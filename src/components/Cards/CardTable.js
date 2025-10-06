@@ -1,9 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-// components
-
-import TableDropdown from "components/Dropdowns/TableDropdown.js";
 
 export default function CardTable({ color }) {
   return (
@@ -154,7 +151,7 @@ export default function CardTable({ color }) {
                   </div>
                 </td>
                 <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-right">
-                  <TableDropdown />
+                
                 </td>
               </tr>
               <tr>
@@ -218,7 +215,7 @@ export default function CardTable({ color }) {
                   </div>
                 </td>
                 <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-right">
-                  <TableDropdown />
+                  
                 </td>
               </tr>
               <tr>
@@ -281,7 +278,7 @@ export default function CardTable({ color }) {
                   </div>
                 </td>
                 <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-right">
-                  <TableDropdown />
+                  
                 </td>
               </tr>
               <tr>
@@ -345,7 +342,7 @@ export default function CardTable({ color }) {
                   </div>
                 </td>
                 <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-right">
-                  <TableDropdown />
+                  
                 </td>
               </tr>
               <tr>
@@ -409,7 +406,7 @@ export default function CardTable({ color }) {
                   </div>
                 </td>
                 <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-right">
-                  <TableDropdown />
+                  
                 </td>
               </tr>
             </tbody>
