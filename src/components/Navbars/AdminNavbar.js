@@ -1,6 +1,8 @@
 import React from "react";
 
 import UserDropdown from "components/Dropdowns/UserDropdown.js";
+import LanguageSwitcher from "components/LanguageSwitcher/LanguageSwitcher.js";
+
 
 export default function Navbar() {
   return (
@@ -31,6 +33,10 @@ export default function Navbar() {
           </form>
           {/* User */}
           <ul className="flex-col md:flex-row list-none items-center hidden md:flex">
+            <li className="flex items-center mr-3">
+              <LanguageSwitcher />
+            </li>
+
             <UserDropdown />
           </ul>
         </div>

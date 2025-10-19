@@ -2,12 +2,13 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import LanguageSwitcher from "components/LanguageSwitcher/LanguageSwitcher.js";
+import { useAuth } from "context/AuthContext";
+import UserDropdown from "components/Dropdowns/UserDropdown.js";
 
 export default function MainNavbar() {
     const { t } = useTranslation();
-
-
     const [navbarOpen, setNavbarOpen] = React.useState(false);
+    const {isLoggedIn, user, logout} = useAuth();
     return (
     <>
         <nav className="top-0 fixed z-50 w-full flex flex-wrap items-center justify-between px-2 py-3 navbar-expand-lg bg-white shadow">
@@ -36,7 +37,7 @@ export default function MainNavbar() {
             }
             >
             {/* Navigation Links (Left side) */}
-            <ul className="flex flex-col lg:flex-row list-none lg:ml-auto">
+            <ul className="flex flex-col lg:flex-row list-none lg:ml-auto space-2">
                 <li className="flex items-center">
                 <Link
                     to="/jobs"
@@ -56,26 +57,56 @@ export default function MainNavbar() {
                 </Link>
                 </li>
                 {/* Auth Buttons (Right side) */}
-                <li className="flex items-center ml-4">
-                <Link to="/auth/login">
-                    <button
-                    className="bg-lightBlue-500 text-white active:bg-lightBlue-600 text-xs font-bold uppercase px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none lg:mr-1 lg:mb-0 ml-3 mb-3 ease-linear transition-all duration-150"
-                    type="button"
-                    >
-                        {t('login_button')}
-                    </button>
-                </Link>
-                </li>
-                <li className="flex items-center">
-                <Link to="/auth/register">
-                    <button
-                    className="border border-lightBlue-500 text-lightBlue-500 active:bg-lightBlue-600 text-xs font-bold uppercase px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none lg:mr-1 lg:mb-0 ml-3 mb-3 ease-linear transition-all duration-150"
-                    type="button"
-                    >
-                        {t('register_button')}
-                    </button>
-                </Link>
-                </li>
+                {
+                    isLoggedIn ?
+                    (
+                        <li className="flex items-center">
+                            <UserDropdown />
+                        </li>
+                    ) : (
+                        <>
+                            <li className="flex items-center m-2">
+                                <Link to="/auth/login">
+                                    <button
+                                        className="bg-brand text-white
+                                            active:bg-brand/90 text-xs font-bold 
+                                            uppercase px-4 py-2 rounded-full shadow hover:shadow-lg 
+                                            outline-none focus:outline-none ease-linear transition-all duration-150"
+                                        type="button"
+                                    >
+                                        {t('login_button')}
+                                    </button>
+                                </Link>
+                            </li>
+                            <li className="flex items-center m-2">
+                                <Link to="/auth/register">
+                                    <button
+                                        className="border border-brand text-brand
+                                            hover:bg-brand hover:text-white active:bg-brand/10 text-xs font-bold uppercase px-4 
+                                            py-2 rounded-full shadow hover:shadow-lg outline-none 
+                                            focus:outline-none ease-linear transition-all duration-150"
+                                        type="button"
+                                    >
+                                        {t('register_button')}
+                                    </button>
+                                </Link>
+                            </li>
+                            <li className="flex items-center m-2">
+                                <Link to="/employer/dashboard"> {/* Hoặc một link phù hợp */}
+                                    <button
+                                        className="bg-blueGray-100 text-blueGray-700
+                                            active:bg-blueGray-200 text-xs font-bold uppercase
+                                            px-4 py-2 rounded-full shadow hover:shadow-md outline-none 
+                                            focus:outline-none ease-linear transition-all duration-150"
+                                        type="button"
+                                    >
+                                        {t('recruit_button')}
+                                    </button>
+                                </Link>
+                            </li>
+                        </>
+                    )
+                }               
                 <li className="flex items-center">
                     <LanguageSwitcher />
                 </li>

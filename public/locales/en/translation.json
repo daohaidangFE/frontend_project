@@ -1,8 +1,43 @@
-    {
-      "find_internship": "Find Internship",
-      "companies": "Companies",
-      "login_button": "Login",
-      "register_button": "Register",
-      "welcome_message": "Welcome to website !",
-      "homepage_subtitle": "Website"
-    }
+{
+  "find_internship": "Find Internship",
+  "companies": "Companies",
+  "home_button": "Home",
+  "logout_button": "Logout",
+  "my_profile": "My profile",
+  "welcome_message": "Welcome to website!",
+  "homepage_subtitle": "Website",
+  "recruit_button": "Post Job & Find Profiles",
+
+  "login_button": "Login",
+  "login_title": "Login to JobHunter",
+  "login_subtitle": "Internship opportunities – The first step of your career",
+  "email_label": "Email",
+  "email_placeholder": "Enter your email",
+  "password_label": "Password",
+  "password_placeholder": "Enter your password",
+  "forgot_password": "Forgot password?",
+  "login_error": "Incorrect email or password. Please try again!",
+  "login_success": "Logged in successfully as {{role}}!",
+  "logging_in": "Logging in...",
+  "login_welcome_title": "Welcome back",
+  "login_welcome_subtitle": "Let's build a standout profile and get ideal career opportunities.",
+  "or_login_with": "OR LOGIN WITH",
+  "no_account_yet": "Don't have an account yet?",
+  "register_now": "Register now",
+
+  "register_button": "Register",
+  "register_title": "Create an Account",
+  "register_subtitle": "Join us and find your perfect internship",
+  "register_with_google": "Sign up with Google",
+  "name_label": "Name",
+  "name_placeholder": "Your full name",
+  "create_account": "Create new account",
+  "already_have_account": "Already have an account?",
+  "login_now": "Log In",
+  "confirm_password_label": "Confirm Password",
+  "confirm_password_placeholder": "Re-enter your password",
+  "or_login_with": "Or login with",
+
+  "student": "student",
+  "employer": "employer"
+}

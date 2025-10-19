@@ -1,28 +1,39 @@
+// src/layouts/AuthLayout.js
 import React from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
 
-// Bước 1: Import các component thật
+// views
 import Login from "views/auth/Login.js";
 import Register from "views/auth/Register.js";
 
 export default function AuthLayout() {
-    return (
-    <main>
-        <section className="relative w-full h-full py-40 min-h-screen">
-        <div
-            className="absolute top-0 w-full h-full bg-white bg-no-repeat bg-full"
-            style={{
-            backgroundImage:
-                "url(" + require("assets/img/register_bg_2.png").default + ")",
-            }}
-        ></div>
-        <Switch>
-            {/* Bước 2: Sử dụng component thật thay vì render chữ */}
+  return (
+    <main className="flex justify-center items-center min-h-screen bg-slate-50">
+      
+      {/* Container chính, bạn có thể giảm max-w-6xl thành max-w-5xl nếu muốn nó hẹp hơn */}
+      <div className="w-full max-w-6xl mx-auto flex bg-white shadow-lg rounded-xl overflow-hidden">
+
+        {/* Cột 1: Form (Login hoặc Register) */}
+        {/* === THAY ĐỔI Ở ĐÂY: Tăng chiều rộng từ 1/2 lên 7/12 === */}
+        <div className="w-full lg:w-7/12 p-8 lg:p-12 flex flex-col justify-center">
+          <Switch>
             <Route path="/auth/login" exact component={Login} />
             <Route path="/auth/register" exact component={Register} />
             <Redirect from="/auth" to="/auth/login" />
-        </Switch>
-        </section>
+          </Switch>
+        </div>
+
+        {/* Cột 2: Hình ảnh */}
+        {/* === THAY ĐỔI Ở ĐÂY: Giảm chiều rộng từ 1/2 xuống 5/12 === */}
+        <div className="hidden lg:flex lg:w-5/12 justify-center items-center">
+          <img
+            src="/anh1.png"
+            alt="Illustration"
+            className="w-full h-full object-cover"
+          />
+        </div>
+
+      </div>
     </main>
-    );
+  );
 }

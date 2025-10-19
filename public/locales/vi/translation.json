@@ -1,8 +1,43 @@
-  {
-      "find_internship": "Tìm việc thực tập",
-      "companies": "Công ty",
-      "login_button": "Đăng nhập",
-      "register_button": "Đăng ký",
-      "welcome_message": "Chào mừng tới trang web !",
-      "homepage_subtitle": "Trang web"
-    }
+{
+  "find_internship": "Tìm việc thực tập",
+  "companies": "Công ty",
+  "home_button": "Trang chủ",
+  "logout_button": "Đăng xuất",
+  "my_profile": "Hồ sơ của tôi",
+  "welcome_message": "Chào mừng tới trang web!",
+  "homepage_subtitle": "Trang web",
+  "recruit_button": "Đăng tuyển & tìm hồ sơ",
+
+  "login_button": "Đăng nhập",
+  "login_title": "Đăng nhập JobHunter",
+  "login_subtitle": "Cơ hội thực tập – Bước khởi đầu sự nghiệp",
+  "email_label": "Email",
+  "email_placeholder": "Nhập email của bạn",
+  "password_label": "Mật khẩu",
+  "password_placeholder": "Nhập mật khẩu của bạn",
+  "forgot_password": "Quên mật khẩu?",
+  "login_error": "Email hoặc mật khẩu không đúng. Vui lòng thử lại!",
+  "login_success": "Đăng nhập thành công với vai trò {{role}}!",
+  "logging_in": "Đang đăng nhập...",
+  "login_welcome_title": "Chào mừng bạn quay trở lại",
+  "login_welcome_subtitle": "Cùng xây dựng một hồ sơ nổi bật và nhận được các cơ hội sự nghiệp lý tưởng.",
+  "or_login_with": "HOẶC ĐĂNG NHẬP BẰNG",
+  "no_account_yet": "Bạn chưa có tài khoản?",
+  "register_now": "Đăng ký ngay",
+
+  "register_button": "Đăng ký",
+  "register_title": "Tạo tài khoản",
+  "register_subtitle": "Tham gia và tìm kiếm kỳ thực tập hoàn hảo của bạn",
+  "register_with_google": "Đăng ký với Google",
+  "name_label": "Họ và Tên",
+  "name_placeholder": "Tên đầy đủ của bạn",
+  "create_account": "Tạo tài khoản mới",
+  "already_have_account": "Đã có tài khoản?",
+  "login_now": "Đăng nhập",
+  "confirm_password_label": "Xác nhận mật khẩu",
+  "confirm_password_placeholder": "Nhập lại mật khẩu của bạn",
+  "or_login_with": "Hoặc đăng nhập bằng",
+
+  "student": "sinh viên",
+  "employer": "nhà tuyển dụng"
+}

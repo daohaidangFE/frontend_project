@@ -9,19 +9,28 @@ import "assets/styles/tailwind.css";
 import AdminLayout from "layouts/AdminLayout.js";
 import AuthLayout from "layouts/AuthLayout.js";
 import MainLayout from "layouts/MainLayout.js";
+import { AuthProvider } from "./context/AuthContext";
+
+// === THÊM DÒNG IMPORT NÀY ===
+import LanguageSwitcher from "components/LanguageSwitcher/LanguageSwitcher.js";
 
 ReactDOM.render(
-  <BrowserRouter>
-    <Switch>
-      {/* URL nào bắt đầu bằng /admin sẽ dùng AdminLayout */}
-      <Route path="/admin" component={AdminLayout} />
+  <AuthProvider>
+    <BrowserRouter>
+      {/* === ĐẶT COMPONENT VÀO ĐÂY === */}
+      <LanguageSwitcher />
+      
+      <Switch>
+        {/* URL nào bắt đầu bằng /admin sẽ dùng AdminLayout */}
+        <Route path="/admin" component={AdminLayout} />
 
-      {/* URL nào bắt đầu bằng /auth sẽ dùng AuthLayout */}
-      <Route path="/auth" component={AuthLayout} />
+        {/* URL nào bắt đầu bằng /auth sẽ dùng AuthLayout */}
+        <Route path="/auth" component={AuthLayout} />
 
-      {/* Tất cả các URL còn lại sẽ dùng MainLayout */}
-      <Route path="/" component={MainLayout} />
-    </Switch>
-  </BrowserRouter>,
+        {/* Tất cả các URL còn lại sẽ dùng MainLayout */}
+        <Route path="/" component={MainLayout} />
+      </Switch>
+    </BrowserRouter>
+  </AuthProvider>,
   document.getElementById("root")
 );

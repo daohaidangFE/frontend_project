@@ -23,6 +23,9 @@ module.exports = {
       ...colors,
     },
     extend: {
+      colors: {
+        brand: '#00b14f',
+      },
       minHeight: {
         "screen-75": "75vh",
       },

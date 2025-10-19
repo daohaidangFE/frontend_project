@@ -4,98 +4,131 @@ import { useTranslation } from "react-i18next";
 
 export default function Register() {
     const { t } = useTranslation();
-
     return (
-    <div className="container mx-auto px-4 h-full">
-        <div className="flex content-center items-center justify-center h-full">
-        <div className="w-full lg:w-6/12 px-4">
-            <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-blueGray-200 border-0">
-            <div className="rounded-t mb-0 px-6 py-6">
-                <div className="text-center mb-3">
-                <h6 className="text-blueGray-500 text-sm font-bold">
-                    Sign up with
-                </h6>
-                </div>
-                <div className="btn-wrapper text-center">
-                <button
-                    className="bg-white active:bg-blueGray-50 text-blueGray-700 font-normal px-4 py-2 rounded outline-none focus:outline-none mr-1 mb-1 uppercase shadow hover:shadow-md inline-flex items-center font-bold text-xs ease-linear transition-all duration-150"
-                    type="button"
-                >
-                    <img
-                    alt="..."
-                    className="w-5 mr-1"
-                    src={require("assets/img/google.svg").default}
-                    />
-                    Google
-                </button>
-                </div>
-                <hr className="mt-6 border-b-1 border-blueGray-300" />
-            </div>
-            <div className="flex-auto px-4 lg:px-10 py-10 pt-0">
-                <div className="text-blueGray-400 text-center mb-3 font-bold">
-                <small>Or sign up with credentials</small>
-                </div>
-                <form>
-                <div className="relative w-full mb-3">
-                    <label
-                    className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                    htmlFor="grid-password"
-                    >
-                    Name
-                    </label>
-                    <input
-                    type="email"
-                    className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                    placeholder="Name"
-                    />
-                </div>
+        <div className="container mx-auto px-4 h-full bg-slate-50">
+            <div className="flex content-center items-center justify-center h-full">
+                <div className="w-full lg:w-5/12 px-4">
+                    <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-white border-0">
+                        {/* Header */}
+                        <div className="rounded-t mb-0 px-6 py-4 border-b border-slate-200 text-center">
+                            <h2 className="text-2xl font-semibold text-slate-700">
+                                {t("register_title", "Create an Account")}
+                            </h2>
+                            <p className="text-sm text-slate-500 mt-1">
+                                {t("register_subtitle")}
+                            </p>
+                        </div>
+                        
+                        <div className="flex-auto px-4 lg:px-10 py-10 pt-10">
+                            <form>
+                                {/* Name Input */}
+                                <div className="flex flex-col mb-5">
+                                    <label className="mb-1 text-xs tracking-wide text-slate-600">{t("name_label", "Name")}</label>
+                                    <div className="relative">
+                                        <div className="inline-flex items-center justify-center absolute left-0 top-0 h-full w-10 text-slate-400">
+                                            <i className="fas fa-user text-brand"></i>
+                                        </div>
+                                        <input
+                                            type="text"
+                                            className="text-sm placeholder-slate-400 pl-10 pr-4 rounded-lg border border-slate-300 w-full py-2 focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand"
+                                            placeholder={t("name_placeholder", "Your full name")}
+                                            required
+                                        />
+                                    </div>
+                                </div>
 
-                <div className="relative w-full mb-3">
-                    <label
-                    className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                    htmlFor="grid-password"
-                    >
-                    Email
-                    </label>
-                    <input
-                    type="email"
-                    className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                    placeholder="Email"
-                    />
-                </div>
+                                {/* Email Input */}
+                                <div className="flex flex-col mb-5">
+                                    <label className="mb-1 text-xs tracking-wide text-slate-600">{t("email_label")}</label>
+                                    <div className="relative">
+                                        <div className="inline-flex items-center justify-center absolute left-0 top-0 h-full w-10 text-slate-400">
+                                            <i className="fas fa-envelope text-brand"></i>
+                                        </div>
+                                        <input
+                                            type="email"
+                                            className="text-sm placeholder-slate-400 pl-10 pr-4 rounded-lg border border-slate-300 w-full py-2 focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand"
+                                            placeholder={t("email_placeholder")}
+                                            required
+                                        />
+                                    </div>
+                                </div>
 
-                <div className="relative w-full mb-3">
-                    <label
-                    className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                    htmlFor="grid-password"
-                    >
-                    Password
-                    </label>
-                    <input
-                    type="password"
-                    className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                    placeholder="Password"
-                    />
-                </div>
+                                {/* Password Input */}
+                                <div className="flex flex-col mb-5">
+                                    <label className="mb-1 text-xs tracking-wide text-slate-600">{t("password_label")}</label>
+                                    <div className="relative">
+                                        <div className="inline-flex items-center justify-center absolute left-0 top-0 h-full w-10 text-slate-400">
+                                            <i className="fas fa-lock text-brand"></i>
+                                        </div>
+                                        <input
+                                            type="password"
+                                            className="text-sm placeholder-slate-400 pl-10 pr-4 rounded-lg border border-slate-300 w-full py-2 focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand"
+                                            placeholder={t("password_placeholder")}
+                                            required
+                                        />
+                                    </div>
+                                </div>
 
-                <div className="text-center mt-6">
-                    <button
-                    className="bg-blueGray-800 text-white active:bg-blueGray-600 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full ease-linear transition-all duration-150"
-                    type="button"
-                    >
-                    {t('register_button')}
-                    </button>
+                                {/* === KHỐI MÃ MỚI BẮT ĐẦU TỪ ĐÂY === */}
+                                {/* Confirm Password Input */}
+                                <div className="flex flex-col mb-6">
+                                    <label className="mb-1 text-xs tracking-wide text-slate-600">{t("confirm_password_label")}</label>
+                                    <div className="relative">
+                                        <div className="inline-flex items-center justify-center absolute left-0 top-0 h-full w-10 text-slate-400">
+                                            <i className="fas fa-lock text-brand"></i>
+                                        </div>
+                                        <input
+                                            type="password"
+                                            className="text-sm placeholder-slate-400 pl-10 pr-4 rounded-lg border border-slate-300 w-full py-2 focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand"
+                                            placeholder={t("confirm_password_placeholder")}
+                                            required
+                                        />
+                                    </div>
+                                </div>
+                                {/* === KHỐI MÃ MỚI KẾT THÚC TẠI ĐÂY === */}
+
+
+                                {/* Submit button */}
+                                <div className="text-center mt-6">
+                                    <button
+                                        className="bg-brand hover:opacity-90 w-full py-3 font-bold text-white uppercase text-sm rounded-lg shadow hover:shadow-md transition-all duration-150"
+                                        type="button"
+                                    >
+                                        {t('register_button')}
+                                    </button>
+                                </div>
+                                <p className="text-center my-4">{t("or_login_with")}</p>
+                                <div className="text-center">
+                                <button
+                                    className="bg-white active:bg-slate-50 text-slate-700 font-normal 
+                                    px-4 py-2 rounded-lg outline-none focus:outline-none border 
+                                    border-slate-300 hover:shadow-md inline-flex items-center 
+                                    font-bold text-xs ease-linear transition-all duration-150"
+                                    type="button"
+                                >
+                                    <img
+                                        alt="..."
+                                        className="w-5 mr-2"
+                                        src={require("assets/img/google.svg").default}
+                                    />
+                                    {t("register_with_google")}
+                                </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                     {/* Footer */}
+                    <div className="text-center mb-6">
+                        <p className="text-sm text-slate-500">
+                        {t("already_have_account", "Already have an account?")}{" "}
+                        <Link to="/auth/login" className="font-semibold text-brand hover:opacity-80">
+                            {t("login_now", "Log In")}
+                        </Link>
+                        </p>
+                    </div>
                 </div>
-                </form>
-            </div>
-            </div>
-            <div className="w-1/2 text-right">
-                <Link to="/auth/login" className="text-blueGray-200">
-                <small>Already have account?</small>
-                </Link>
             </div>
         </div>
-        </div>
-    </div>
+        
     );
 }
