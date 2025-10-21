@@ -5,6 +5,7 @@ import { Switch, Route, Redirect } from "react-router-dom";
 // views
 import Login from "views/auth/Login.js";
 import Register from "views/auth/Register.js";
+import ForgotPassword from "views/auth/ForgotPassword.js"
 
 export default function AuthLayout() {
   return (
@@ -19,6 +20,7 @@ export default function AuthLayout() {
           <Switch>
             <Route path="/auth/login" exact component={Login} />
             <Route path="/auth/register" exact component={Register} />
+            <Route path="/auth/forgotpassword" exact component={ForgotPassword} />
             <Redirect from="/auth" to="/auth/login" />
           </Switch>
         </div>

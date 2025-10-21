@@ -37,6 +37,11 @@
   "confirm_password_label": "Confirm Password",
   "confirm_password_placeholder": "Re-enter your password",
   "or_login_with": "Or login with",
+  "forgot_password": "Forgot password",
+  "reset_password": "Reset password",
+  "back_to_login": "Back to login",
+  "register_a_new_account": "Register a new account",
+  "troll": "Having trouble creating an account? Never mind.",
 
   "student": "student",
   "employer": "employer"

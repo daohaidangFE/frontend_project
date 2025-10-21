@@ -37,6 +37,11 @@
   "confirm_password_label": "Xác nhận mật khẩu",
   "confirm_password_placeholder": "Nhập lại mật khẩu của bạn",
   "or_login_with": "Hoặc đăng nhập bằng",
+  "forgot_password": "Quên mật khẩu",
+  "reset_password": "Tạo lại mật khẩu",
+  "back_to_login": "Quay lại đăng nhập",
+  "register_a_new_account": "Đăng kí tài khoản mới",
+  "troll": "Bạn gặp khó khăn khi tạo tài khoản? Kệ bạn.",
 
   "student": "sinh viên",
   "employer": "nhà tuyển dụng"

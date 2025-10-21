@@ -94,13 +94,9 @@ export default function Login() {
                   </div>
                 )}
                 <div className="text-right">
-                  <a
-                    href="#forgot"
-                    onClick={(e) => e.preventDefault()}
-                    className="text-sm text-slate-500  text-brand hover:opacity-80"
-                  >
+                  <Link to="/auth/forgotpassword" className="text-sm text-slate-500  text-brand hover:opacity-80">
                     {t("forgot_password")}
-                  </a>
+                  </Link>  
                 </div>
                 {/* Submit button */}
                 <div className="text-center mt-6">
