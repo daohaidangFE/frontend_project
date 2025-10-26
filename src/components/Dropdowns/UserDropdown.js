@@ -26,6 +26,8 @@ const UserDropdown = () => {
     return null;
   }
 
+  const displayName = user.fullName || user.role;
+
   return (
     <div className="relative" ref={dropdownRef}>
       {/* ... Nút bấm chính giữ nguyên ... */}
@@ -34,7 +36,7 @@ const UserDropdown = () => {
         px-3 py-2 flex items-center text-xs uppercase font-bold transition-colors duration-300"
         onClick={() => setDropdownOpen(!dropdownOpen)}
       >
-        {user.name}
+        {displayName}
         <i className="fas fa-caret-down ml-2"></i>
       </button>
       
