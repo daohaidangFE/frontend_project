@@ -25,6 +25,9 @@ module.exports = {
     extend: {
       colors: {
         brand: '#00b14f',
+        secondary: '#10b981',
+        'primary-600': '#009a45',
+        'primary-300': '#66d19e',
       },
       minHeight: {
         "screen-75": "75vh",
