@@ -13,7 +13,7 @@ export default function MainFooter() {
                     href="#" // Link to your profile or team
                     className="text-blueGray-500 hover:text-blueGray-800"
                 >
-                    Your Team Name
+                    NoiCamLon Team
                 </a>
                 .
                 </div>

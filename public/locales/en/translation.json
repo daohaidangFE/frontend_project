@@ -102,5 +102,23 @@
   "project_name": "Project Name",
   "company_name": "Company Name",
   "role": "Role",
-  "no_experience_info": "No experience or project information provided."
+  "no_experience_info": "No experience or project information provided.",
+
+  "cv": "CV",
+  "cv_status": "CV Status",
+  "uploaded": "Uploaded",
+  "not_uploaded": "Not uploaded",
+  "view_cv": "View CV",
+  "upload_cv": "Upload CV",
+  "not_updated": "Not updated",
+
+  "joined": "Joined",
+  "edit_profile": "Edit Profile",
+
+  "stats": "Stats",
+  "profile_views": "Profile Views",
+  "applications": "Applications",
+  "connections": "Connections",
+  "jobs": "Jobs",
+  "messages": "Messages"
 }

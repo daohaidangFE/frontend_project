@@ -10,6 +10,7 @@ import AdminLayout from "layouts/AdminLayout.js";
 import AuthLayout from "layouts/AuthLayout.js";
 import MainLayout from "layouts/MainLayout.js";
 import { AuthProvider } from "./context/AuthContext";
+import StudentLayout from "layouts/StudentLayout.js";
 
 // === THÊM DÒNG IMPORT NÀY ===
 import LanguageSwitcher from "components/LanguageSwitcher/LanguageSwitcher.js";
@@ -26,6 +27,9 @@ ReactDOM.render(
 
         {/* URL nào bắt đầu bằng /auth sẽ dùng AuthLayout */}
         <Route path="/auth" component={AuthLayout} />
+
+        {/* 2. THÊM ROUTE CHO STUDENT (phải đặt trước MainLayout) */}
+        <Route path="/student" component={StudentLayout} />
 
         {/* Tất cả các URL còn lại sẽ dùng MainLayout */}
         <Route path="/" component={MainLayout} />

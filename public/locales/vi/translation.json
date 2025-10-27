@@ -102,5 +102,24 @@
   "project_name": "Tên dự án",
   "company_name": "Tên công ty",
   "role": "Vai trò",
-  "no_experience_info": "Chưa có thông tin kinh nghiệm hoặc dự án."
+  "no_experience_info": "Chưa có thông tin kinh nghiệm hoặc dự án.",
+
+  "cv": "CV",
+  "cv_status": "Trạng thái CV",
+  "uploaded": "Đã tải lên",
+  "not_uploaded": "Chưa tải lên",
+  "view_cv": "Xem CV",
+  "upload_cv": "Tải lên CV",
+  "not_updated": "Chưa cập nhật",
+
+  "joined": "Tham gia",
+  "edit_profile": "Chỉnh sửa hồ sơ",
+
+  "stats": "Thống kê",
+  "profile_views": "Lượt xem hồ sơ",
+  "applications": "Đơn ứng tuyển",
+  "connections": "Kết nối",
+  "jobs": "Công việc",
+  "messages": "Tin nhắn"
+
 }
