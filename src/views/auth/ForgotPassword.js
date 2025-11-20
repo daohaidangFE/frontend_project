@@ -7,7 +7,7 @@ export default function ForgotPassword() {
     const { t } = useTranslation();
     return (
         <>
-            <div className="relative flex flex-col min-w-0 break-words w-full mb-6 bg-white border-0">
+            <div className="relative flex flex-col min-w-0 break-words w-full mb-6 bg-white border-0 rounded-lg shadow-md">
                 {/* Header */}
                 <div className="rounded-t px-6 border-slate-200 text-left">
                     <h2 className="text-2xl font-semibold text-slate-700  text-brand">

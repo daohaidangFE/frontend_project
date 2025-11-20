@@ -27,7 +27,7 @@ export default function ProfileInfoCard({ profile }) {
   const notUpdatedText = t('not_updated', 'Chưa cập nhật');
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md text-center mt-6">
+    <div className="bg-white p-6 rounded-lg shadow-md text-center">
       {/* Avatar */}
       <img
         src={profile.avatarUrl || defaultAvatar}

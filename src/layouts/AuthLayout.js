@@ -9,11 +9,11 @@ import ForgotPassword from "views/auth/ForgotPassword.js"
 
 export default function AuthLayout() {
   return (
-    <main className="flex justify-center items-center min-h-screen bg-slate-50">
-      <div className="w-full max-w-6xl mx-auto flex bg-white shadow-lg rounded-xl overflow-hidden">
+    <main className="flex justify-center items-stretch min-h-screen bg-slate-50">
+      <div className="w-full mx-0 flex bg-white shadow-lg overflow-hidden">
 
         {/* Cột chứa form */}
-        <div className="w-full lg:w-7/12 p-8 lg:px-12 lg:pt-36 lg:pb-16 flex flex-col justify-start">
+        <div className="w-full lg:w-7/12 p-8 lg:px-12 lg:pt-36 lg:pb-16 flex flex-col justify-between min-h-screen">
           <Switch>
             <Route path="/auth/login" exact component={Login} />
             <Route path="/auth/register" exact component={Register} />
@@ -23,7 +23,7 @@ export default function AuthLayout() {
         </div>
 
         {/* Cột chứa ảnh */}
-        <div className="hidden lg:flex lg:w-5/12 justify-center items-center">
+        <div className="hidden lg:flex lg:w-5/12 justify-center items-center h-full">
           <img
             src="/anh1.png"
             alt="Illustration"
@@ -32,5 +32,6 @@ export default function AuthLayout() {
         </div>
       </div>
     </main>
+
   );
 }

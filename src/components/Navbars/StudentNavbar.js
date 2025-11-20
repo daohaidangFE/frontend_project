@@ -52,7 +52,7 @@ export default function StudentNavbar() {
         >
           <ul className="flex flex-col lg:flex-row list-none lg:ml-auto space-2">
             <li className="flex items-center">
-              <Link to="/jobs" className={getLinkClass("/jobs")}>
+              <Link to="/student/jobs" className={getLinkClass("/student/jobs")}>
                 <i className="fas fa-briefcase text-lg leading-lg mr-2" />{" "}
                 {t("jobs", "Jobs")}
               </Link>

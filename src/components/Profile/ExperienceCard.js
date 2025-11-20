@@ -3,7 +3,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 
-export default function ExperienceCard({ experiences }) {
+export default function ExperienceCard({ experiences, onAddClick }) {
   const { t } = useTranslation();
 
   return (
@@ -13,7 +13,9 @@ export default function ExperienceCard({ experiences }) {
         <h3 className="text-xl font-bold text-blueGray-700">
           {t('experience', 'Experience')}
         </h3>
-        <button className="text-brand text-sm font-semibold hover:opacity-80 transition-all">
+        <button 
+          onClick={onAddClick}
+          className="text-brand text-sm font-semibold hover:opacity-80 transition-all">
           <i className="fas fa-plus mr-1"></i>
           {t('add', 'Add')}
         </button>
@@ -50,4 +52,5 @@ export default function ExperienceCard({ experiences }) {
 
 ExperienceCard.propTypes = {
   experiences: PropTypes.array,
+  onAddClick: PropTypes.func.isRequired,
 };

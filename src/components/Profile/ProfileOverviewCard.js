@@ -7,15 +7,12 @@ const formatDate = (dateString, t, locale) => {
   if (!dateString) return t('loading', 'Loading...');
   try {
     const date = new Date(dateString);
+    const now = new Date();
 
-    const formatted = date.toLocaleDateString(locale || 'en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-    });
+    // Tính số ngày chênh lệch dựa trên ngày
+    const diffTime = now.setHours(0,0,0,0) - date.setHours(0,0,0,0);
+    const days = Math.round(diffTime / (1000 * 60 * 60 * 24));
 
-    const diff = Math.floor((Date.now() - date.getTime()) / 1000);
-    const days = Math.floor(diff / 86400);
     let relative = '';
     if (days === 0) relative = t('today', 'Today');
     else if (days === 1) relative = t('yesterday', 'Yesterday');
@@ -25,11 +22,18 @@ const formatDate = (dateString, t, locale) => {
     else
       relative = t('years_ago', '{{count}} years ago', { count: Math.floor(days / 365) });
 
+    const formatted = date.toLocaleDateString(locale || 'en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    });
+
     return `${formatted} (${relative})`;
   } catch (e) {
     return dateString;
   }
 };
+
 
 const formatVisibility = (isVisible, t) => {
   return isVisible ? t('visible', 'Visible') : t('hidden', 'Hidden');

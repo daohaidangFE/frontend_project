@@ -11,9 +11,11 @@ import AuthLayout from "layouts/AuthLayout.js";
 import MainLayout from "layouts/MainLayout.js";
 import { AuthProvider } from "./context/AuthContext";
 import StudentLayout from "layouts/StudentLayout.js";
+import EmployerLayout from "layouts/EmployerLayout.js";
 
 // === THÊM DÒNG IMPORT NÀY ===
 import LanguageSwitcher from "components/LanguageSwitcher/LanguageSwitcher.js";
+import PrivateRoute from "components/common/PrivateRoute";
 
 ReactDOM.render(
   <AuthProvider>
@@ -29,7 +31,17 @@ ReactDOM.render(
         <Route path="/auth" component={AuthLayout} />
 
         {/* 2. THÊM ROUTE CHO STUDENT (phải đặt trước MainLayout) */}
-        <Route path="/student" component={StudentLayout} />
+        <PrivateRoute 
+          path="/student" 
+          component={StudentLayout}
+          allowedRoles={['STUDENT']}
+        />
+
+        <PrivateRoute 
+            path="/employer" 
+            component={EmployerLayout} 
+            allowedRoles={['EMPLOYER']} 
+        />
 
         {/* Tất cả các URL còn lại sẽ dùng MainLayout */}
         <Route path="/" component={MainLayout} />

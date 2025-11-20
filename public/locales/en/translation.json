@@ -21,7 +21,7 @@
   "logging_in": "Logging in...",
   "login_welcome_title": "Welcome back",
   "login_welcome_subtitle": "Let's build a standout profile and get ideal career opportunities.",
-  "or_login_with": "OR LOGIN WITH",
+  "or_login_with": "or login with",
   "no_account_yet": "Don't have an account yet?",
   "register_now": "Register now",
 
@@ -36,8 +36,6 @@
   "login_now": "Log In",
   "confirm_password_label": "Confirm Password",
   "confirm_password_placeholder": "Re-enter your password",
-  "or_login_with": "Or login with",
-  "forgot_password": "Forgot password",
   "reset_password": "Reset password",
   "back_to_login": "Back to login",
   "register_a_new_account": "Register a new account",
@@ -46,7 +44,6 @@
   "student": "student",
   "employer": "employer",
 
-  "loading": "Loading...",
   "loading_profile": "Loading profile...",
   "profile_data_unavailable": "Profile data is unavailable.",
   "profile_not_found_message": "Your profile is not fully set up. Please fill in the information.",
@@ -120,5 +117,84 @@
   "applications": "Applications",
   "connections": "Connections",
   "jobs": "Jobs",
-  "messages": "Messages"
+  "messages": "Messages",
+
+  "recent_activity": "Recent Activity",
+  "applied_for": "Applied for",
+  "connected_with": "Connected with",
+  "at": "at",
+  "from": "from",
+  "time_days_ago": "{{count}} days ago",
+  "time_weeks_ago": "{{count}} week ago",
+  "time_fallback": "Some time ago",
+
+  "about": "About",
+  "bio": "Bio",
+
+  "education": "Education",
+  "add": "Add",
+  "no_education_added": "No education history added yet",
+
+  "experience": "Experience",
+  "no_experience_added": "No experience added yet",
+
+  "unknown_user": "Unknown User",
+  "internship_candidate": "Internship Candidate",
+
+  "level": "Level",
+  "no_skills_added": "No skills added yet",
+
+  "profile_overview": "Profile Overview",
+  "profile_status": "Profile Status",
+  "visible": "Visible",
+  "hidden": "Hidden",
+  "created_at": "Created At",
+  "portfolio": "Portfolio",
+  "today": "Today",
+  "yesterday": "Yesterday",
+  "days_ago": "{{count}} days ago",
+  "months_ago": "{{count}} months ago",
+  "years_ago": "{{count}} years ago",
+
+  "overview": "Overview",
+  "projects": "Projects",
+
+  "find_dream_job": "Find your dream internship",
+  "search_placeholder": "Search by job title, location, skills...",
+  "search": "Search",
+  "loading": "Loading data...",
+  "no_jobs_found": "No jobs found matching your criteria",
+  "unknown_company": "Unknown Company",
+  "view_details": "View Details",
+  "company_label": "Company",
+  "location": "Location",
+
+  "work_mode_all": "All Work Modes",
+  "work_mode_onsite": "Onsite",
+  "work_mode_remote": "Remote",
+  "work_mode_hybrid": "Hybrid",
+
+  "role_student": "I want to find a job",
+  "role_employer": "I want to hire",
+  "register_success": "Registration successful! Logging in...",
+
+  "create_job_title": "Post New Internship",
+  "job_info_section": "Job Information",
+  "job_title_label": "Job Title",
+  "job_title_placeholder": "Ex: Java Backend Intern",
+  "job_position_label": "Position",
+  "job_position_placeholder": "Ex: Backend Developer",
+  "job_location_label": "Location",
+  "job_location_placeholder": "Ex: Hanoi",
+  "work_mode_label": "Work Mode",
+  "duration_label": "Duration",
+  "duration_placeholder": "Ex: 3 months, Full-time",
+  "job_description_section": "Detailed Description",
+  "description_label": "Description & Requirements",
+  "description_placeholder": "Detailed description of the job, benefits, and candidate requirements...",
+  "post_job_button": "Post Job Now",
+  "processing": "Processing...",
+  "create_job_success": "Job posted successfully!",
+  "create_job_error": "Failed to post job. Please try again."
+
 }

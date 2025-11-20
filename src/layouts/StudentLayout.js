@@ -6,6 +6,7 @@ import { Switch, Redirect } from "react-router-dom";
 import StudentNavbar from "components/Navbars/StudentNavbar.js"; // Navbar mới
 import MainFooter from "components/Footers/MainFooter.js";
 import PrivateRoute from "components/common/PrivateRoute.js";
+import JobList from "views/student/JobList.js";
 
 // Import views
 import StudentProfile from "views/student/StudentProfile.js";
@@ -22,8 +23,13 @@ export default function StudentLayout() {
             component={StudentProfile} 
             allowedRoles={['STUDENT']} 
           />
-          
-          <Redirect from="/student" to="/student/profile" />
+          <PrivateRoute 
+            path="/student/jobs" 
+            exact 
+            component={JobList} 
+            allowedRoles={['STUDENT']} 
+          />
+          <Redirect from="/student" to="/student/jobs" />
         </Switch>
       </main>
       <MainFooter />
