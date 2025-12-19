@@ -2,7 +2,6 @@ import axios from "axios";
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
-
 const apiClient = axios.create({
     baseURL: API_BASE_URL,
     headers: {
@@ -19,6 +18,32 @@ apiClient.interceptors.request.use(
         return config;
     },
     (error) => {
+        return Promise.reject(error);
+    }
+);
+
+apiClient.interceptors.response.use(
+    (response) => {
+        return response;
+    },
+    (error) => {
+        if (error.response) {
+            const status = error.response.status;
+
+            if (status === 401) {
+                console.warn("Token hết hạn. Đang tự động đăng xuất...");
+
+                localStorage.removeItem('jwt_token');
+                
+                localStorage.removeItem('user'); 
+                localStorage.removeItem('role');
+
+                if (window.location.pathname !== '/auth/login') {
+                    window.location.href = '/auth/login';
+                }
+            }
+        }
+
         return Promise.reject(error);
     }
 );

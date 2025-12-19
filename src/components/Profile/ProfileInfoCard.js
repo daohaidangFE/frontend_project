@@ -58,11 +58,11 @@ export default function ProfileInfoCard({ profile }) {
       </div>
 
       {/* Edit Button */}
-      <Link to="/student/profile/edit" className="block w-full">
+      {/* <Link to="/student/profile/edit" className="block w-full">
         <button className="bg-brand text-white w-full py-2 rounded-lg font-bold text-sm hover:opacity-90 transition-all flex items-center justify-center">
           <i className="fas fa-user-edit mr-2"></i> {t('edit_profile', 'Edit Profile')}
         </button>
-      </Link>
+      </Link> */}
     </div>
   );
 }

@@ -40,7 +40,7 @@ export default function MainNavbar() {
             <ul className="flex flex-col lg:flex-row list-none lg:ml-auto space-2">
                 <li className="flex items-center">
                 <Link
-                    to="/jobs"
+                    to="/student/jobs"
                     className="hover:text-blueGray-500 text-blueGray-700 px-3 py-4 lg:py-2 flex items-center text-xs uppercase font-bold"
                 >
                     <i className="fas fa-briefcase text-lg leading-lg mr-2" />{" "}

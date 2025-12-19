@@ -7,8 +7,8 @@ import PropTypes from "prop-types";
 const formatGender = (gender, t) => {
   if (!gender) return t("not_updated", "Chưa cập nhật");
   const normalized = gender.toLowerCase();
-  if (normalized === "male") return "Nam";
-  if (normalized === "female") return "Nữ";
+  if (normalized === "male") return t('male', "Nam");
+  if (normalized === "female") return t('female', "Nữ");
   return t(normalized, gender);
 };
 
@@ -21,7 +21,8 @@ const formatDate = (dateString, t) => {
   }
 };
 
-export default function AboutCard({ profile, isEditing, onEditToggle, onSaveSuccess }) {
+// 1. Thêm tham số readOnly vào props (mặc định là false)
+export default function AboutCard({ profile, isEditing, onEditToggle, onSaveSuccess, readOnly = false }) {
   const { t } = useTranslation();
   const [formData, setFormData] = useState(profile);
   const [isSaving, setIsSaving] = useState(false);
@@ -61,36 +62,41 @@ export default function AboutCard({ profile, isEditing, onEditToggle, onSaveSucc
           {t("about", "About")}
         </h3>
 
-        {isEditing ? (
-          <div className="flex gap-2">
-            <button
-              onClick={handleCancel}
-              disabled={isSaving}
-              className="text-sm text-blueGray-600 font-semibold hover:opacity-80 transition-all"
-            >
-              {t("cancel", "Cancel")}
-            </button>
-            <button
-              onClick={handleSave}
-              disabled={isSaving}
-              className="text-brand text-sm font-semibold hover:opacity-80 transition-all"
-            >
-              {isSaving ? (
-                <i className="fas fa-spinner fa-spin mr-1"></i>
-              ) : (
-                <i className="fas fa-save mr-1"></i>
-              )}
-              {t("save", "Save")}
-            </button>
-          </div>
-        ) : (
-          <button
-            onClick={onEditToggle}
-            className="text-brand text-sm font-semibold hover:opacity-80 transition-all"
-          >
-            <i className="fas fa-pen mr-1"></i>
-            {t("edit", "Edit")}
-          </button>
+        {/* 2. Chỉ hiển thị các nút điều khiển nếu KHÔNG PHẢI chế độ readOnly */}
+        {!readOnly && (
+          <>
+            {isEditing ? (
+              <div className="flex gap-2">
+                <button
+                  onClick={handleCancel}
+                  disabled={isSaving}
+                  className="text-sm text-blueGray-600 font-semibold hover:opacity-80 transition-all"
+                >
+                  {t("cancel", "Cancel")}
+                </button>
+                <button
+                  onClick={handleSave}
+                  disabled={isSaving}
+                  className="text-brand text-sm font-semibold hover:opacity-80 transition-all"
+                >
+                  {isSaving ? (
+                    <i className="fas fa-spinner fa-spin mr-1"></i>
+                  ) : (
+                    <i className="fas fa-save mr-1"></i>
+                  )}
+                  {t("save", "Save")}
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={onEditToggle}
+                className="text-brand text-sm font-semibold hover:opacity-80 transition-all"
+              >
+                <i className="fas fa-pen mr-1"></i>
+                {t("edit", "Edit")}
+              </button>
+            )}
+          </>
         )}
       </div>
 
@@ -204,4 +210,5 @@ AboutCard.propTypes = {
   isEditing: PropTypes.bool.isRequired,
   onEditToggle: PropTypes.func.isRequired,
   onSaveSuccess: PropTypes.func.isRequired,
+  readOnly: PropTypes.bool, // 3. Khai báo PropTypes
 };

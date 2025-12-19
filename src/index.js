@@ -4,33 +4,32 @@ import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import "./i18n";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import "assets/styles/tailwind.css";
-
-// layouts
 import AdminLayout from "layouts/AdminLayout.js";
 import AuthLayout from "layouts/AuthLayout.js";
 import MainLayout from "layouts/MainLayout.js";
 import { AuthProvider } from "./context/AuthContext";
 import StudentLayout from "layouts/StudentLayout.js";
 import EmployerLayout from "layouts/EmployerLayout.js";
-
-// === THÊM DÒNG IMPORT NÀY ===
 import LanguageSwitcher from "components/LanguageSwitcher/LanguageSwitcher.js";
 import PrivateRoute from "components/common/PrivateRoute";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 ReactDOM.render(
   <AuthProvider>
     <BrowserRouter>
-      {/* === ĐẶT COMPONENT VÀO ĐÂY === */}
       <LanguageSwitcher />
       
       <Switch>
-        {/* URL nào bắt đầu bằng /admin sẽ dùng AdminLayout */}
-        <Route path="/admin" component={AdminLayout} />
+        {/* 1. SỬA: Bảo vệ Route Admin bằng PrivateRoute */}
+        <PrivateRoute 
+          path="/admin" 
+          component={AdminLayout} 
+          allowedRoles={['SYSTEM_ADMIN']}
+        />
 
-        {/* URL nào bắt đầu bằng /auth sẽ dùng AuthLayout */}
         <Route path="/auth" component={AuthLayout} />
 
-        {/* 2. THÊM ROUTE CHO STUDENT (phải đặt trước MainLayout) */}
         <PrivateRoute 
           path="/student" 
           component={StudentLayout}
@@ -38,14 +37,19 @@ ReactDOM.render(
         />
 
         <PrivateRoute 
-            path="/employer" 
-            component={EmployerLayout} 
-            allowedRoles={['EMPLOYER']} 
+          path="/employer" 
+          component={EmployerLayout} 
+          allowedRoles={['EMPLOYER']} 
         />
 
-        {/* Tất cả các URL còn lại sẽ dùng MainLayout */}
+        {/* Trang chủ nên để cuối cùng */}
         <Route path="/" component={MainLayout} />
+        
+        {/* 2. THÊM: Redirect nếu gõ link sai */}
+        <Redirect from="*" to="/" />
       </Switch>
+
+      <ToastContainer position="top-right" autoClose={3000} />
     </BrowserRouter>
   </AuthProvider>,
   document.getElementById("root")

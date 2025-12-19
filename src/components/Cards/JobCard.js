@@ -1,74 +1,73 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-import { useTranslation } from "react-i18next"; // Import hook
+import { useTranslation } from "react-i18next";
 
 export default function JobCard({ job }) {
-  const { t } = useTranslation(); // Sử dụng hook
+  const { t } = useTranslation();
 
-  const getWorkModeColor = (mode) => {
-     if (!mode) return "bg-blueGray-200 text-blueGray-600";
-     switch (mode.toUpperCase()) {
-       case "REMOTE": return "bg-purple-200 text-purple-600";
-       case "ONSITE": return "bg-emerald-200 text-emerald-600";
-       case "HYBRID": return "bg-lightBlue-200 text-lightBlue-600";
-       default: return "bg-blueGray-200 text-blueGray-600";
-     }
+  // Helper function để định dạng ngày tháng nếu chưa có
+  const displayDate = (dateString) => {
+    if (!dateString) return "";
+    return new Date(dateString).toLocaleDateString("vi-VN");
   };
 
   return (
-    <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded-lg hover:shadow-xl transition-all duration-200 border border-blueGray-100">
-      <div className="px-4 py-5 flex-auto">
-        {/* Header */}
-        <div className="flex justify-between items-start mb-2">
-            <div className="text-blueGray-500 font-bold text-xs uppercase truncate pr-2" title={job.companyName}>
-                <i className="fas fa-building mr-2"></i>
-                {/* Sử dụng t('unknown_company') */}
-                {job.companyName || t('unknown_company')} 
-            </div>
-            <span className={`text-xs font-bold px-2 py-1 rounded uppercase whitespace-nowrap ${getWorkModeColor(job.workMode)}`}>
-                {job.workMode}
-            </span>
+    <div className="relative flex flex-col min-w-0 break-words bg-white w-full h-full shadow-lg rounded-lg hover:-translate-y-1 transition-all duration-200 border border-transparent hover:border-blueGray-200">
+      <div className="px-4 py-5 flex-auto flex flex-col">
+        {/* Company Header */}
+        <div className="flex items-center mb-3">
+          <div className="w-10 h-10 rounded-full bg-blueGray-100 flex items-center justify-center text-blueGray-500 mr-3 flex-shrink-0">
+            <i className="fas fa-building"></i>
+          </div>
+          <h6 className="text-blueGray-500 text-xs font-bold uppercase truncate">
+            {job.companyName || t('unknown_company', 'Công ty ẩn danh')}
+          </h6>
         </div>
 
-        {/* Title */}
-        <Link to={`/student/jobs/${job.id}`}>
-            <h5 className="text-xl font-bold text-blueGray-700 mb-2 hover:text-brand transition-colors cursor-pointer line-clamp-2 h-14">
+        {/* Job Title */}
+        <Link to={`/student/jobs/${job.id}`} className="block mb-2">
+          <h5 className="text-lg font-bold text-blueGray-700 hover:text-brand transition-colors line-clamp-2 min-h-[56px]">
             {job.title}
-            </h5>
+          </h5>
         </Link>
-        
-        <p className="text-sm text-blueGray-500 mb-4 font-semibold truncate">
-            {job.position}
+
+        {/* Tags: WorkMode & Position */}
+        <div className="flex flex-wrap gap-2 mb-3">
+          <span className="text-xs font-semibold inline-block py-1 px-2 rounded text-emerald-600 bg-emerald-100 uppercase">
+            {job.workMode}
+          </span>
+          {job.position && (
+            <span className="text-xs font-semibold inline-block py-1 px-2 rounded text-lightBlue-600 bg-lightBlue-100 uppercase">
+              {job.position}
+            </span>
+          )}
+        </div>
+
+        {/* --- ĐỊA ĐIỂM (LOCATION) - PHẦN MỚI THÊM --- */}
+        <div className="flex items-center text-blueGray-500 text-xs mb-3">
+          <i className="fas fa-map-marker-alt mr-2 text-blueGray-400"></i>
+          <span className="truncate">{job.location || t('location_not_specified', 'Toàn quốc')}</span>
+        </div>
+
+        {/* Description */}
+        <p className="text-blueGray-500 text-sm mb-4 line-clamp-3 flex-grow italic">
+          {job.description}
         </p>
 
-        {/* Details */}
-        <div className="flex flex-wrap items-center text-sm text-blueGray-500 gap-4 mb-4">
-            <div className="flex items-center">
-                <i className="fas fa-map-marker-alt mr-2 text-blueGray-400"></i>
-                {job.location}
-            </div>
-            {job.expiredAt && (
-                 <div className="flex items-center text-orange-500">
-                    <i className="fas fa-clock mr-2"></i>
-                    {new Date(job.expiredAt).toLocaleDateString('vi-VN')}
-                </div>
-            )}
-        </div>
-        
-        {/* Action Button */}
-        <div className="mt-auto pt-4 border-t border-blueGray-100">
-             <Link to={`/student/jobs/${job.id}`}>
-                <button className="w-full bg-white text-brand border border-brand active:bg-brand active:text-white font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
-                    {t('view_details')} {/* <--- Thay đổi */}
-                </button>
-             </Link>
+        {/* Footer: Date & Detail Link */}
+        <div className="border-t border-blueGray-100 pt-4 mt-auto flex justify-between items-center">
+          <span className="text-xs text-blueGray-400">
+            <i className="far fa-clock mr-1"></i>
+            {displayDate(job.createdAt)}
+          </span>
+          <Link
+            to={`/student/jobs/${job.id}`}
+            className="text-brand font-bold text-xs uppercase hover:underline"
+          >
+            {t('view_detail', 'Chi tiết')} <i className="fas fa-arrow-right ml-1"></i>
+          </Link>
         </div>
       </div>
     </div>
   );
 }
-
-JobCard.propTypes = {
-  job: PropTypes.object.isRequired,
-};

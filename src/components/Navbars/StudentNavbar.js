@@ -68,12 +68,12 @@ export default function StudentNavbar() {
               </Link>
             </li>
 
-            <li className="flex items-center">
+            {/* <li className="flex items-center">
               <Link to="/messages" className={getLinkClass("/messages")}>
                 <i className="fas fa-envelope text-lg leading-lg mr-2" />{" "}
                 {t("messages", "Messages")}
               </Link>
-            </li>
+            </li> */}
 
             {/* --- Language Switcher --- */}
             <li className="flex items-center">

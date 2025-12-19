@@ -1,15 +1,17 @@
 import React from "react";
 import { Link } from "react-router-dom";
-
 import UserDropdown from "components/Dropdowns/UserDropdown.js";
+import { useTranslation } from "react-i18next";
 
 export default function Sidebar() {
   const [collapseShow, setCollapseShow] = React.useState("hidden");
+  const { t } = useTranslation();
+
   return (
     <>
       <nav className="md:left-0 md:block md:fixed md:top-0 md:bottom-0 md:overflow-y-auto md:flex-row md:flex-nowrap md:overflow-hidden shadow-xl bg-white flex flex-wrap items-center justify-between relative md:w-64 z-10 py-4 px-6">
         <div className="md:flex-col md:items-stretch md:min-h-full md:flex-nowrap px-0 flex flex-wrap items-center justify-between w-full mx-auto">
-          {/* Toggler */}
+          {/* Toggler (Mobile) */}
           <button
             className="cursor-pointer text-black opacity-50 md:hidden px-3 py-1 text-xl leading-none bg-transparent rounded border border-solid border-transparent"
             type="button"
@@ -17,22 +19,22 @@ export default function Sidebar() {
           >
             <i className="fas fa-bars"></i>
           </button>
-          {/* Brand - Sửa tên dự án ở đây */}
+          
+          {/* Brand */}
           <Link
             className="md:block text-left md:pb-2 text-blueGray-600 mr-0 inline-block whitespace-nowrap text-sm uppercase font-bold p-4 px-0"
             to="/admin"
           >
             Internship Hub
           </Link>
+
           {/* User (chỉ hiển thị trên mobile) */}
           <ul className="md:hidden items-center flex flex-wrap list-none">
-            <li className="inline-block relative">
-              
-            </li>
             <li className="inline-block relative">
               <UserDropdown />
             </li>
           </ul>
+
           {/* Collapse */}
           <div
             className={
@@ -63,20 +65,18 @@ export default function Sidebar() {
               </div>
             </div>
 
-            {/* Xóa form tìm kiếm không cần thiết */}
-            {/* <form className="mt-6 mb-4 md:hidden">...</form> */}
-
             {/* Divider */}
             <hr className="my-4 md:min-w-full" />
+            
             {/* Heading */}
             <h6 className="md:min-w-full text-blueGray-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline">
-              Quản trị viên
+              {t('admin_section', "Quản trị viên")}
             </h6>
-            {/* Navigation */}
 
+            {/* Navigation */}
             <ul className="md:flex-col md:min-w-full flex flex-col list-none">
               
-              {/* Link mới cho trang Quản lý Tin tuyển dụng */}
+              {/* 1. Quản lý Tin tuyển dụng (Tất cả) */}
               <li className="items-center">
                 <Link
                   className={
@@ -95,34 +95,32 @@ export default function Sidebar() {
                         : "text-blueGray-300")
                     }
                   ></i>{" "}
-                  Quản lý Tin tuyển dụng
+                  {t('manage_job_posts', "Quản lý Tin tuyển dụng")}
                 </Link>
               </li>
 
-              {/* Chúng ta sẽ thêm các link khác ở đây, ví dụ Quản lý người dùng */}
-              {/*
+              {/* 2. MỚI: Phê duyệt bài đăng (Chỉ PENDING) */}
               <li className="items-center">
                 <Link
                   className={
                     "text-xs uppercase py-3 font-bold block " +
-                    (window.location.href.indexOf("/admin/user-management") !== -1
-                      ? "text-lightBlue-500 hover:text-lightBlue-600"
+                    (window.location.href.indexOf("/admin/job-approval") !== -1
+                      ? "text-brand hover:opacity-80"
                       : "text-blueGray-700 hover:text-blueGray-500")
                   }
-                  to="/admin/user-management"
+                  to="/admin/job-approval"
                 >
                   <i
                     className={
-                      "fas fa-users mr-2 text-sm " +
-                      (window.location.href.indexOf("/admin/user-management") !== -1
+                      "fas fa-check-circle mr-2 text-sm " +
+                      (window.location.href.indexOf("/admin/job-approval") !== -1
                         ? "opacity-75"
                         : "text-blueGray-300")
                     }
                   ></i>{" "}
-                  Quản lý người dùng
+                  {t('approve_job_posts', "Phê duyệt bài đăng")}
                 </Link>
               </li>
-              */}
 
             </ul>
           </div>

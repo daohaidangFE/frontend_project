@@ -73,7 +73,7 @@ export default function EmployerSidebar() {
               <li className="items-center">
                 <Link className={"text-xs uppercase py-3 font-bold block " + isActive("/employer/create-job")} to="/employer/create-job">
                   <i className="fas fa-plus-circle mr-2 text-sm opacity-75"></i>{" "}
-                  Đăng tin tuyển dụng
+                  {t('post_new_job', "Đăng tin tuyển dụng")}
                 </Link>
               </li>
 
@@ -81,7 +81,7 @@ export default function EmployerSidebar() {
               <li className="items-center">
                 <Link className={"text-xs uppercase py-3 font-bold block " + isActive("/employer/jobs")} to="/employer/jobs">
                   <i className="fas fa-list-alt mr-2 text-sm opacity-75"></i>{" "}
-                  Quản lý tin đăng
+                  {t('manage_my_jobs', "Quản lý tin đăng")}
                 </Link>
               </li>
             </ul>
