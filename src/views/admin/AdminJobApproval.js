@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
 import jobService from "services/jobService";
-import Swal from "sweetalert2"; // Để làm hộp thoại xác nhận
-import { toast } from 'react-toastify'; // Để hiện thông báo góc màn hình
+import Swal from "sweetalert2";
+import { toast } from 'react-toastify';
+import AdminPostDetailModal from "components/Modals/AdminPostDetailModal.js";
 
 export default function AdminJobApproval() {
   const [pendingPosts, setPendingPosts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [selectedPost, setSelectedPost] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // Load dữ liệu khi vào trang
   useEffect(() => {
     loadData();
   }, []);
@@ -23,23 +25,27 @@ export default function AdminJobApproval() {
     }
   };
 
+  const onViewDetail = (post) => {
+    setSelectedPost(post);
+    setIsModalOpen(true);
+  };
+
   const onApprove = async (postId) => {
-    // Sử dụng SweetAlert2 để hỏi xác nhận
     Swal.fire({
       title: "Phê duyệt bài đăng?",
       text: "Tin tuyển dụng này sẽ được hiển thị công khai cho sinh viên.",
       icon: "question",
       showCancelButton: true,
-      confirmButtonColor: "#10b981", // Emerald-500
-      cancelButtonColor: "#64748b", // BlueGray-500
+      confirmButtonColor: "#10b981",
+      cancelButtonColor: "#64748b",
       confirmButtonText: "Đồng ý, duyệt ngay!",
       cancelButtonText: "Hủy",
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
           await jobService.approvePost(postId);
-          // Cập nhật UI
           setPendingPosts(pendingPosts.filter((p) => p.id !== postId));
+          setIsModalOpen(false); // Đóng modal nếu đang mở
           toast.success("✅ Đã phê duyệt bài đăng thành công!");
         } catch (error) {
           toast.error("❌ Phê duyệt thất bại!");
@@ -49,13 +55,12 @@ export default function AdminJobApproval() {
   };
 
   const onReject = async (postId) => {
-    // Sử dụng SweetAlert2 để cảnh báo khi từ chối
     Swal.fire({
       title: "Từ chối bài đăng?",
       text: "Bạn có chắc chắn muốn từ chối phê duyệt bài đăng này?",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#f43f5e", // Red-500
+      confirmButtonColor: "#f43f5e",
       cancelButtonColor: "#64748b",
       confirmButtonText: "Đúng, từ chối!",
       cancelButtonText: "Quay lại",
@@ -64,6 +69,7 @@ export default function AdminJobApproval() {
         try {
           await jobService.rejectPost(postId);
           setPendingPosts(pendingPosts.filter((p) => p.id !== postId));
+          setIsModalOpen(false);
           toast.info("📋 Đã từ chối bài đăng.");
         } catch (error) {
           toast.error("❌ Thao tác thất bại!");
@@ -95,7 +101,7 @@ export default function AdminJobApproval() {
             <tbody>
               {pendingPosts.length > 0 ? (
                 pendingPosts.map((post) => (
-                  <tr key={post.id} className="hover:bg-blueGray-50 transition-all">
+                  <tr key={post.id} className="hover:bg-blueGray-50 transition-all cursor-pointer" onClick={() => onViewDetail(post)}>
                     <td className="px-4 py-4 border-b">
                       <div className="font-bold text-blueGray-700">{post.title}</div>
                       <div className="text-xs text-blueGray-500">{post.position}</div>
@@ -106,18 +112,19 @@ export default function AdminJobApproval() {
                     <td className="px-4 py-4 border-b text-sm text-blueGray-600">
                       {new Date(post.createdAt).toLocaleDateString('vi-VN')}
                     </td>
-                    <td className="px-4 py-4 border-b text-center">
+                    <td className="px-4 py-4 border-b text-center" onClick={(e) => e.stopPropagation()}>
+                      {/* e.stopPropagation() để khi bấm nút không bị nhảy vào hàm onViewDetail của dòng */}
                       <button 
                         onClick={() => onApprove(post.id)}
-                        className="bg-emerald-500 text-white px-3 py-2 rounded shadow hover:bg-emerald-600 hover:shadow-md transition-all mr-2 text-xs font-bold uppercase"
+                        className="bg-emerald-500 text-white px-3 py-2 rounded shadow hover:bg-emerald-600 mr-2 text-xs font-bold uppercase"
                       >
-                        <i className="fas fa-check mr-1"></i> Duyệt
+                        Duyệt
                       </button>
                       <button 
                         onClick={() => onReject(post.id)}
-                        className="bg-red-500 text-white px-3 py-2 rounded shadow hover:bg-red-600 hover:shadow-md transition-all text-xs font-bold uppercase"
+                        className="bg-red-500 text-white px-3 py-2 rounded shadow hover:bg-red-600 text-xs font-bold uppercase"
                       >
-                        <i className="fas fa-times mr-1"></i> Từ chối
+                        Từ chối
                       </button>
                     </td>
                   </tr>
@@ -125,10 +132,7 @@ export default function AdminJobApproval() {
               ) : (
                 <tr>
                   <td colSpan="4" className="text-center py-12 text-blueGray-400 italic">
-                    <div className="flex flex-col items-center">
-                      <i className="fas fa-folder-open text-4xl mb-2 opacity-20"></i>
-                      <p>Hiện không có bài đăng nào cần phê duyệt.</p>
-                    </div>
+                    Không có bài đăng nào cần phê duyệt.
                   </td>
                 </tr>
               )}
@@ -136,6 +140,14 @@ export default function AdminJobApproval() {
           </table>
         </div>
       </div>
+
+      <AdminPostDetailModal 
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        post={selectedPost}
+        onApprove={onApprove}
+        onReject={onReject}
+      />
     </div>
   );
 }
