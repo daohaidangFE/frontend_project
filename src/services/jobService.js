@@ -7,15 +7,21 @@ const PROFILE_API_URL = "/profile/v1";
 const unwrap = (response) => response.data?.data || response.data?.result || response.data;
 
 const jobService = {
-  searchJobs: async (keyword = "", workMode = "", location = "", skillId = "", companyId = "") => {
-    const params = { keyword };
+  searchJobs: async (keyword = "", workMode = "", location = "", skillId = "", companyId = "", page = 0, size = 10) => {
+    const params = { 
+        keyword,
+        page,
+        size
+    };
+
     if (workMode && workMode !== "ALL") params.workMode = workMode;
     if (location) params.location = location;
     if (skillId) params.skillId = skillId;
     if (companyId) params.companyId = companyId;
 
     const response = await apiClient.get(`${JOB_API_URL}/search`, { params });
-    return unwrap(response) || [];
+    
+    return unwrap(response); 
   },
   getJobDetail: async (postId) => {
     const response = await apiClient.get(`${JOB_API_URL}/detail`, {

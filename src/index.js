@@ -15,42 +15,50 @@ import PrivateRoute from "components/common/PrivateRoute";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+
 ReactDOM.render(
   <AuthProvider>
-    <BrowserRouter>
-      <LanguageSwitcher />
-      
-      <Switch>
-        {/* 1. SỬA: Bảo vệ Route Admin bằng PrivateRoute */}
-        <PrivateRoute 
-          path="/admin" 
-          component={AdminLayout} 
-          allowedRoles={['SYSTEM_ADMIN']}
-        />
+    {/* Cung cấp context xác thực cho toàn app */}
 
-        <Route path="/auth" component={AuthLayout} />
+      <BrowserRouter>
+        <LanguageSwitcher />
 
-        <PrivateRoute 
-          path="/student" 
-          component={StudentLayout}
-          allowedRoles={['STUDENT']}
-        />
+        <Switch>
+          {/* Khu vực quản trị */}
+          <PrivateRoute
+            path="/admin"
+            component={AdminLayout}
+            allowedRoles={["SYSTEM_ADMIN"]}
+          />
 
-        <PrivateRoute 
-          path="/employer" 
-          component={EmployerLayout} 
-          allowedRoles={['EMPLOYER']} 
-        />
+          {/* Trang đăng nhập / đăng ký */}
+          <Route path="/auth" component={AuthLayout} />
 
-        {/* Trang chủ nên để cuối cùng */}
-        <Route path="/" component={MainLayout} />
-        
-        {/* 2. THÊM: Redirect nếu gõ link sai */}
-        <Redirect from="*" to="/" />
-      </Switch>
+          {/* Khu vực sinh viên */}
+          <PrivateRoute
+            path="/student"
+            component={StudentLayout}
+            allowedRoles={["STUDENT"]}
+          />
 
-      <ToastContainer position="top-right" autoClose={3000} />
-    </BrowserRouter>
+          {/* Khu vực nhà tuyển dụng */}
+          <PrivateRoute
+            path="/employer"
+            component={EmployerLayout}
+            allowedRoles={["EMPLOYER"]}
+          />
+
+          {/* Trang mặc định */}
+          <Route path="/" component={MainLayout} />
+
+          {/* Fallback route */}
+          <Redirect from="*" to="/" />
+        </Switch>
+
+        {/* Toast thông báo toàn cục */}
+        <ToastContainer position="top-right" autoClose={3000} />
+      </BrowserRouter>
+
   </AuthProvider>,
   document.getElementById("root")
 );

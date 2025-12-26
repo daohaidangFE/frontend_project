@@ -2,68 +2,79 @@ import apiClient from "./apiClient";
 
 const AUTH_URL = "/auth";
 
-/**
- * Gửi yêu cầu đăng nhập đến server.
- * @param {string} email 
- * @param {string} password 
- * @returns {Promise<{authResponse: object, user: object}>} - AuthResponse và đối tượng User.
- */
-
+// Login
 const loginWithApi = async (email, password) => {
+  // Call API
   const response = await apiClient.post(`${AUTH_URL}/login`, {
-    email: email,
-    password: password
+    email,
+    password,
   });
 
-  const authResponse = response.data.data;
+  // Flat data from backend
+  const authData = response.data.data;
 
-  const fullToken = `${authResponse.tokenType} ${authResponse.accessToken}`;
-  localStorage.setItem('jwt_token', fullToken);
-  localStorage.setItem('refresh_token', authResponse.refreshToken);
-
+  // Build user object
   const user = {
-    userId: authResponse.userId,
-    email: email,
-    role: authResponse.role,
-    fullName: authResponse.fullName,
+    userId: authData.userId,
+    email,
+    role: authData.role,
+    fullName: authData.fullName,
+    avatar: authData.avatar || null,
   };
-  localStorage.setItem('user', JSON.stringify(user));
-  return {authResponse, user};
+
+  // Save storage
+  localStorage.setItem("accessToken", authData.accessToken);
+  localStorage.setItem("refreshToken", authData.refreshToken);
+  localStorage.setItem("user", JSON.stringify(user));
+
+  return { user };
 };
 
-
+// Register
 const registerWithApi = async (userData) => {
   const response = await apiClient.post(`${AUTH_URL}/register`, userData);
-  const authResponse = response.data.data;
-  const fullToken = `${authResponse.tokenType} ${authResponse.accessToken}`; 
-  localStorage.setItem('jwt_token', fullToken); 
-  localStorage.setItem('refresh_token', authResponse.refreshToken);
+  const authData = response.data.data;
 
-  const user = { 
-      userId: authResponse.userId,
-      email: userData.email,
-      role: authResponse.role, 
-      fullName: userData.fullName,
+  // Save token
+  localStorage.setItem("accessToken", authData.accessToken);
+  localStorage.setItem("refreshToken", authData.refreshToken);
+
+  const user = {
+    userId: authData.userId,
+    email: userData.email,
+    role: authData.role,
+    fullName: userData.fullName,
   };
-  localStorage.setItem('user', JSON.stringify(user));
-  return { authResponse, user };
+
+  localStorage.setItem("user", JSON.stringify(user));
+  return { user };
 };
 
 const authService = {
   login: loginWithApi,
   register: registerWithApi,
 
+  // Safe get user
   getCurrentUser: () => {
     const userStr = localStorage.getItem("user");
-    return userStr ? JSON.parse(userStr) : null;
+    if (!userStr || userStr === "undefined") return null;
+
+    try {
+      return JSON.parse(userStr);
+    } catch (err) {
+      console.error("Parse user failed:", err);
+      localStorage.removeItem("user");
+      return null;
+    }
   },
 
+  // Clear auth data
   logout: () => {
-    localStorage.removeItem("jwt_token");
-    localStorage.removeItem("refresh_token");
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
     localStorage.removeItem("user");
+    window.location.href = "/auth/login";
   },
 };
-
 
 export default authService;

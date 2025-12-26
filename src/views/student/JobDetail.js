@@ -1,51 +1,58 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useHistory } from "react-router-dom";
+import { useParams, useHistory, Link } from "react-router-dom";
 import apiClient from "services/apiClient";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 
-// --- IMPORTS MỚI ---
+// --- IMPORT MODAL & SERVICE ---
 import ApplyJobModal from "components/Modals/ApplyJobModal";
 import profileService from "services/profileService";
 
 export default function JobDetail() {
-  const { id } = useParams();
+  const { id } = useParams();                 // Lấy jobId từ URL
   const history = useHistory();
   const { t } = useTranslation();
   
-  const [job, setJob] = useState(null);
+  const [job, setJob] = useState(null);       // Data job
   const [loading, setLoading] = useState(true);
 
-  // --- STATE MỚI CHO LOGIC ỨNG TUYỂN ---
+  // --- STATE APPLY ---
   const [showApplyModal, setShowApplyModal] = useState(false);
   const [currentUserProfile, setCurrentUserProfile] = useState(null);
-  // Thêm state loading cho profile để tránh bị logout oan
   const [isCheckingProfile, setIsCheckingProfile] = useState(true);
 
-  // 1. Lấy thông tin Job (Code cũ)
+  // ================== 1. FETCH JOB DETAIL ==================
   useEffect(() => {
     async function fetchJobData() {
       try {
         const res = await apiClient.get(`/internship-post/detail`, {
-            params: { postId: id }
+          params: { postId: id }
         });
-        
+
+        // Chuẩn hoá data từ BE
         let jobData = res.data.data || res.data.result || res.data;
 
+        // Fetch thêm thông tin công ty nếu có companyId
         if (jobData.companyId) {
-            try {
-                const companyRes = await apiClient.get(`/companies/${jobData.companyId}`);
-                jobData = { ...jobData, companyName: companyRes.data.name || companyRes.data.result.name };
-            } catch (err) {
-                console.warn("Không lấy được tên công ty", err);
-                jobData.companyName = t('unknown_company', "Công ty ẩn danh");
-            }
+          try {
+            const companyRes = await apiClient.get(`/companies/${jobData.companyId}`);
+            jobData = { 
+              ...jobData, 
+              companyName: companyRes.data.name || companyRes.data.result?.name,
+              companyAddress: companyRes.data.address || "Hà Nội, Việt Nam",
+              companyWebsite: companyRes.data.website || "#",
+              companyLogo: companyRes.data.logo
+            };
+          } catch (err) {
+            console.warn("Không lấy được công ty", err);
+            jobData.companyName = t("unknown_company", "Công ty ẩn danh");
+          }
         }
 
         setJob(jobData);
       } catch (error) {
         console.error(error);
-        toast.error(t('post_not_found', "Không tìm thấy bài đăng!"));
+        toast.error(t("post_not_found", "Không tìm thấy bài đăng!"));
         history.push("/student/jobs");
       } finally {
         setLoading(false);
@@ -55,208 +62,218 @@ export default function JobDetail() {
     if (id) fetchJobData();
   }, [id, history, t]);
 
-  // 2. Lấy thông tin User Profile (ĐÃ SỬA: Thêm loading và check data kỹ hơn)
+  // ================== 2. FETCH USER PROFILE ==================
   useEffect(() => {
     async function fetchMe() {
-        try {
-            setIsCheckingProfile(true);
-            // Gọi hàm mới đã được unwrap sẵn
-            const userData = await profileService.getMe();
-            
-            if (userData) {
-                setCurrentUserProfile(userData);
-            }
-        } catch (e) {
-            console.warn("Chưa đăng nhập hoặc lỗi lấy profile:", e);
-        } finally {
-            setIsCheckingProfile(false);
-        }
+      try {
+        setIsCheckingProfile(true);
+        const userData = await profileService.getMe();
+        if (userData) setCurrentUserProfile(userData);
+      } catch (e) {
+        console.warn("Chưa đăng nhập hoặc lỗi profile:", e);
+      } finally {
+        setIsCheckingProfile(false);
+      }
     }
     fetchMe();
-    }, []);
+  }, []);
 
-  // 3. Hàm xử lý khi bấm nút "Ứng tuyển ngay" (ĐÃ SỬA: Check trạng thái loading)
+  // ================== 3. HANDLE APPLY ==================
   const handleApplyClick = () => {
-      // Nếu đang kiểm tra profile thì báo chờ, không logout
-      if (isCheckingProfile) {
-          toast.info("Đang kiểm tra thông tin người dùng, vui lòng thử lại sau giây lát...");
-          return;
-      }
+    if (isCheckingProfile) {
+      toast.info("Đang kiểm tra thông tin...");
+      return;
+    }
 
-      // Nếu load xong mà vẫn không có Profile -> Mới thực sự là chưa đăng nhập
-      if (!currentUserProfile) {
-          toast.info(t('login_required', "Vui lòng đăng nhập để ứng tuyển!"));
-          history.push("/auth/login");
-          return;
-      }
+    // Chưa đăng nhập
+    if (!currentUserProfile) {
+      toast.info(t("login_required", "Vui lòng đăng nhập để ứng tuyển!"));
+      history.push("/auth/login");
+      return;
+    }
 
-      // Check xem có CV chưa
-      if (!currentUserProfile.cvUrl) {
-          const confirmRedirect = window.confirm(t('cv_missing_confirm', "Bạn chưa có CV trong hồ sơ. Bạn có muốn đến trang Profile để tải CV lên không?"));
-          if (confirmRedirect) {
-              history.push("/student/profile");
-          }
-          return;
-      }
+    // Chưa có CV
+    if (!currentUserProfile.cvUrl) {
+      const confirmRedirect = window.confirm(
+        t("cv_missing_confirm", "Bạn chưa có CV. Đến trang Profile để tải lên?")
+      );
+      if (confirmRedirect) history.push("/student/profile");
+      return;
+    }
 
-      // Nếu đủ điều kiện -> Mở Modal
-      setShowApplyModal(true);
+    setShowApplyModal(true);
   };
 
-  // 4. Hàm xác nhận gửi hồ sơ
-  const handleConfirmApply = async (data) => {
-      console.log(">>> GỬI ỨNG TUYỂN:", {
-          jobId: job.id,
-          employerId: job.postedBy, 
-          cvUrl: currentUserProfile.cvUrl,
-          coverLetter: data.coverLetter
-      });
-
-      // TODO: Sau này thay bằng API thật
-      toast.success(t('apply_success', "Đã gửi hồ sơ thành công!"));
-      setShowApplyModal(false);
+  // Sau khi confirm apply
+  const handleConfirmApply = async () => {
+    toast.success(t("apply_success", "Đã gửi hồ sơ thành công!"));
+    setShowApplyModal(false);
   };
 
-  if (loading) return <div className="p-10 text-center">{t('loading_data', "Đang tải dữ liệu...")}</div>;
+  // ================== LOADING STATE ==================
+  if (loading) {
+    return (
+      <div className="min-h-screen flex justify-center items-center bg-blueGray-100">
+        <div className="text-center">
+          <i className="fas fa-circle-notch fa-spin text-4xl text-brand mb-4"></i>
+          <p className="text-blueGray-500 font-medium">
+            {t("loading_data", "Đang tải dữ liệu...")}
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   if (!job) return null;
 
+  // ================== RENDER ==================
   return (
     <div className="bg-blueGray-100 min-h-screen pb-20">
-      {/* Header */}
-      <div className="relative bg-lightBlue-600 md:pt-32 pb-32 pt-12">
+
+      {/* ===== HEADER ===== */}
+      <div className="relative bg-blueGray-800 md:pt-32 pb-40 pt-12 overflow-hidden">
+        <div
+          className="absolute top-0 w-full h-full bg-blueGray-800 opacity-50"
+          style={{ backgroundImage: "url('https://www.transparenttextures.com/patterns/cubes.png')" }}
+        />
+
         <div className="container mx-auto px-4 relative z-10">
-            <div className="flex flex-col md:flex-row items-center">
-                <div className="w-20 h-20 bg-white rounded-lg flex items-center justify-center shadow-lg mb-4 md:mb-0 md:mr-6">
-                   <i className="fas fa-building text-3xl text-lightBlue-600"></i>
-                </div>
-                <div className="text-center md:text-left text-white flex-1">
-                    <h1 className="text-3xl font-bold font-sans leading-tight mb-2">{job.title}</h1>
-                    <p className="text-blueGray-200 text-lg font-medium mb-1">
-                        <i className="far fa-building mr-2"></i>
-                        {job.companyName || t('updating', "Đang cập nhật...")}
-                    </p>
-                    <div className="flex flex-wrap justify-center md:justify-start gap-3 mt-3">
-                        <span className="bg-white/20 backdrop-blur text-white px-3 py-1 rounded text-sm uppercase font-bold">
-                            <i className="fas fa-laptop-house mr-2"></i>{job.workMode}
-                        </span>
-                        <span className="bg-white/20 backdrop-blur text-white px-3 py-1 rounded text-sm">
-                            <i className="fas fa-user-tag mr-2"></i>{job.position}
-                        </span>
-                    </div>
-                </div>
-                
-                {/* Nút Ứng tuyển */}
-                <div className="mt-6 md:mt-0">
-                    <button 
-                        onClick={handleApplyClick} 
-                        // Disable nút khi đang load profile để người dùng không bấm loạn
-                        disabled={isCheckingProfile}
-                        className={`font-bold uppercase text-xs px-6 py-3 rounded shadow hover:shadow-md transform hover:-translate-y-1 transition-all ${isCheckingProfile ? 'bg-gray-400 cursor-not-allowed text-gray-200' : 'bg-emerald-500 text-white'}`}
-                    >
-                        {isCheckingProfile ? "Checking..." : t('apply_now', "Ứng tuyển ngay")}
-                    </button>
-                </div>
+          {/* Breadcrumb */}
+          <div className="text-blueGray-300 text-sm mb-6">
+            <Link to="/" className="hover:text-white">Trang chủ</Link>
+            <span className="mx-2">/</span>
+            <Link to="/student/jobs" className="hover:text-white">Việc làm</Link>
+            <span className="mx-2">/</span>
+            <span className="text-white opacity-80 truncate">{job.title}</span>
+          </div>
+
+          <div className="flex flex-col md:flex-row items-start md:items-center">
+            {/* Logo */}
+            <div className="w-24 h-24 bg-white rounded-xl flex items-center justify-center shadow-2xl mb-4 md:mr-8">
+              {job.companyLogo ? (
+                <img src={job.companyLogo} alt="Logo" className="w-16 h-16 object-contain" />
+              ) : (
+                <i className="fas fa-building text-4xl text-blueGray-300" />
+              )}
             </div>
+
+            {/* Title */}
+            <div className="text-white flex-1">
+              <h1 className="text-3xl md:text-4xl font-bold mb-3">{job.title}</h1>
+              <div className="flex flex-wrap gap-4 text-blueGray-200">
+                <span>
+                  <i className="far fa-building mr-2 text-lightBlue-400" />
+                  {job.companyName}
+                </span>
+                <span className="bg-white/20 px-3 py-1 rounded-full text-sm">
+                  <i className="fas fa-clock mr-2" />
+                  {job.duration || "Toàn thời gian"}
+                </span>
+              </div>
+            </div>
+
+            {/* Apply Button Desktop */}
+            <div className="hidden md:block">
+              <button
+                onClick={handleApplyClick}
+                disabled={isCheckingProfile}
+                className={`font-bold uppercase text-sm px-8 py-4 rounded-lg transition
+                  ${isCheckingProfile
+                    ? "bg-blueGray-400 text-blueGray-200"
+                    : "bg-emerald-500 text-white hover:bg-emerald-600"}`}
+              >
+                <i className="fas fa-paper-plane mr-2" />
+                {isCheckingProfile ? "Checking..." : "Ứng tuyển ngay"}
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div className="container mx-auto px-4 -mt-20 relative z-20">
+      {/* ===== BODY ===== */}
+      <div className="container mx-auto px-4 -mt-24 relative z-20">
         <div className="flex flex-wrap">
-          {/* CỘT TRÁI */}
-          <div className="w-full lg:w-8/12 px-4 mb-6">
-            <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-white border-0">
-              <div className="px-6 py-6">
-                
-                {/* Hiển thị SKILLS */}
-                {job.skills && job.skills.length > 0 && (
-                    <div className="mb-6">
-                       <h6 className="text-sm font-bold text-blueGray-400 uppercase tracking-wide mb-3">
-                           {t('required_skills', "Kỹ năng yêu cầu")}
-                       </h6>
-                        <div className="flex flex-wrap gap-2">
-                            {job.skills.map(skill => (
-                                <span key={skill.id} className="bg-indigo-100 text-indigo-600 px-3 py-1 rounded-full text-xs font-bold uppercase">
-                                    {skill.name}
-                                </span>
-                            ))}
-                        </div>
-                    </div>
-                )}
 
-                 <div className="mb-8">
-                    <h6 className="text-sm font-bold text-blueGray-400 uppercase tracking-wide mb-3">
-                        {t('job_description', "Mô tả công việc")}
-                    </h6>
-                    <div className="text-blueGray-600 text-base leading-relaxed whitespace-pre-line bg-blueGray-50 p-4 rounded">
-                        {job.description}
-                    </div>
+          {/* MAIN CONTENT */}
+          <div className="w-full lg:w-8/12 px-4 mb-6">
+            <div className="bg-white shadow-xl rounded-lg p-8">
+
+              {/* Skills */}
+              {job.skills?.length > 0 && (
+                <div className="mb-8 border-b pb-8">
+                  <h6 className="font-bold mb-4">Kỹ năng chuyên môn</h6>
+                  <div className="flex flex-wrap gap-3">
+                    {job.skills.map(skill => (
+                      <span
+                        key={skill.id}
+                        className="bg-lightBlue-50 text-lightBlue-600 px-4 py-2 rounded-lg text-sm font-bold"
+                      >
+                        {skill.name}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Description */}
+              <div>
+                <h6 className="font-bold mb-4">Mô tả chi tiết</h6>
+                <div className="text-blueGray-600 whitespace-pre-line text-justify">
+                  {job.description}
                 </div>
               </div>
             </div>
           </div>
 
-          {/* CỘT PHẢI (Sidebar) */}
+          {/* SIDEBAR */}
           <div className="w-full lg:w-4/12 px-4">
-            <div className="bg-white shadow-lg rounded-lg p-6">
-               <h6 className="text-blueGray-700 font-bold text-sm uppercase border-b pb-2 mb-4">
-                   {t('general_info', "Thông tin chung")}
-               </h6>
-               
-               <div className="flex items-start mb-4">
-                   <div className="w-8 h-8 rounded bg-blue-100 flex items-center justify-center mr-3 text-blue-500">
-                       <i className="fas fa-calendar-alt"></i>
-                   </div>
-                   <div>
-                       <span className="block text-xs text-blueGray-400 uppercase font-bold">{t('duration', "Thời gian")}</span>
-                       <span className="text-blueGray-700 font-semibold">{job.duration || t('unknown', "Không rõ")}</span>
-                   </div>
-               </div>
-
-               <div className="flex items-start mb-4">
-                   <div className="w-8 h-8 rounded bg-emerald-100 flex items-center justify-center mr-3 text-emerald-500">
-                        <i className="fas fa-money-bill-wave"></i>
-                   </div>
-                   <div>
-                       <span className="block text-xs text-blueGray-400 uppercase font-bold">{t('salary', "Mức lương")}</span>
-                       <span className="text-emerald-600 font-bold">{t('negotiable', "Thỏa thuận")}</span>
-                   </div>
-               </div>
-
-               <div className="flex items-start mb-4">
-                   <div className="w-8 h-8 rounded bg-red-100 flex items-center justify-center mr-3 text-red-500">
-                       <i className="fas fa-hourglass-end"></i>
-                   </div>
-                   <div>
-                       <span className="block text-xs text-blueGray-400 uppercase font-bold">{t('deadline', "Hạn nộp")}</span>
-                       <span className="text-blueGray-700 font-semibold">
-                           {job.expiredAt ? new Date(job.expiredAt).toLocaleDateString("vi-VN") : t('no_deadline', "Vô thời hạn")}
-                       </span>
-                   </div>
-               </div>
-
-                <div className="flex items-start mb-4">
-                   <div className="w-8 h-8 rounded bg-orange-100 flex items-center justify-center mr-3 text-orange-500">
-                       <i className="fas fa-map-marker-alt"></i>
-                   </div>
-                   <div>
-                       <span className="block text-xs text-blueGray-400 uppercase font-bold">{t('location', "Địa điểm")}</span>
-                       <span className="text-blueGray-700 font-semibold">{job.location}</span>
-                   </div>
-               </div>
+            <div className="bg-white shadow-xl rounded-lg p-6 mb-6">
+              <InfoItem icon="fa-money-bill-wave" color="emerald" label="Mức lương" value="Thỏa thuận" />
+              <InfoItem icon="fa-map-marker-alt" color="red" label="Địa điểm" value={job.location} />
+              <InfoItem icon="fa-briefcase" color="orange" label="Hình thức" value={job.workMode} />
             </div>
+
+            {/* Apply Mobile */}
+            <button
+              onClick={handleApplyClick}
+              className="w-full bg-emerald-500 text-white font-bold py-3 rounded md:hidden"
+            >
+              Ứng tuyển ngay
+            </button>
           </div>
         </div>
       </div>
 
-      {/* --- MODAL ỨNG TUYỂN --- */}
-      <ApplyJobModal 
-          isOpen={showApplyModal}
-          onClose={() => setShowApplyModal(false)}
-          jobTitle={job.title}
-          companyName={job.companyName}
-          cvUrl={currentUserProfile?.cvUrl}
-          onConfirm={handleConfirmApply}
+      {/* APPLY MODAL */}
+      <ApplyJobModal
+        isOpen={showApplyModal}
+        onClose={() => setShowApplyModal(false)}
+        jobTitle={job.title}
+        companyName={job.companyName}
+        cvUrl={currentUserProfile?.cvUrl}
+        onConfirm={handleConfirmApply}
       />
+    </div>
+  );
+}
+
+// ================== SUB COMPONENT ==================
+function InfoItem({ icon, color, label, value }) {
+  const colorClasses = {
+    emerald: "text-emerald-500 bg-emerald-100",
+    red: "text-red-500 bg-red-100",
+    orange: "text-orange-500 bg-orange-100",
+  };
+
+  return (
+    <div className="flex items-center mb-4">
+      <div className={`w-10 h-10 rounded-lg flex items-center justify-center mr-4 ${colorClasses[color]}`}>
+        <i className={`fas ${icon}`} />
+      </div>
+      <div>
+        <div className="text-xs text-blueGray-400 font-bold">{label}</div>
+        <div className="text-blueGray-700 font-semibold">{value || "N/A"}</div>
+      </div>
     </div>
   );
 }

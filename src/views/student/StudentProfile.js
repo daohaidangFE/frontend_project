@@ -15,6 +15,7 @@ import ProfileInfoCard from "components/Profile/ProfileInfoCard.js";
 import RecentActivityCard from "components/Profile/RecentActivityCard";
 import ExperienceModal from "components/Modals/ExperienceModal";
 import cvService from "services/cvService";
+import { toast } from "react-toastify";
 
 export default function StudentProfile() {
   const { t } = useTranslation();
@@ -77,9 +78,18 @@ export default function StudentProfile() {
     }
   };
 
-  const handleUpdateAbout = (updatedProfile) => {
-    setProfile(updatedProfile);
+const handleUpdateAbout = (updatedDataFromApi) => {
+    
+    setProfile((prevProfile) => ({
+      ...updatedDataFromApi,
+      
+      cvName: prevProfile.cvName, 
+      cvUrl: prevProfile.cvUrl,
+      id: prevProfile.id
+    }));
+
     setIsEditingAbout(false);
+    toast.success(t("update_success", "Cập nhật thông tin thành công!"));
   };
 
   const handleDeleteExperience = async (expId) => {
