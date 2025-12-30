@@ -6,10 +6,6 @@ const COMPANY_URL = "/profile/v1/companies";
 const unwrap = (response) => response.data?.data || response.data?.result || response.data;
 
 const profileService = {
-    getMe: async () => {
-        const response = await apiClient.get(PROFILE_V2_URL);
-        return unwrap(response);
-    },
 
     getStudentProfile: async () => {
         const response = await apiClient.get(PROFILE_V2_URL);
@@ -88,6 +84,17 @@ const profileService = {
             console.error("Lỗi khi tìm công ty theo ID:", error);
             return null;
         }
+    },
+    getAllSkills: async () => {
+        const response = await apiClient.get(`${PROFILE_V2_URL}/skills`);
+        return unwrap(response) || [];
+    },
+    addSkill: async (data) => {
+        const response = await apiClient.post(`${PROFILE_V2_URL}/skills`, data);
+        return unwrap(response);
+    },
+    deleteSkill: async (id) => {
+        await apiClient.delete(`${PROFILE_V2_URL}/skills/${id}`);
     }
 };
 

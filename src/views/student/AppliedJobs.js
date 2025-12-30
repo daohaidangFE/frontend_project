@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-// apiClient để sẵn, sau này thay mock bằng API thật
 import apiClient from "services/apiClient";
 import { toast } from "react-toastify";
 
@@ -9,7 +8,7 @@ export default function AppliedJobs() {
   const { t } = useTranslation();
 
   // ===== STATE =====
-  const [applications, setApplications] = useState([]); // danh sách job đã apply
+  const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(true);
 
   // ===== FETCH DATA (MOCK) =====
@@ -25,7 +24,7 @@ export default function AppliedJobs() {
           companyName: "FPT Software",
           companyLogo: "https://via.placeholder.com/150",
           appliedAt: "2025-12-20",
-          status: "PENDING", // PENDING | APPROVED | REJECTED
+          status: "PENDING",
         },
         {
           id: 2,

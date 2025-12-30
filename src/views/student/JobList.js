@@ -2,7 +2,12 @@ import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import jobService from "services/jobService";
 import JobCard from "components/Cards/JobCard.js";
-import { LOCATIONS } from "constants/index";
+import { PROVINCE_API_URL } from "constants/index"; 
+
+const getCleanProvinceName = (fullName) => {
+  if (!fullName) return "";
+  return fullName.replace(/^(Thành phố|Tỉnh)\s+/i, "");
+};
 
 export default function JobList() {
   const { t } = useTranslation();
@@ -10,12 +15,13 @@ export default function JobList() {
   // Danh sách job
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [provinces, setProvinces] = useState([]);
 
   // Trạng thái phân trang
   const [pagination, setPagination] = useState({
-    page: 0,        // Trang hiện tại (bắt đầu từ 0)
-    size: 9,       // Số job mỗi trang
-    totalPages: 0,  // Tổng số trang
+    page: 0,
+    size: 9,
+    totalPages: 0,
     totalElements: 0
   });
 
@@ -26,10 +32,30 @@ export default function JobList() {
     location: ""
   });
 
-  // Gọi API lấy danh sách job theo trang
+  // 1. Fetch danh sách Tỉnh/Thành
+  useEffect(() => {
+    const fetchProvinces = async () => {
+      try {
+        // Kiểm tra xem URL có đúng không
+        const url = PROVINCE_API_URL || "https://provinces.open-api.vn/api/?depth=1";
+        const response = await fetch(url);
+        const data = await response.json();
+        setProvinces(Array.isArray(data) ? data : []);
+      } catch (error) {
+        console.error("Lỗi lấy danh sách tỉnh thành:", error);
+        setProvinces([]);
+      }
+    };
+    fetchProvinces();
+  }, []);
+
+  // 2. Fetch Job
   const fetchJobs = async (pageIndex = 0) => {
     setLoading(true);
+    console.log("--> Đang gọi API Search với filters:", filters);
+
     try {
+      // Gọi y hệt HomePage, chỉ thay tham số bằng state
       const data = await jobService.searchJobs(
         filters.keyword,
         filters.workMode,
@@ -39,6 +65,8 @@ export default function JobList() {
         pageIndex,
         pagination.size
       );
+
+      console.log("--> Kết quả API trả về:", data);
 
       if (data) {
         setJobs(data.content || []);
@@ -57,19 +85,17 @@ export default function JobList() {
     }
   };
 
-  // Load dữ liệu lần đầu
+  // Load lần đầu khi vào trang
   useEffect(() => {
     fetchJobs(0);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Submit form tìm kiếm
+  // Xử lý sự kiện
   const handleSearch = (e) => {
     e.preventDefault();
-    fetchJobs(0); // Tìm mới thì quay về trang đầu
+    fetchJobs(0);
   };
 
-  // Chuyển trang
   const handlePageChange = (newPage) => {
     if (newPage >= 0 && newPage < pagination.totalPages) {
       fetchJobs(newPage);
@@ -77,7 +103,6 @@ export default function JobList() {
     }
   };
 
-  // Thay đổi bộ lọc
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFilters((prev) => ({ ...prev, [name]: value }));
@@ -87,7 +112,7 @@ export default function JobList() {
     <div className="bg-blueGray-100 min-h-screen pt-24 pb-10">
       <div className="container mx-auto px-4">
 
-        {/* Thanh tìm kiếm */}
+        {/* --- PHẦN SEARCH FORM --- */}
         <div className="flex flex-wrap justify-center mb-8">
           <div className="w-full lg:w-10/12 px-4">
             <h2 className="text-3xl font-bold text-center mb-8 text-blueGray-700">
@@ -98,7 +123,7 @@ export default function JobList() {
               <form onSubmit={handleSearch}>
                 <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
 
-                  {/* Từ khóa */}
+                  {/* Keyword */}
                   <div className="md:col-span-5 relative">
                     <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-blueGray-400">
                       <i className="fas fa-search"></i>
@@ -113,7 +138,7 @@ export default function JobList() {
                     />
                   </div>
 
-                  {/* Hình thức làm việc */}
+                  {/* WorkMode */}
                   <div className="md:col-span-3 relative">
                     <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-blueGray-400">
                       <i className="fas fa-briefcase"></i>
@@ -131,7 +156,7 @@ export default function JobList() {
                     </select>
                   </div>
 
-                  {/* Địa điểm */}
+                  {/* Location */}
                   <div className="md:col-span-3 relative">
                     <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-blueGray-400">
                       <i className="fas fa-map-marker-alt"></i>
@@ -143,17 +168,23 @@ export default function JobList() {
                       onChange={handleChange}
                     >
                       <option value="">Tất cả địa điểm</option>
-                      {LOCATIONS.map((loc) => (
-                        <option key={loc} value={loc}>{loc}</option>
-                      ))}
+                      {/* Dùng optional chaining ?.map để tránh lỗi nếu provinces null */}
+                      {provinces?.map((prov) => {
+                        const cleanName = getCleanProvinceName(prov.name);
+                        return (
+                          <option key={prov.code} value={cleanName}>
+                            {prov.name}
+                          </option>
+                        );
+                      })}
                     </select>
                   </div>
 
-                  {/* Nút tìm kiếm */}
+                  {/* Submit Button */}
                   <div className="md:col-span-1">
                     <button
                       type="submit"
-                      className="w-full h-full bg-brand text-white font-bold rounded hover:shadow-lg flex items-center justify-center"
+                      className="w-full h-full bg-brand text-white font-bold rounded hover:shadow-lg flex items-center justify-center py-3 md:py-0"
                     >
                       <i className="fas fa-arrow-right"></i>
                     </button>
@@ -165,7 +196,7 @@ export default function JobList() {
           </div>
         </div>
 
-        {/* Danh sách job */}
+        {/* --- PHẦN DANH SÁCH JOB --- */}
         <div className="flex flex-wrap -mx-4">
           {loading ? (
             <div className="w-full text-center py-20">
@@ -185,7 +216,7 @@ export default function JobList() {
                     </div>
                   ))}
 
-                  {/* Phân trang */}
+                  {/* Pagination Control */}
                   {pagination.totalPages > 1 && (
                     <div className="w-full px-4 mt-4 flex justify-center items-center space-x-2">
                       <button
@@ -193,7 +224,7 @@ export default function JobList() {
                         onClick={() => handlePageChange(pagination.page - 1)}
                         className={`px-4 py-2 rounded ${
                           pagination.page === 0
-                            ? "bg-gray-200 text-gray-400"
+                            ? "bg-gray-200 text-gray-400 cursor-not-allowed"
                             : "bg-white text-brand hover:bg-brand hover:text-white shadow"
                         }`}
                       >
@@ -209,7 +240,7 @@ export default function JobList() {
                         onClick={() => handlePageChange(pagination.page + 1)}
                         className={`px-4 py-2 rounded ${
                           pagination.page >= pagination.totalPages - 1
-                            ? "bg-gray-200 text-gray-400"
+                            ? "bg-gray-200 text-gray-400 cursor-not-allowed"
                             : "bg-white text-brand hover:bg-brand hover:text-white shadow"
                         }`}
                       >

@@ -1,166 +1,84 @@
-// src/components/Profile/CVCard.js
-import React, { useState, useRef } from 'react';
-import { useTranslation } from 'react-i18next';
-import PropTypes from 'prop-types';
-import cvService from 'services/cvService';
-import profileService from 'services/profileService';
+import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
+import { toast } from "react-toastify";
+import cvService from "services/cvService";
 
-export default function CVCard({ 
-  profile, 
-  onUploadSuccess, 
-  readOnly = false 
-}) {
+export default function CVCard({ profile, onUploadSuccess }) {
   const { t } = useTranslation();
-  const fileInputRef = useRef(null);
+  const [uploading, setUploading] = useState(false);
+  const hasCV = !!profile.cvUrl;
 
-  const [isUploading, setIsUploading] = useState(false);
-  const [uploadError, setUploadError] = useState(null);
-
-  const cvStatus = profile.cvUrl
-    ? t('uploaded', 'Đã tải lên')
-    : t('not_uploaded', 'Chưa tải lên');
-
-  /** Mở input file ẩn */
-  const handleButtonClick = () => fileInputRef.current.click();
-
-  /** Upload file khi người dùng chọn */
-  const handleFileChange = async (event) => {
-    const file = event.target.files[0];
+  const handleFileChange = async (e) => {
+    const file = e.target.files[0];
     if (!file) return;
 
-    if (file.size > 10 * 1024 * 1024) {
-      setUploadError("File quá lớn (Max 10MB)");
+    // Validate client-side
+    if (file.type !== "application/pdf") {
+      toast.warning(t("cv.invalid_format", "Vui lòng chỉ tải lên file PDF."));
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) { // 5MB limit
+      toast.warning(t("cv.file_too_large", "File quá lớn (Tối đa 5MB)."));
       return;
     }
 
-    setIsUploading(true);
-    setUploadError(null);
-
+    setUploading(true);
     try {
-      // BƯỚC 1: Upload file lên CV Service
-      const uploadRes = await cvService.uploadCV(file, file.name);
-      
-      console.log("Upload Response:", uploadRes); // Log để debug
-
-      // --- SỬA ĐOẠN NÀY ---
-      // Ưu tiên lấy cvUrl vì log của bạn cho thấy nó nằm ở đó
-      const newCvUrl = uploadRes?.cvUrl || uploadRes?.data?.cvUrl || uploadRes?.url || uploadRes?.data?.url;
-      // --------------------
-
-      if (newCvUrl) {
-          // BƯỚC 2: Gọi Profile Service để lưu Link này vào Database của Student
-          await profileService.updateBasicProfile({
-              ...profile,
-              cvUrl: newCvUrl 
-          });
-          
-          console.log("Đã cập nhật CV URL vào Profile:", newCvUrl);
-      } else {
-          console.warn("Không lấy được URL từ response upload:", uploadRes);
-      }
-
-      // Thông báo thành công
-      onUploadSuccess && onUploadSuccess();
-      
+      await cvService.uploadCV(file);
+      toast.success(t("cv.upload_success", "Tải lên CV thành công!"));
+      if (onUploadSuccess) onUploadSuccess();
     } catch (error) {
-      console.error("Upload/Update error:", error);
-      setUploadError(t('upload_failed', 'Tải lên thất bại. Vui lòng thử lại.'));
+      toast.error(t("cv.upload_failed", "Lỗi khi tải lên CV. Vui lòng thử lại."));
     } finally {
-      setIsUploading(false);
-      event.target.value = null;
+      setUploading(false);
+      e.target.value = null; // Reset input
     }
   };
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md mt-6 border border-blueGray-200 relative">
-      
-      {/* Loading overlay */}
-      {isUploading && (
-        <div className="absolute inset-0 bg-white bg-opacity-75 z-10 flex flex-col items-center justify-center rounded-lg">
-          <i className="fas fa-circle-notch fa-spin text-3xl text-brand mb-2"></i>
-          <p className="text-sm font-semibold text-blueGray-600">
-            {t('analyzing_cv', 'Đang tải lên & lưu hồ sơ...')}
-          </p>
-        </div>
-      )}
-
-      <h3 className="text-lg font-bold text-blueGray-700 mb-4">
-        {t('cv', 'CV & Hồ sơ')}
-      </h3>
-
-      <div className="space-y-3 mb-4">
-        
-        {/* Trạng thái CV */}
-        <div className="text-sm">
-          <label className="text-xs text-blueGray-500 uppercase font-bold">
-            {t('cv_status', 'Trạng thái CV')}
-          </label>
-          <p className={`font-semibold ${profile.cvUrl ? 'text-emerald-500' : 'text-blueGray-400'}`}>
-            {cvStatus}
-          </p>
-        </div>
-
-        {/* Link xem CV */}
-        <div className="text-sm">
-          <label className="text-xs text-blueGray-500 uppercase font-bold">
-            {t('view_cv', 'CV hiện tại')}
-          </label>
-          <div className="text-brand truncate mt-1">
-            {profile.cvUrl ? (
-              <a
-                href={profile.cvUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="bg-blueGray-50 hover:bg-blueGray-100 border border-blueGray-200 rounded p-2 inline-flex items-center gap-2 font-medium transition-all text-blueGray-700 hover:text-brand"
-              >
-                <i className="fas fa-file-pdf text-red-500 text-xl"></i>
-                <span>{profile.cvName || profile.cvUrl.split('/').pop().split('?')[0] || "My_CV.pdf"}</span>
-                <i className="fas fa-download ml-2 text-xs opacity-50"></i>
-              </a>
-            ) : (
-              <span className="text-blueGray-400 italic">{t('not_updated', 'Chưa cập nhật')}</span>
-            )}
-          </div>
-        </div>
+    <div className="bg-white rounded-lg shadow-sm border border-blueGray-200 p-5">
+      <div className="flex justify-between items-center mb-3">
+        <h5 className="text-lg font-bold text-blueGray-700">{t("cv.title", "Hồ sơ đính kèm (CV)")}</h5>
+        {uploading && <i className="fas fa-spinner fa-spin text-lightBlue-500"></i>}
       </div>
-
-      {uploadError && (
-        <p className="text-red-500 text-xs mb-3 italic">{uploadError}</p>
+      
+      {hasCV ? (
+        <div className="mb-4">
+            <div className="bg-emerald-100 border border-emerald-200 text-emerald-700 px-4 py-3 rounded text-sm mb-3 flex items-center">
+                <i className="fas fa-check-circle mr-2 text-lg"></i> 
+                <span className="font-semibold">{t("cv.status_uploaded", "Đã có CV trên hệ thống")}</span>
+            </div>
+            <a 
+                href={profile.cvUrl} 
+                target="_blank" 
+                rel="noreferrer"
+                className="block w-full text-center bg-blueGray-700 hover:bg-blueGray-800 text-white font-bold py-2 px-4 rounded transition-colors duration-150 text-sm shadow hover:shadow-lg"
+            >
+                <i className="fas fa-eye mr-2"></i> {t("cv.view_download", "Xem / Tải xuống")}
+            </a>
+        </div>
+      ) : (
+        <div className="bg-orange-100 border border-orange-200 text-orange-700 px-4 py-3 rounded text-sm mb-4 flex items-center">
+            <i className="fas fa-exclamation-triangle mr-2 text-lg"></i> 
+            <span>{t("cv.status_missing", "Bạn chưa tải lên CV nào.")}</span>
+        </div>
       )}
 
-      {/* Chỉ hiển thị phần Upload nếu KHÔNG PHẢI readOnly */}
-      {!readOnly && (
-        <>
-          <input
-            type="file"
-            ref={fileInputRef}
-            onChange={handleFileChange}
-            accept=".pdf,.doc,.docx"
-            className="hidden"
-          />
-
-          <button
-            onClick={handleButtonClick}
-            disabled={isUploading}
-            className="bg-brand text-white w-full py-2 px-4 rounded-lg font-bold text-sm flex items-center justify-center shadow hover:shadow-lg hover:opacity-90 transition-all"
-          >
-            <i className="fas fa-cloud-upload-alt mr-2"></i>
-            {profile.cvUrl
-              ? t('update_cv', 'Cập nhật CV mới')
-              : t('upload_cv', 'Tải CV lên')}
-          </button>
-
-          <p className="text-blueGray-400 text-xs mt-2 text-center">
-            *Hỗ trợ PDF, DOCX. Tối đa 10MB.
-          </p>
-        </>
-      )}
+      {/* Upload Button */}
+      <label className={`cursor-pointer block w-full text-center border-2 border-dashed ${uploading ? 'border-gray-300 bg-gray-100 cursor-not-allowed' : 'border-lightBlue-500 hover:bg-lightBlue-50'} text-lightBlue-600 font-bold py-3 px-4 rounded transition-all duration-200 text-sm`}>
+        <i className="fas fa-cloud-upload-alt mr-2 text-lg"></i> 
+        {uploading ? t("common.processing", "Đang xử lý...") : (hasCV ? t("cv.update_new", "Cập nhật CV mới") : t("cv.upload_now", "Tải lên ngay"))}
+        <input 
+            type="file" 
+            className="hidden" 
+            accept=".pdf"
+            disabled={uploading}
+            onChange={handleFileChange} 
+        />
+      </label>
+      <p className="text-xs text-blueGray-400 mt-2 text-center italic">
+        {t("cv.hint", "Hỗ trợ định dạng PDF, tối đa 5MB")}
+      </p>
     </div>
   );
 }
-
-CVCard.propTypes = {
-  profile: PropTypes.object.isRequired,
-  onUploadSuccess: PropTypes.func,
-  readOnly: PropTypes.bool,
-};

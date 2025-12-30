@@ -1,98 +1,99 @@
-// src/components/Profile/ExperienceCard.js
-import React from 'react';
-import { useTranslation } from 'react-i18next';
+import React from "react";
+import { useTranslation } from "react-i18next";
 import PropTypes from 'prop-types';
-
-const formatDate = (dateString, t) => {
-  if (!dateString) return t('present', 'Hiện tại');
-  try {
-    // Format hiển thị: 05/2023
-    return new Date(dateString).toLocaleDateString('vi-VN', { month: '2-digit', year: 'numeric' });
-  } catch {
-    return dateString;
-  }
-};
 
 export default function ExperienceCard({ 
   experiences, 
-  onAddClick, 
-  onEditClick, 
-  onDeleteClick, 
+  onAdd, 
+  onEdit, 
+  onDelete,
   readOnly = false 
 }) {
   const { t } = useTranslation();
 
+  const formatDate = (dateString) => {
+    if (!dateString) return t("common.present", "Hiện tại");
+    return new Date(dateString).toLocaleDateString('vi-VN', { month: '2-digit', year: 'numeric' });
+  };
+
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md border border-blueGray-200 mt-6">
-      <div className="flex justify-between items-center mb-4">
-        <h3 className="text-xl font-bold text-blueGray-700">
-          {t('experience', 'Kinh nghiệm làm việc')}
+    <div className="relative">
+      <div className="flex justify-between items-center mb-6">
+        <h3 className="text-2xl font-bold text-blueGray-700">
+          {t("profile.experience", "Kinh nghiệm làm việc")}
         </h3>
         
-        {/* Chỉ hiện nút Thêm nếu KHÔNG PHẢI readOnly */}
         {!readOnly && (
           <button 
-            onClick={onAddClick}
-            className="text-brand text-sm font-semibold hover:opacity-80 transition-all flex items-center"
+            onClick={onAdd} // Gọi prop onAdd từ Profile.js
+            className="bg-lightBlue-500 text-white active:bg-lightBlue-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none ease-linear transition-all duration-150"
           >
-            <i className="fas fa-plus mr-1"></i>
-            {t('add', 'Thêm mới')}
+            <i className="fas fa-plus mr-1"></i> {t("common.add_new", "Thêm mới")}
           </button>
         )}
       </div>
 
       {experiences && experiences.length > 0 ? (
-        <ul className="space-y-6">
-          {experiences.map((exp) => (
-            <li 
-              key={exp.id} 
-              className="border-b border-blueGray-100 pb-4 last:border-b-0 last:pb-0 relative group"
-            >
-              {/* Nhóm nút Sửa/Xóa - Ẩn khi readOnly */}
-              {!readOnly && (
-                <div className="absolute top-0 right-0 opacity-0 group-hover:opacity-100 transition-opacity flex gap-3 bg-white pl-2">
-                  <button 
-                    onClick={() => onEditClick(exp)}
-                    className="text-blueGray-400 hover:text-brand"
-                    title={t('edit')}
-                  >
-                    <i className="fas fa-pencil-alt"></i>
-                  </button>
-                  <button 
-                    onClick={() => onDeleteClick(exp.id)}
-                    className="text-blueGray-400 hover:text-red-500"
-                    title={t('delete')}
-                  >
-                    <i className="fas fa-trash-alt"></i>
-                  </button>
+        <div className="space-y-8">
+            {experiences.map((exp, index) => (
+                <div key={exp.id || index} className="relative pl-8 border-l-2 border-blueGray-200 last:border-0 group">
+                    {/* Timeline Dot */}
+                    <div className="absolute -left-2 top-0 w-4 h-4 rounded-full bg-lightBlue-500 border-2 border-white shadow-sm z-10"></div>
+                    
+                    <div className="flex justify-between items-start">
+                        <div>
+                            <h4 className="text-xl font-semibold text-blueGray-800">{exp.position}</h4> {/* Sửa title -> position cho khớp Modal */}
+                            <div className="text-lg text-blueGray-600 font-medium">{exp.companyName}</div>
+                            <div className="text-sm text-blueGray-400 mt-1 mb-2 italic">
+                                <i className="far fa-calendar-alt mr-1"></i>
+                                {formatDate(exp.startDate)} - {exp.endDate ? formatDate(exp.endDate) : t("common.present", "Hiện tại")}
+                            </div>
+                        </div>
+                        
+                        {/* Action Buttons */}
+                        {!readOnly && (
+                          <div className="flex space-x-3 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
+                               <button onClick={() => onEdit(exp)} className="text-blueGray-400 hover:text-lightBlue-500" title={t("common.edit", "Sửa")}>
+                                  <i className="fas fa-pencil-alt"></i>
+                               </button>
+                               <button onClick={() => onDelete(exp.id)} className="text-blueGray-400 hover:text-red-500" title={t("common.delete", "Xóa")}>
+                                  <i className="fas fa-trash"></i>
+                               </button>
+                          </div>
+                        )}
+                    </div>
+
+                    {exp.description && (
+                        <div className="mt-2 text-blueGray-600 whitespace-pre-line text-sm leading-relaxed bg-blueGray-50 p-3 rounded border border-blueGray-100">
+                            {exp.description}
+                        </div>
+                    )}
+                    {exp.achievement && (
+                            <div className="mt-4 p-3 bg-emerald-50 border-l-4 border-emerald-500 rounded-r text-sm">
+                                <div className="flex items-start">
+                                    <i className="fas fa-trophy text-emerald-500 mt-1 mr-2 text-base"></i>
+                                    <div>
+                                        <span className="font-bold text-emerald-700 block uppercase text-xs mb-1">
+                                            {t('profile.achievement', 'Thành tích nổi bật')}
+                                        </span>
+                                        <span className="text-blueGray-700">
+                                            {exp.achievement}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
                 </div>
-              )}
-
-              <h4 className="font-bold text-lg text-blueGray-800">
-                {exp.position}
-              </h4>
-
-              <p className="text-brand font-semibold text-sm mb-1">
-                {exp.companyName}
-              </p>
-
-              <p className="text-xs text-blueGray-500 mb-2 flex items-center">
-                <i className="far fa-calendar-alt mr-2"></i>
-                {formatDate(exp.startDate, t)} - {formatDate(exp.endDate, t)}
-              </p>
-
-              {exp.description && (
-                <p className="text-sm text-blueGray-600 whitespace-pre-line mt-2">
-                  {exp.description}
-                </p>
-              )}
-            </li>
-          ))}
-        </ul>
+            ))}
+        </div>
       ) : (
-        <div className="text-center text-blueGray-400 py-8 bg-blueGray-50 rounded-lg border border-dashed border-blueGray-300">
-          <i className="fas fa-briefcase text-3xl mb-3 opacity-50"></i>
-          <p className="text-sm">{t('no_experience_added', 'Chưa có thông tin kinh nghiệm')}</p>
+        <div className="text-center py-8 bg-blueGray-50 rounded-lg border border-dashed border-blueGray-300">
+            <p className="text-blueGray-500 mb-2">{t("profile.no_experience", "Chưa có kinh nghiệm làm việc nào.")}</p>
+            {!readOnly && (
+              <button className="text-lightBlue-500 font-bold text-sm hover:underline" onClick={onAdd}>
+                  {t("profile.add_first_experience", "Thêm kinh nghiệm đầu tiên")}
+              </button>
+            )}
         </div>
       )}
     </div>
@@ -101,8 +102,8 @@ export default function ExperienceCard({
 
 ExperienceCard.propTypes = {
   experiences: PropTypes.array,
-  onAddClick: PropTypes.func,
-  onEditClick: PropTypes.func,
-  onDeleteClick: PropTypes.func,
-  readOnly: PropTypes.bool,
+  onAdd: PropTypes.func,
+  onEdit: PropTypes.func,
+  onDelete: PropTypes.func,
+  readOnly: PropTypes.bool
 };

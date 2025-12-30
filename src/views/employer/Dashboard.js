@@ -3,237 +3,185 @@ import { Link } from "react-router-dom";
 
 export default function EmployerDashboard() {
   return (
-    <div className="bg-blueGray-100 min-h-screen pt-24 pb-20">
-      <div className="container mx-auto px-4">
-        
-        {/* --- 1. STATS CARDS (Thống kê) --- */}
-        <div className="flex flex-wrap mb-12">
-           <StatCard 
-              title="Tin đang tuyển" 
-              value="3" 
-              icon="fas fa-briefcase" 
-              color="bg-orange-500" 
-              desc="Java Backend, ReactJS, Tester"
-           />
-           <StatCard 
-              title="CV mới nhận" 
-              value="18" 
-              icon="fas fa-file-alt" 
-              color="bg-pink-500" 
-              desc="+5 CV trong hôm nay"
-           />
-           <StatCard 
-              title="Lịch phỏng vấn" 
-              value="4" 
-              icon="fas fa-calendar-check" 
-              color="bg-lightBlue-500" 
-              desc="Sắp tới: 14:00 chiều nay"
-           />
-           <StatCard 
-              title="Tỷ lệ chuyển đổi" 
-              value="65%" 
-              icon="fas fa-chart-pie" 
-              color="bg-emerald-500" 
-              desc="Khá tốt so với tháng trước"
-           />
+    <>
+      <div className="flex flex-wrap">
+        {/* CARD 1: Tin đang hiển thị */}
+        <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
+          <StatCard 
+            title="Tin đang hiển thị"
+            value="3"
+            icon="fas fa-briefcase"
+            color="bg-emerald-500"
+            footer="2 tin đang chờ duyệt"
+            footerIcon="fas fa-clock"
+            footerColor="text-orange-500"
+          />
         </div>
 
-        {/* --- 2. BẢNG ỨNG VIÊN MỚI NHẤT --- */}
-        <div className="w-full mb-12">
-          <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-white border-0">
-            <div className="rounded-t mb-0 px-6 py-4 border-b border-blueGray-100 bg-blueGray-50">
+        {/* CARD 2: Ứng viên mới */}
+        <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
+          <StatCard 
+            title="Ứng viên mới"
+            value="12"
+            icon="fas fa-users"
+            color="bg-lightBlue-500"
+            footer="Tăng 15% so với tuần trước"
+            footerIcon="fas fa-arrow-up"
+            footerColor="text-emerald-500"
+          />
+        </div>
+
+        {/* CARD 3: Sắp hết hạn */}
+        <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
+          <StatCard 
+            title="Sắp hết hạn"
+            value="1"
+            icon="fas fa-hourglass-half"
+            color="bg-orange-500"
+            footer="Hết hạn trong 3 ngày tới"
+            footerIcon="fas fa-exclamation-triangle"
+            footerColor="text-red-500"
+          />
+        </div>
+
+        {/* CARD 4: Tổng lượt xem (Giả định) */}
+        <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
+          <StatCard 
+            title="Tổng lượt xem"
+            value="450"
+            icon="fas fa-chart-bar"
+            color="bg-red-500"
+            footer="Cập nhật 1 giờ trước"
+            footerIcon="fas fa-sync"
+            footerColor="text-blueGray-500"
+          />
+        </div>
+      </div>
+
+      <div className="flex flex-wrap mt-4">
+        {/* CỘT TRÁI: Ứng viên mới nhất */}
+        <div className="w-full xl:w-8/12 mb-12 xl:mb-0 px-4">
+          <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded">
+            <div className="rounded-t mb-0 px-4 py-3 border-0">
               <div className="flex flex-wrap items-center">
                 <div className="relative w-full px-4 max-w-full flex-grow flex-1">
-                  <h3 className="font-bold text-lg text-blueGray-700">
-                    <i className="fas fa-user-clock mr-2 text-blueGray-400"></i>
-                    Ứng viên chờ duyệt mới nhất
+                  <h3 className="font-semibold text-base text-blueGray-700">
+                    Ứng viên mới nộp hồ sơ
                   </h3>
                 </div>
                 <div className="relative w-full px-4 max-w-full flex-grow flex-1 text-right">
-                  <button
-                    className="bg-indigo-500 text-white active:bg-indigo-600 text-xs font-bold uppercase px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none ease-linear transition-all duration-150"
-                    type="button"
+                  <Link
+                    to="/employer/dashboard" // Sau này trỏ tới trang All Candidates
+                    className="bg-indigo-500 text-white active:bg-indigo-600 text-xs font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                   >
                     Xem tất cả
-                  </button>
+                  </Link>
                 </div>
               </div>
             </div>
-            
             <div className="block w-full overflow-x-auto">
+              {/* Bảng ứng viên rút gọn */}
               <table className="items-center w-full bg-transparent border-collapse">
                 <thead>
                   <tr>
-                    <th className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-bold text-left bg-blueGray-50 text-blueGray-500 border-blueGray-100">
-                      Họ và tên
+                    <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
+                      Tên ứng viên
                     </th>
-                    <th className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-bold text-left bg-blueGray-50 text-blueGray-500 border-blueGray-100">
+                    <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
                       Vị trí ứng tuyển
                     </th>
-                    <th className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-bold text-left bg-blueGray-50 text-blueGray-500 border-blueGray-100">
-                      Thời gian nộp
-                    </th>
-                    <th className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-bold text-left bg-blueGray-50 text-blueGray-500 border-blueGray-100">
-                      Trạng thái
-                    </th>
-                    <th className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-bold text-left bg-blueGray-50 text-blueGray-500 border-blueGray-100">
-                      Hành động
+                    <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
+                      Ngày nộp
                     </th>
                   </tr>
                 </thead>
-
                 <tbody>
-                  {/* --- MOCK DATA SÁT THỰC TẾ --- */}
-                  
-                  {/* 1. Ứng viên vừa nộp (Main Flow) */}
-                  <CandidateRow 
-                    name="Đào Hải Đăng"
-                    avatar="https://randomuser.me/api/portraits/men/32.jpg" 
-                    position="Java Backend Intern"
-                    date="Vừa xong"
-                    status="PENDING"
-                  />
-
-                  {/* 2. Ứng viên nữ, Frontend */}
-                  <CandidateRow 
-                    name="Lê Thị Minh Anh"
-                    avatar="https://randomuser.me/api/portraits/women/44.jpg"
-                    position="Frontend ReactJS Fresher"
-                    date="2 giờ trước"
-                    status="PENDING"
-                  />
-
-                  {/* 3. Ứng viên đang xem xét */}
-                  <CandidateRow 
-                    name="Phạm Văn Khoa"
-                    avatar="https://randomuser.me/api/portraits/men/85.jpg"
-                    position="DevOps Engineer"
-                    date="Hôm qua, 14:30"
-                    status="REVIEWING"
-                  />
-
-                  {/* 4. Ứng viên đã phỏng vấn */}
-                  <CandidateRow 
-                    name="Hoàng Thu Trang"
-                    avatar="https://randomuser.me/api/portraits/women/68.jpg"
-                    position="Business Analyst Intern"
-                    date="16/12/2025"
-                    status="INTERVIEWED"
-                  />
-                  
-                  {/* 5. Ứng viên Tester */}
-                  <CandidateRow 
-                    name="Vũ Đức Thắng"
-                    avatar="https://randomuser.me/api/portraits/men/11.jpg"
-                    position="Manual Tester"
-                    date="15/12/2025"
-                    status="REJECTED"
-                  />
+                  <tr>
+                    <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
+                      Nguyễn Văn A
+                    </td>
+                    <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                      Frontend Intern
+                    </td>
+                    <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                      Vừa xong
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
+                      Trần Thị B
+                    </td>
+                    <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                      Java Backend
+                    </td>
+                    <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                      1 giờ trước
+                    </td>
+                  </tr>
                 </tbody>
               </table>
             </div>
           </div>
         </div>
+        
+        {/* CỘT PHẢI: Shortcut hoặc tin tức */}
+        <div className="w-full xl:w-4/12 px-4">
+          <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded">
+            <div className="rounded-t mb-0 px-4 py-3 border-0">
+              <div className="flex flex-wrap items-center">
+                <div className="relative w-full px-4 max-w-full flex-grow flex-1">
+                  <h3 className="font-semibold text-base text-blueGray-700">
+                    Phím tắt
+                  </h3>
+                </div>
+              </div>
+            </div>
+            <div className="p-4 flex flex-col gap-3">
+                <Link to="/employer/create-job" className="w-full bg-emerald-500 text-white font-bold text-xs px-4 py-3 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150 text-center uppercase">
+                    <i className="fas fa-plus-circle mr-2"></i> Đăng tin mới
+                </Link>
+                <Link to="/employer/my-jobs" className="w-full bg-lightBlue-500 text-white font-bold text-xs px-4 py-3 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150 text-center uppercase">
+                    <i className="fas fa-list mr-2"></i> Quản lý tin
+                </Link>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 
-// --- COMPONENTS CON ---
-
-function StatCard({ title, value, icon, color, desc }) {
+// Component con hiển thị thẻ thống kê
+function StatCard({ title, value, icon, color, footer, footerIcon, footerColor }) {
     return (
-        <div className="w-full lg:w-3/12 px-4 mb-4 lg:mb-0">
-            <div className="relative flex flex-col min-w-0 break-words bg-white rounded mb-6 xl:mb-0 shadow-lg hover:-translate-y-1 transform transition-all duration-300">
-                <div className="flex-auto p-4">
-                    <div className="flex flex-wrap">
-                        <div className="relative w-full pr-4 max-w-full flex-grow flex-1">
-                            <h5 className="text-blueGray-400 uppercase font-bold text-xs">{title}</h5>
-                            <span className="font-semibold text-xl text-blueGray-700">{value}</span>
-                        </div>
-                        <div className="relative w-auto pl-4 flex-initial">
-                            <div className={`text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 shadow-lg rounded-full ${color}`}>
-                                <i className={icon}></i>
-                            </div>
-                        </div>
-                    </div>
-                    <p className="text-sm text-blueGray-400 mt-4">
-                        <span className="text-emerald-500 mr-2"><i className="fas fa-arrow-up"></i></span>
-                        <span className="whitespace-nowrap">{desc}</span>
-                    </p>
+        <div className="relative flex flex-col min-w-0 break-words bg-white rounded mb-6 xl:mb-0 shadow-lg">
+            <div className="flex-auto p-4">
+              <div className="flex flex-wrap">
+                <div className="relative w-full pr-4 max-w-full flex-grow flex-1">
+                  <h5 className="text-blueGray-400 uppercase font-bold text-xs">
+                    {title}
+                  </h5>
+                  <span className="font-semibold text-xl text-blueGray-700">
+                    {value}
+                  </span>
                 </div>
-            </div>
-        </div>
-    )
-}
-
-function CandidateRow({ name, avatar, position, date, status }) {
-    // Logic màu sắc trạng thái
-    let statusClass = "bg-blueGray-100 text-blueGray-600 border-blueGray-200";
-    let statusText = "Không rõ";
-
-    switch(status) {
-        case 'PENDING':
-            statusClass = "bg-orange-100 text-orange-600 border-orange-200";
-            statusText = "Chờ duyệt";
-            break;
-        case 'REVIEWING':
-            statusClass = "bg-lightBlue-100 text-lightBlue-600 border-lightBlue-200";
-            statusText = "Đang xem xét";
-            break;
-        case 'INTERVIEWED':
-            statusClass = "bg-purple-100 text-purple-600 border-purple-200";
-            statusText = "Đã phỏng vấn";
-            break;
-        case 'REJECTED':
-            statusClass = "bg-red-100 text-red-600 border-red-200";
-            statusText = "Đã từ chối";
-            break;
-        default: break;
-    }
-
-    return (
-        <tr className="hover:bg-blueGray-50 transition-colors border-b border-blueGray-100 last:border-none">
-            <td className="px-6 align-middle text-xs whitespace-nowrap p-4 text-left flex items-center">
-                 <div className="w-10 h-10 rounded-full bg-blueGray-200 flex items-center justify-center mr-3 overflow-hidden shadow-sm shrink-0">
-                    {avatar ? (
-                         <img src={avatar} alt="..." className="w-full h-full object-cover" />
-                    ) : (
-                         <i className="fas fa-user text-white"></i>
-                    )}
-                 </div>
-                 <span className="font-bold text-blueGray-700 text-sm">{name}</span>
-            </td>
-            <td className="px-6 align-middle text-xs whitespace-nowrap p-4">
-                <span className="font-semibold text-blueGray-600">{position}</span>
-            </td>
-            <td className="px-6 align-middle text-xs whitespace-nowrap p-4">
-                 <i className="far fa-clock mr-2 text-blueGray-400"></i> {date}
-            </td>
-            <td className="px-6 align-middle text-xs whitespace-nowrap p-4">
-                <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase border ${statusClass}`}>
-                    {statusText}
+                <div className="relative w-auto pl-4 flex-initial">
+                  <div
+                    className={
+                      "text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 shadow-lg rounded-full " +
+                      color
+                    }
+                  >
+                    <i className={icon}></i>
+                  </div>
+                </div>
+              </div>
+              <p className="text-sm text-blueGray-400 mt-4">
+                <span className={footerColor + " mr-2"}>
+                  <i className={footerIcon}></i> {footer}
                 </span>
-            </td>
-            <td className="px-6 align-middle text-xs whitespace-nowrap p-4">
-                 {/* Nút hành động */}
-                 <div className="flex gap-2">
-                    <Link to="/employer/candidates/1" className="bg-lightBlue-500 hover:bg-lightBlue-600 text-white font-bold uppercase text-xs px-3 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none ease-linear transition-all duration-150" title="Xem chi tiết CV">
-                        <i className="fas fa-eye"></i>
-                    </Link>
-                    
-                    {status === 'PENDING' && (
-                        <>
-                            <button className="bg-emerald-500 hover:bg-emerald-600 text-white font-bold uppercase text-xs px-3 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none ease-linear transition-all duration-150" title="Duyệt hồ sơ">
-                                <i className="fas fa-check"></i>
-                            </button>
-                            <button className="bg-red-500 hover:bg-red-600 text-white font-bold uppercase text-xs px-3 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none ease-linear transition-all duration-150" title="Từ chối">
-                                <i className="fas fa-times"></i>
-                            </button>
-                        </>
-                    )}
-                 </div>
-            </td>
-        </tr>
+              </p>
+            </div>
+          </div>
     )
 }

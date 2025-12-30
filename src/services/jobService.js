@@ -41,6 +41,41 @@ const jobService = {
     return jobData;
   },
 
+  getEmployerJobDetail: async (postId) => {
+    const response = await apiClient.get(`${JOB_API_URL}/employer/detail`, {
+      params: { postId }
+    });
+    return unwrap(response);
+  },
+
+  updateJob: async (postId, jobData) => {
+    const response = await apiClient.put(`${JOB_API_URL}/update`, jobData, {
+      params: { postId }
+    });
+    return unwrap(response);
+  },
+
+  getMyPosts: (page = 0, size = 10) => {
+    return apiClient.get("/internship-post/employer/my-posts", {
+      params: {
+        page: page,
+        size: size
+      }
+    });
+  },
+
+  getApplicationDetail: async (applicationId) => {
+    const response = await apiClient.get(`/applications/${applicationId}`);
+    return response.data?.data || response.data?.result || response.data;
+  },
+
+  updateApplicationStatus: async (applicationId, status) => {
+    const response = await apiClient.put(`/applications/${applicationId}/status`, null, {
+        params: { status }
+    });
+    return response.data;
+  },
+
   createJob: async (jobData) => {
     const response = await apiClient.post(`${JOB_API_URL}/create`, jobData);
     return unwrap(response);
@@ -49,6 +84,11 @@ const jobService = {
   getPendingPosts: async () => {
     const response = await apiClient.get(`${JOB_API_URL}/admin/pending`);
     return unwrap(response) || [];
+  },
+
+  getStudentPublicProfile: async (studentId) => {
+    const response = await apiClient.get(`${PROFILE_API_URL}/${studentId}`);
+    return response.data?.data || response.data;
   },
 
   approvePost: async (postId) => {

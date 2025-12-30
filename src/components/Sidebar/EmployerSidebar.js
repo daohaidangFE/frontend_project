@@ -8,11 +8,25 @@ export default function EmployerSidebar() {
   const location = useLocation();
   const { t } = useTranslation();
 
-  // Hàm kiểm tra active link
+  // --- HÀM KIỂM TRA ACTIVE (CŨ) ---
+  // Dùng cho các mục đơn giản như "Post a Job"
   const isActive = (path) => {
       return location.pathname.indexOf(path) !== -1
-          ? "text-brand hover:text-emerald-600"
+          ? "text-emerald-500 hover:text-emerald-600" // Sửa thành emerald cho khớp theme
           : "text-blueGray-700 hover:text-blueGray-500";
+  };
+
+  // --- HÀM KIỂM TRA ACTIVE CHO MỤC "QUẢN LÝ TIN" (MỚI) ---
+  // Mục này cần sáng đèn khi ở Dashboard HOẶC My Jobs HOẶC Job Details
+  const isManageJobsActive = () => {
+      const path = location.pathname;
+      return (
+          path.indexOf("/employer/dashboard") !== -1 || 
+          path.indexOf("/employer/my-jobs") !== -1 || 
+          path.indexOf("/employer/jobs") !== -1
+      ) 
+      ? "text-emerald-500 hover:text-emerald-600"
+      : "text-blueGray-700 hover:text-blueGray-500";
   };
 
   return (
@@ -71,16 +85,23 @@ export default function EmployerSidebar() {
             <ul className="md:flex-col md:min-w-full flex flex-col list-none">
               {/* Menu: Đăng tin mới */}
               <li className="items-center">
-                <Link className={"text-xs uppercase py-3 font-bold block " + isActive("/employer/create-job")} to="/employer/create-job">
-                  <i className="fas fa-plus-circle mr-2 text-sm opacity-75"></i>{" "}
+                <Link 
+                    className={"text-xs uppercase py-3 font-bold block " + isActive("/employer/create-job")} 
+                    to="/employer/create-job"
+                >
+                  <i className={"fas fa-plus-circle mr-2 text-sm " + (location.pathname.indexOf("/employer/create-job") !== -1 ? "opacity-75" : "text-blueGray-300")}></i>{" "}
                   {t('post_new_job', "Đăng tin tuyển dụng")}
                 </Link>
               </li>
 
               {/* Menu: Quản lý tin */}
+              {/* 👇 ĐÃ SỬA: Dùng hàm isManageJobsActive() */}
               <li className="items-center">
-                <Link className={"text-xs uppercase py-3 font-bold block " + isActive("/employer/jobs")} to="/employer/jobs">
-                  <i className="fas fa-list-alt mr-2 text-sm opacity-75"></i>{" "}
+                <Link 
+                    className={"text-xs uppercase py-3 font-bold block " + isManageJobsActive()} 
+                    to="/employer/my-jobs" 
+                >
+                  <i className={"fas fa-list-alt mr-2 text-sm " + (isManageJobsActive().includes("text-emerald-500") ? "opacity-75" : "text-blueGray-300")}></i>{" "}
                   {t('manage_my_jobs', "Quản lý tin đăng")}
                 </Link>
               </li>

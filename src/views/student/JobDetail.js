@@ -5,8 +5,10 @@ import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 
 // --- IMPORT MODAL & SERVICE ---
-import ApplyJobModal from "components/Modals/ApplyJobModal";
+// import ApplyJobModal from "components/Modals/ApplyJobModal";
 import profileService from "services/profileService";
+
+import ApplyModal from "components/Modals/ApplyModal";
 
 export default function JobDetail() {
   const { id } = useParams();                 // Lấy jobId từ URL
@@ -79,29 +81,20 @@ export default function JobDetail() {
   }, []);
 
   // ================== 3. HANDLE APPLY ==================
-  const handleApplyClick = () => {
-    if (isCheckingProfile) {
-      toast.info("Đang kiểm tra thông tin...");
-      return;
-    }
+const handleApplyClick = () => {
+      if (isCheckingProfile) {
+        toast.info("Đang kiểm tra thông tin...");
+        return;
+      }
 
-    // Chưa đăng nhập
-    if (!currentUserProfile) {
-      toast.info(t("login_required", "Vui lòng đăng nhập để ứng tuyển!"));
-      history.push("/auth/login");
-      return;
-    }
+      // Chưa đăng nhập -> Giữ lại
+      if (!currentUserProfile) {
+        toast.info(t("login_required", "Vui lòng đăng nhập để ứng tuyển!"));
+        history.push("/auth/login");
+        return;
+      }
 
-    // Chưa có CV
-    if (!currentUserProfile.cvUrl) {
-      const confirmRedirect = window.confirm(
-        t("cv_missing_confirm", "Bạn chưa có CV. Đến trang Profile để tải lên?")
-      );
-      if (confirmRedirect) history.push("/student/profile");
-      return;
-    }
-
-    setShowApplyModal(true);
+      setShowApplyModal(true);
   };
 
   // Sau khi confirm apply
@@ -245,13 +238,11 @@ export default function JobDetail() {
       </div>
 
       {/* APPLY MODAL */}
-      <ApplyJobModal
-        isOpen={showApplyModal}
-        onClose={() => setShowApplyModal(false)}
+      <ApplyModal
+        show={showApplyModal}
+        setShow={setShowApplyModal}
+        jobPostId={id}
         jobTitle={job.title}
-        companyName={job.companyName}
-        cvUrl={currentUserProfile?.cvUrl}
-        onConfirm={handleConfirmApply}
       />
     </div>
   );

@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 const INITIAL_STATE = {
   school: '',
   major: '',
-  degree: 'BACHELOR', // Giá trị mặc định từ Enum Degree của Backend
+  degree: 'BACHELOR',
   gpa: '',
   description: '',
   startDate: '',
@@ -54,7 +54,6 @@ export default function EducationModal({ isOpen, onClose, onSubmit, initialData 
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Chuyển đổi GPA sang số thực (Float) trước khi gửi để khớp Backend
     onSubmit({
       ...formData,
       gpa: formData.gpa ? parseFloat(formData.gpa) : null,
@@ -77,118 +76,57 @@ export default function EducationModal({ isOpen, onClose, onSubmit, initialData 
 
           <form onSubmit={handleSubmit}>
             <div className="p-6 space-y-4">
-              {/* Trường học */}
+              {/* Form fields here... */}
               <div>
                 <label className="block text-xs font-bold mb-2 uppercase">{t('school')} *</label>
-                <input
-                  type="text"
-                  name="school"
-                  value={formData.school}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-3 py-3 rounded shadow text-sm bg-white border border-blueGray-200 focus:outline-none focus:ring ring-brand ring-opacity-30"
-                />
+                <input type="text" name="school" value={formData.school} onChange={handleChange} required className="w-full px-3 py-3 rounded shadow text-sm border border-blueGray-200" />
               </div>
-
-              {/* Ngành học & Bằng cấp */}
+              
               <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-bold mb-2 uppercase">{t('major')}</label>
-                  <input
-                    type="text"
-                    name="major"
-                    value={formData.major}
-                    onChange={handleChange}
-                    className="w-full px-3 py-3 rounded shadow text-sm bg-white border border-blueGray-200"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold mb-2 uppercase">{t('degree')}</label>
-                  <select
-                    name="degree"
-                    value={formData.degree}
-                    onChange={handleChange}
-                    className="w-full px-3 py-3 rounded shadow text-sm bg-white border border-blueGray-200"
-                  >
-                    <option value="HIGH_SCHOOL">{t('degree_high_school', 'Cấp 3')}</option>
-                    <option value="COLLEGE">{t('degree_college', 'Cao đẳng')}</option>
-                    <option value="BACHELOR">{t('degree_bachelor', 'Cử nhân')}</option>
-                    <option value="MASTER">{t('degree_master', 'Thạc sĩ')}</option>
-                    <option value="PHD">{t('degree_phd', 'Tiến sĩ')}</option>
-                  </select>
-                </div>
+                 <div>
+                    <label className="block text-xs font-bold mb-2 uppercase">{t('major')}</label>
+                    <input type="text" name="major" value={formData.major} onChange={handleChange} className="w-full px-3 py-3 rounded shadow text-sm border border-blueGray-200" />
+                 </div>
+                 <div>
+                    <label className="block text-xs font-bold mb-2 uppercase">{t('degree')}</label>
+                    <select name="degree" value={formData.degree} onChange={handleChange} className="w-full px-3 py-3 rounded shadow text-sm border border-blueGray-200">
+                      <option value="HIGH_SCHOOL">Cấp 3</option>
+                      <option value="COLLEGE">Cao đẳng</option>
+                      <option value="BACHELOR">Đại học</option>
+                      <option value="MASTER">Thạc sĩ</option>
+                      <option value="PHD">Tiến sĩ</option>
+                    </select>
+                 </div>
               </div>
-
-              {/* GPA & Thời gian */}
+               
               <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-bold mb-2 uppercase">GPA</label>
-                  <input
-                    type="number"
-                    step="0.1"
-                    min="0"
-                    max="10"
-                    name="gpa"
-                    value={formData.gpa}
-                    onChange={handleChange}
-                    placeholder="4.0"
-                    className="w-full px-3 py-3 rounded shadow text-sm bg-white border border-blueGray-200"
-                  />
-                </div>
-                <div className="flex items-end mb-2">
-                  <label className="inline-flex items-center cursor-pointer">
-                    <input type="checkbox" checked={isCurrentlyStudying} onChange={handleCheckboxChange} className="w-5 h-5 rounded border-blueGray-300" />
-                    <span className="ml-2 text-sm font-semibold text-blueGray-600">{t('currently_studying', 'Đang học')}</span>
-                  </label>
-                </div>
+                 <div>
+                    <label className="block text-xs font-bold mb-2 uppercase">{t('start_date')}</label>
+                    <input type="date" name="startDate" value={formData.startDate} onChange={handleChange} required className="w-full px-3 py-3 rounded shadow text-sm border border-blueGray-200" />
+                 </div>
+                 <div>
+                    <label className="block text-xs font-bold mb-2 uppercase">{t('end_date')}</label>
+                    <input type="date" name="endDate" value={formData.endDate} onChange={handleChange} disabled={isCurrentlyStudying} className={`w-full px-3 py-3 rounded shadow text-sm border border-blueGray-200 ${isCurrentlyStudying ? 'bg-gray-100' : ''}`} />
+                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-bold mb-2 uppercase">{t('start_date')} *</label>
-                  <input
-                    type="date"
-                    name="startDate"
-                    value={formData.startDate}
-                    onChange={handleChange}
-                    required
-                    className="w-full px-3 py-3 rounded shadow text-sm bg-white border border-blueGray-200"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold mb-2 uppercase">{t('end_date')}</label>
-                  <input
-                    type="date"
-                    name="endDate"
-                    value={formData.endDate}
-                    onChange={handleChange}
-                    disabled={isCurrentlyStudying}
-                    className={`w-full px-3 py-3 rounded shadow text-sm border border-blueGray-200 ${
-                      isCurrentlyStudying ? 'bg-gray-100 text-gray-400' : 'bg-white'
-                    }`}
-                  />
-                </div>
-              </div>
+              <label className="inline-flex items-center mt-2">
+                 <input type="checkbox" checked={isCurrentlyStudying} onChange={handleCheckboxChange} className="w-5 h-5 rounded border-blueGray-300" />
+                 <span className="ml-2 text-sm text-blueGray-600">Đang học tại đây</span>
+              </label>
 
-              {/* Mô tả */}
               <div>
-                <label className="block text-xs font-bold mb-2 uppercase">{t('description')}</label>
-                <textarea
-                  name="description"
-                  rows="3"
-                  value={formData.description}
-                  onChange={handleChange}
-                  className="w-full px-3 py-3 rounded shadow text-sm bg-white border border-blueGray-200"
-                  placeholder={t('education_desc_placeholder', 'Mô tả thêm về quá trình học tập...')}
-                ></textarea>
+                 <label className="block text-xs font-bold mb-2 uppercase">{t('description')}</label>
+                 <textarea name="description" rows="3" value={formData.description} onChange={handleChange} className="w-full px-3 py-3 rounded shadow text-sm border border-blueGray-200"></textarea>
               </div>
+
             </div>
 
             <div className="flex items-center justify-end p-6 border-t border-blueGray-200">
               <button type="button" onClick={onClose} className="text-red-500 font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150">
                 {t('cancel')}
               </button>
-              <button type="submit" className="bg-brand text-white active:bg-blue-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150">
+              <button type="submit" className="bg-lightBlue-500 text-white font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150">
                 {initialData ? t('update') : t('create')}
               </button>
             </div>

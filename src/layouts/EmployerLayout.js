@@ -2,18 +2,22 @@ import React from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
 
 // Components
-import AdminNavbar from "components/Navbars/AdminNavbar.js"; 
+import AdminNavbar from "components/Navbars/AdminNavbar.js";
 import EmployerSidebar from "components/Sidebar/EmployerSidebar.js";
 import MainFooter from "components/Footers/MainFooter.js";
 import EmployerDashboard from "views/employer/Dashboard.js";
 import CandidateDetail from "views/employer/CandidateDetail.js";
-// Views
+import PostApplications from "views/employer/PostApplications.js";
+import JobDetail from "views/employer/JobDetail.js";
 import CreateJob from "views/employer/CreateJob.js";
-
+import MyJobs from "views/employer/MyJobs.js";
+import JobEdit from "views/employer/JobEdit";
 export default function EmployerLayout() {
   return (
     <>
+      {/* 1. Sidebar nằm độc lập ở ngoài */}
       <EmployerSidebar />
+      
       <div className="relative md:ml-64 bg-blueGray-100 min-h-screen">
         <AdminNavbar />
         
@@ -25,15 +29,17 @@ export default function EmployerLayout() {
             <Route path="/employer/create-job" exact component={CreateJob} />
             <Route path="/employer/dashboard" exact component={EmployerDashboard} />
             
-            {/* THÊM ROUTE CHAT Ở ĐÂY */}
-            {/* <Route path="/employer/messages" exact component={Messages} /> */}
-            <Route path="/employer/candidates/:id" exact component={CandidateDetail} />
+            {/* Route MyJobs */}
+            <Route path="/employer/my-jobs" exact component={MyJobs} />
             
-            <Redirect from="/employer" to="/employer/create-job" />
+            <Route path="/employer/posts/:postId/applications" exact component={PostApplications} />
+            <Route path="/employer/candidates/:id" exact component={CandidateDetail} />  
+            <Route path="/employer/jobs/:id/edit" exact component={JobEdit} />
+            <Route path="/employer/jobs/:id" exact component={JobDetail} />  
+            <Redirect from="/employer" to="/employer/dashboard" />
           </Switch>
           <MainFooter />
         </div>
-        {/* <FloatingChatButton /> */}
       </div>
     </>
   );
