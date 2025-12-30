@@ -8,20 +8,16 @@ export default function EmployerSidebar() {
   const location = useLocation();
   const { t } = useTranslation();
 
-  // --- HÀM KIỂM TRA ACTIVE (CŨ) ---
-  // Dùng cho các mục đơn giản như "Post a Job"
   const isActive = (path) => {
       return location.pathname.indexOf(path) !== -1
-          ? "text-emerald-500 hover:text-emerald-600" // Sửa thành emerald cho khớp theme
+          ? "text-emerald-500 hover:text-emerald-600"
           : "text-blueGray-700 hover:text-blueGray-500";
   };
 
-  // --- HÀM KIỂM TRA ACTIVE CHO MỤC "QUẢN LÝ TIN" (MỚI) ---
-  // Mục này cần sáng đèn khi ở Dashboard HOẶC My Jobs HOẶC Job Details
   const isManageJobsActive = () => {
       const path = location.pathname;
       return (
-          path.indexOf("/employer/dashboard") !== -1 || 
+          // path.indexOf("/employer/dashboard") !== -1 || 
           path.indexOf("/employer/my-jobs") !== -1 || 
           path.indexOf("/employer/jobs") !== -1
       ) 
@@ -94,8 +90,6 @@ export default function EmployerSidebar() {
                 </Link>
               </li>
 
-              {/* Menu: Quản lý tin */}
-              {/* 👇 ĐÃ SỬA: Dùng hàm isManageJobsActive() */}
               <li className="items-center">
                 <Link 
                     className={"text-xs uppercase py-3 font-bold block " + isManageJobsActive()} 
