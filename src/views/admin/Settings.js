@@ -62,39 +62,36 @@ export default function Settings() {
     <>
       
       <div className="flex flex-wrap">
+        
         <div className="w-full lg:w-4/12 px-4">
-          <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-xl rounded-lg mt-16">
-            <div className="px-6">
-              <div className="flex flex-wrap justify-center">
-                <div className="w-full px-4 flex justify-center">
-                  <div className="relative">
-                    <img
-                      alt="..."
-                      src={currentUser?.avatar || "https://demos.creative-tim.com/notus-react/static/media/team-1-800x800.0efee51b.jpg"}
-                      className="shadow-xl rounded-full h-auto align-middle border-none absolute -m-16 -ml-20 lg:-ml-16 max-w-150-px"
-                    />
-                  </div>
-                </div>
-                <div className="w-full px-4 text-center mt-20">
-                </div>
-              </div>
-              <div className="text-center mt-4 mb-6">
-                <h3 className="text-xl font-semibold leading-normal mb-2 text-blueGray-700">
+          <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-xl rounded-lg">
+            <div className="px-6 py-6">
+              <div className="text-center">
+                {/* Tên hiển thị to, rõ ràng */}
+                <h3 className="text-xl font-bold leading-normal mb-2 text-blueGray-700 uppercase">
                   {currentUser?.fullName || "Administrator"}
                 </h3>
-                <div className="mb-2 text-blueGray-600 mt-10">
-                  <i className="fas fa-envelope mr-2 text-lg text-blueGray-400"></i>
-                  {currentUser?.email}
+                
+                {/* Role hiển thị ngay dưới tên */}
+                <div className="text-xs font-bold uppercase tracking-wide text-blueGray-400 mb-4">
+                  <i className="fas fa-shield-alt mr-2 text-sm"></i>
+                  {currentUser?.role || "SYSTEM_ADMIN"}
                 </div>
-                <div className="mb-2 text-blueGray-600">
-                  <i className="fas fa-user-shield mr-2 text-lg text-blueGray-400"></i>
-                  Role: {currentUser?.role}
+
+                {/* Đường kẻ mờ ngăn cách */}
+                <hr className="my-4 border-b-1 border-blueGray-200" />
+
+                {/* Email */}
+                <div className="text-sm text-blueGray-600">
+                  <i className="fas fa-envelope mr-2 text-blueGray-400"></i>
+                  {currentUser?.email}
                 </div>
               </div>
             </div>
           </div>
         </div>
 
+        {/* CARD PHẢI: FORM */}
         <div className="w-full lg:w-8/12 px-4">
           <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-blueGray-100 border-0">
             <div className="rounded-t bg-white mb-0 px-6 py-6">

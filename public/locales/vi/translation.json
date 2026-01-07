@@ -610,5 +610,8 @@
 
   "dashboard": "Tổng quan",
   "settings": "Cài đặt",
-  "settings_section": "Hệ thống"
+  "settings_section": "Hệ thống",
+
+  "skill_name": "Tên kĩ năng",
+  "category_name": "Tên danh mục"
 }

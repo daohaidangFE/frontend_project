@@ -18,7 +18,6 @@ export default function SkillModal({ isOpen, onClose, onSubmit }) {
   const [loadingCat, setLoadingCat] = useState(false);
   const [loadingSkill, setLoadingSkill] = useState(false);
 
-  // Danh sách Level (Khai báo bên trong để dùng t())
   const levelOptions = [
     { value: 'BEGINNER', label: t('level_beginner') },
     { value: 'INTERMEDIATE', label: t('level_intermediate') },

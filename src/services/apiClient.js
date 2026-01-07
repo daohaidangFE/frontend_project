@@ -27,6 +27,10 @@ apiClient.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
+    if (originalRequest.url.includes("/auth/login") || originalRequest.url.includes("/login")) {
+        return Promise.reject(error);
+    }
+
     // Logic Refresh Token khi gặp 401
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;

@@ -607,5 +607,8 @@
 
   "dashboard": "Dashboard",
   "settings": "Settings",
-  "settings_section": "Settings section"
+  "settings_section": "Settings section",
+
+  "skill_name": "skill name",
+  "category_name": "category name"
 }

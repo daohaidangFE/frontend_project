@@ -2,19 +2,18 @@ import React, { useState, useEffect } from "react";
 import skillService from "../../services/skillService";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useTranslation } from "react-i18next"; // 1. Import hook
+import { useTranslation } from "react-i18next";
 
 export default function SkillManagement() {
-  const { t } = useTranslation(); // 2. Khởi tạo t
+  const { t } = useTranslation();
   
   // --- STATE ---
-  const [activeTab, setActiveTab] = useState("categories"); // 'categories' | 'skills'
+  const [activeTab, setActiveTab] = useState("categories");
   const [loading, setLoading] = useState(false);
   
   const [categories, setCategories] = useState([]);
   const [skills, setSkills] = useState([]);
 
-  // State cho Modal (Thêm/Sửa)
   const [showModal, setShowModal] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [currentItem, setCurrentItem] = useState(null);
@@ -23,26 +22,21 @@ export default function SkillManagement() {
   const [formData, setFormData] = useState({
     name: "",
     description: "",
-    categoryId: "" // Chỉ dùng khi tạo Skill
+    categoryId: ""
   });
 
-  // Filter cho Skill (Lọc theo danh mục)
   const [selectedCategoryFilter, setSelectedCategoryFilter] = useState("");
-
-  // --- EFFECT ---
+  
   useEffect(() => {
     fetchCategories();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     if (activeTab === "skills") {
       fetchSkills();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeTab, selectedCategoryFilter]);
 
-  // --- API CALLS ---
   const fetchCategories = async () => {
     try {
       setLoading(true);
@@ -62,7 +56,6 @@ export default function SkillManagement() {
       if (selectedCategoryFilter) {
         data = await skillService.getSkillsByCategory(selectedCategoryFilter);
       } else {
-        // Nếu không chọn danh mục -> Tìm tất cả (truyền rỗng)
         data = await skillService.searchSkills("");
       }
       setSkills(data);
@@ -109,7 +102,6 @@ export default function SkillManagement() {
       }
       toast.success(t('delete_success'));
     } catch (error) {
-      // Backend có check lỗi CATEGORY_HAS_SKILLS, hiển thị thông báo đó
       const msg = error.response?.data?.message || t('operation_failed');
       toast.error(msg);
     }
@@ -188,10 +180,8 @@ export default function SkillManagement() {
         </div>
       </div>
 
-      {/* TOOLBAR & FILTER */}
       <div className="px-4 py-3 flex justify-between items-center bg-blueGray-50 border-t border-blueGray-100">
           <div className="flex-1">
-             {/* Chỉ hiện filter khi ở tab Skills */}
              {activeTab === "skills" && (
                 <select 
                     className="border rounded px-3 py-2 text-sm outline-none w-64 focus:border-lightBlue-500"
@@ -214,13 +204,12 @@ export default function SkillManagement() {
           </button>
       </div>
 
-      {/* MAIN TABLE CONTENT */}
       <div className="block w-full overflow-x-auto">
         <table className="items-center w-full bg-transparent border-collapse">
           <thead>
             <tr>
               <th className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left bg-blueGray-50 text-blueGray-500 border-blueGray-100">
-                {t('name_label')}
+                {activeTab === "categories" ? t('category_name') : t('skill_name')}
               </th>
               {activeTab === "skills" && (
                 <th className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left bg-blueGray-50 text-blueGray-500 border-blueGray-100">
@@ -278,13 +267,11 @@ export default function SkillManagement() {
         </table>
       </div>
 
-      {/* --- MODAL --- */}
       {showModal && (
         <>
             <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
                 <div className="relative w-full my-6 mx-auto max-w-lg">
                     <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
-                        {/* Modal Header */}
                         <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t">
                             <h3 className="text-xl font-semibold">
                                 {isEditing ? t('update') : t('add_new')} {activeTab === "categories" ? t('category') : t('skill')}
@@ -292,10 +279,11 @@ export default function SkillManagement() {
                             <button onClick={() => setShowModal(false)} className="text-black opacity-50 text-2xl font-semibold">×</button>
                         </div>
                         
-                        {/* Modal Body */}
                         <form onSubmit={handleSubmit} className="p-6">
                             <div className="mb-4">
-                                <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">{t('name_label')}</label>
+                                <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
+                                    {activeTab === "categories" ? t('category_name') : t('skill_name')}
+                                </label>
                                 <input 
                                     type="text" 
                                     className="border px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
@@ -305,7 +293,6 @@ export default function SkillManagement() {
                                 />
                             </div>
 
-                            {/* Chỉ hiện chọn Category khi ở tab Skills */}
                             {activeTab === "skills" && (
                                 <div className="mb-4">
                                     <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">{t('category')}</label>
