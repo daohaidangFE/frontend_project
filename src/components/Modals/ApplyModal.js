@@ -1,19 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next"; // 1. Import hook
 import cvService from "services/cvService";
 import applyingService from "services/applyingService";
 
 export default function ApplyModal({ show, setShow, jobPostId, jobTitle }) {
+  const { t } = useTranslation(); // 2. Khởi tạo t
+  
   const [cvs, setCvs] = useState([]);
   const [selectedCvId, setSelectedCvId] = useState("");
-  const [selectedCvName, setSelectedCvName] = useState(""); // State để lưu tên hiển thị
+  const [selectedCvName, setSelectedCvName] = useState("");
   const [coverLetter, setCoverLetter] = useState("");
   
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
 
-  // Load danh sách CV khi mở Modal
+  // Load CV list when modal opens
   useEffect(() => {
     if (show) {
       resetForm();
@@ -33,7 +36,7 @@ export default function ApplyModal({ show, setShow, jobPostId, jobTitle }) {
     try {
       const res = await cvService.getMyCVs();
       
-      // Logic lấy data an toàn như cũ
+      // Safe data retrieval logic
       let listCvs = [];
       if (Array.isArray(res)) listCvs = res;
       else if (res.data && Array.isArray(res.data)) listCvs = res.data;
@@ -43,21 +46,20 @@ export default function ApplyModal({ show, setShow, jobPostId, jobTitle }) {
       setCvs(listCvs);
 
       if (listCvs.length > 0) {
-        // Lấy CV cuối cùng
+        // Default to latest CV
         const latestCv = listCvs[listCvs.length - 1];
         
         setSelectedCvId(latestCv.id);
         setSelectedCvName(latestCv.cvName || `CV #${latestCv.id}`);
       }
     } catch (err) {
-      console.error("Lỗi lấy danh sách CV:", err);
-      setErrorMessage("Không tải được danh sách CV.");
+      setErrorMessage(t('error')); // General error
     }
   };
 
   const handleApply = async () => {
     if (!selectedCvId) {
-      setErrorMessage("Bạn chưa có CV nào để ứng tuyển.");
+      setErrorMessage(t('no_cv_to_apply'));
       return;
     }
 
@@ -73,16 +75,16 @@ export default function ApplyModal({ show, setShow, jobPostId, jobTitle }) {
 
       await applyingService.applyJob(payload);
       
-      setSuccessMessage("Ứng tuyển thành công!");
+      setSuccessMessage(t('apply_success_msg'));
       
       setTimeout(() => {
         setShow(false);
       }, 2000);
 
     } catch (err) {
-      const msg = err.response?.data?.message || "Có lỗi xảy ra.";
+      const msg = err.response?.data?.message || t('error');
       if (msg.includes("already applied")) {
-        setErrorMessage("Bạn đã nộp đơn vào công việc này rồi!");
+        setErrorMessage(t('already_applied_error'));
       } else {
         setErrorMessage(msg);
       }
@@ -104,10 +106,10 @@ export default function ApplyModal({ show, setShow, jobPostId, jobTitle }) {
             <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t">
               <div>
                 <h3 className="text-2xl font-semibold text-blueGray-700">
-                  Ứng tuyển ngay
+                  {t('apply_now')}
                 </h3>
                 <p className="text-sm text-blueGray-500 mt-1">
-                  Vị trí: <span className="font-bold text-emerald-600">{jobTitle}</span>
+                  {t('position_label')}: <span className="font-bold text-emerald-600">{jobTitle}</span>
                 </p>
               </div>
               <button
@@ -124,10 +126,10 @@ export default function ApplyModal({ show, setShow, jobPostId, jobTitle }) {
               {successMessage && <div className="bg-emerald-500 text-white px-4 py-2 rounded mb-4 text-sm">{successMessage}</div>}
 
               <form>
-                  {/* --- PHẦN HIỂN THỊ CV (BỎ DROPDOWN) --- */}
+                  {/* --- CV DISPLAY (Default Latest) --- */}
                   <div className="mb-4">
                     <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
-                        Hồ sơ ứng tuyển (Mặc định CV mới nhất)
+                        {t('cv_selection_label')}
                     </label>
                     
                     {cvs.length > 0 ? (
@@ -136,14 +138,14 @@ export default function ApplyModal({ show, setShow, jobPostId, jobTitle }) {
                             <div className="flex-1">
                                 {selectedCvName}
                             </div>
-                            <span className="text-xs bg-emerald-500 text-white px-2 py-1 rounded">Mới nhất</span>
+                            <span className="text-xs bg-emerald-500 text-white px-2 py-1 rounded">{t('latest_tag')}</span>
                         </div>
                     ) : (
                         <div className="text-sm text-orange-500 bg-orange-100 p-3 rounded border border-orange-200">
                             <i className="fas fa-exclamation-circle mr-2"></i>
-                            Bạn chưa có CV nào. 
+                            {t('no_cv_text')} 
                             <Link to="/student/profile" className="ml-1 font-bold underline text-orange-600 hover:text-orange-800">
-                                Tải lên ngay
+                                {t('upload_cv_link')}
                             </Link>
                         </div>
                     )}
@@ -152,12 +154,12 @@ export default function ApplyModal({ show, setShow, jobPostId, jobTitle }) {
                   {/* Cover Letter */}
                   <div className="mb-4">
                     <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
-                        Thư giới thiệu (Cover Letter)
+                        {t('cover_letter')}
                     </label>
                     <textarea
                         rows="4"
                         className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-blueGray-100 rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150 resize-none"
-                        placeholder="Viết vài dòng giới thiệu bản thân..."
+                        placeholder={t('cover_letter_placeholder')}
                         value={coverLetter}
                         onChange={(e) => setCoverLetter(e.target.value)}
                     />
@@ -172,7 +174,7 @@ export default function ApplyModal({ show, setShow, jobPostId, jobTitle }) {
                 type="button"
                 onClick={() => setShow(false)}
               >
-                Đóng
+                {t('close')}
               </button>
               
               {!successMessage && (
@@ -182,7 +184,7 @@ export default function ApplyModal({ show, setShow, jobPostId, jobTitle }) {
                     onClick={handleApply}
                     disabled={loading || cvs.length === 0}
                   >
-                    {loading ? "Đang gửi..." : "Nộp hồ sơ"}
+                    {loading ? t('sending') : t('submit_application')}
                   </button>
               )}
             </div>

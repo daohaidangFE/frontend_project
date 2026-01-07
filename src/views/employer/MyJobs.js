@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-
-// Services
+import { useTranslation } from "react-i18next"; // 1. Import hook
 import jobService from "services/jobService";
 
 // Helper format date
@@ -11,6 +10,7 @@ const formatDate = (dateString) => {
 };
 
 export default function MyJobs() {
+  const { t } = useTranslation(); // 2. Khởi tạo t
   const [posts, setPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   
@@ -43,7 +43,7 @@ export default function MyJobs() {
       }
 
     } catch (error) {
-      console.error("Lỗi tải danh sách:", error);
+      // Handle error silently or minimal log
     } finally {
       setIsLoading(false);
     }
@@ -60,13 +60,19 @@ export default function MyJobs() {
     }
   };
 
+  // Helper dịch status (tận dụng các key đã khai báo ở JobDetail)
+  const renderStatus = (status) => {
+      const key = `status_${status.toLowerCase()}`; // VD: status_active, status_pending
+      return t(key, status); // Fallback về status gốc nếu không tìm thấy key
+  };
+
   return (
     <div className="relative bg-blueGray-100 min-h-screen pt-12 pb-20">
       <div className="px-4 md:px-10 mx-auto w-full">
         
-        {/* --- PHẦN THỐNG KÊ (Placeholder - Có thể thêm các Card thống kê ở đây sau) --- */}
+        {/* --- PHẦN THỐNG KÊ (Placeholder) --- */}
         <div className="flex flex-wrap">
-           {/* Ví dụ: Tổng số bài đăng, Tổng số ứng viên... */}
+           {/* Future Stats */}
         </div>
 
         {/* --- BẢNG QUẢN LÝ TIN TUYỂN DỤNG --- */}
@@ -80,7 +86,7 @@ export default function MyJobs() {
                     <div className="relative w-full px-4 max-w-full flex-grow flex-1">
                       <h3 className="font-semibold text-lg text-blueGray-700">
                         <i className="fas fa-briefcase mr-2"></i>
-                        Quản lý tin tuyển dụng ({pagination.totalElements})
+                        {t('manage_my_jobs')} ({pagination.totalElements})
                       </h3>
                     </div>
                     <div className="relative w-full px-4 max-w-full flex-grow flex-1 text-right">
@@ -88,7 +94,7 @@ export default function MyJobs() {
                         to="/employer/create-job"
                         className="bg-indigo-500 text-white active:bg-indigo-600 text-xs font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                       >
-                        <i className="fas fa-plus mr-1"></i> Đăng tin mới
+                        <i className="fas fa-plus mr-1"></i> {t('post_new_job')}
                       </Link>
                     </div>
                   </div>
@@ -100,25 +106,25 @@ export default function MyJobs() {
                     <thead>
                       <tr>
                         <th className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left bg-blueGray-50 text-blueGray-500 border-blueGray-100">
-                          Tên công việc
+                          {t('job_title_header')}
                         </th>
                         <th className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left bg-blueGray-50 text-blueGray-500 border-blueGray-100">
-                          Trạng thái
+                          {t('status_header')}
                         </th>
                         <th className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left bg-blueGray-50 text-blueGray-500 border-blueGray-100">
-                          Ngày đăng
+                          {t('posted_date_header')}
                         </th>
                         <th className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left bg-blueGray-50 text-blueGray-500 border-blueGray-100">
-                          Hành động
+                          {t('action_header')}
                         </th>
                       </tr>
                     </thead>
 
                     <tbody>
                       {isLoading ? (
-                         <tr><td colSpan="4" className="text-center py-8">Đang tải dữ liệu...</td></tr>
+                          <tr><td colSpan="4" className="text-center py-8">{t('loading')}</td></tr>
                       ) : posts.length === 0 ? (
-                         <tr><td colSpan="4" className="text-center py-8">Bạn chưa đăng tin tuyển dụng nào.</td></tr>
+                          <tr><td colSpan="4" className="text-center py-8">{t('no_posted_jobs')}</td></tr>
                       ) : (
                         posts.map((job) => (
                           <tr key={job.id} className="hover:bg-gray-50 transition-colors">
@@ -138,7 +144,7 @@ export default function MyJobs() {
                                 job.status === 'PENDING' ? 'text-orange-500' : 
                                 job.status === 'REJECTED' ? 'text-red-500' : 'text-blueGray-400'
                               }`}></i> 
-                              {job.status}
+                              {renderStatus(job.status)}
                             </td>
 
                             {/* 3. Ngày tạo */}
@@ -152,7 +158,7 @@ export default function MyJobs() {
                               <Link 
                                 to={`/employer/jobs/${job.id}`}
                                 className="bg-teal-500 text-white active:bg-teal-600 font-bold uppercase text-xs px-2 py-1 rounded shadow hover:shadow-md outline-none focus:outline-none mr-2 ease-linear transition-all duration-150"
-                                title="Xem chi tiết & Thao tác"
+                                title={t('view_detail_tooltip')}
                               >
                                 <i className="fas fa-info-circle"></i>
                               </Link>
@@ -161,7 +167,7 @@ export default function MyJobs() {
                               <Link 
                                 to={`/employer/posts/${job.id}/applications`}
                                 className="bg-lightBlue-500 text-white active:bg-lightBlue-600 font-bold uppercase text-xs px-2 py-1 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
-                                title="Xem danh sách ứng viên"
+                                title={t('view_candidates_tooltip')}
                               >
                                 <i className="fas fa-users"></i>
                               </Link>
@@ -177,23 +183,23 @@ export default function MyJobs() {
                 {/* Footer Bảng (Pagination) */}
                 {!isLoading && pagination.totalPages > 1 && (
                   <div className="rounded-b py-3 px-4 border-t border-blueGray-100 bg-blueGray-50 flex justify-end items-center gap-2">
-                     <span className="text-xs font-semibold text-blueGray-600 mr-2">
-                       Trang {pagination.pageNumber + 1} / {pagination.totalPages}
-                     </span>
-                     <button
+                      <span className="text-xs font-semibold text-blueGray-600 mr-2">
+                        {t('page_info', { page: pagination.pageNumber + 1, total: pagination.totalPages })}
+                      </span>
+                      <button
                         disabled={pagination.pageNumber === 0}
                         onClick={() => handlePageChange(pagination.pageNumber - 1)}
                         className={`px-3 py-1 rounded text-xs font-bold uppercase ${pagination.pageNumber === 0 ? 'bg-gray-200 text-gray-400' : 'bg-white text-indigo-500 border border-indigo-500 hover:bg-indigo-500 hover:text-white'}`}
-                     >
-                        Trước
-                     </button>
-                     <button
+                      >
+                        {t('prev')}
+                      </button>
+                      <button
                         disabled={pagination.pageNumber >= pagination.totalPages - 1}
                         onClick={() => handlePageChange(pagination.pageNumber + 1)}
                         className={`px-3 py-1 rounded text-xs font-bold uppercase ${pagination.pageNumber >= pagination.totalPages - 1 ? 'bg-gray-200 text-gray-400' : 'bg-white text-indigo-500 border border-indigo-500 hover:bg-indigo-500 hover:text-white'}`}
-                     >
-                        Sau
-                     </button>
+                      >
+                        {t('next')}
+                      </button>
                   </div>
                 )}
 

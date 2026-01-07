@@ -12,7 +12,7 @@ export default function ExperienceCard({
   const { t } = useTranslation();
 
   const formatDate = (dateString) => {
-    if (!dateString) return t("common.present", "Hiện tại");
+    if (!dateString) return t("present");
     return new Date(dateString).toLocaleDateString('vi-VN', { month: '2-digit', year: 'numeric' });
   };
 
@@ -20,15 +20,16 @@ export default function ExperienceCard({
     <div className="relative">
       <div className="flex justify-between items-center mb-6">
         <h3 className="text-2xl font-bold text-blueGray-700">
-          {t("profile.experience", "Kinh nghiệm làm việc")}
+          {t("experience_title")}
         </h3>
         
         {!readOnly && (
           <button 
-            onClick={onAdd} // Gọi prop onAdd từ Profile.js
-            className="bg-lightBlue-500 text-white active:bg-lightBlue-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none ease-linear transition-all duration-150"
+            onClick={onAdd}
+            className="text-lightBlue-500 text-sm font-semibold hover:opacity-80 transition-all focus:outline-none"
           >
-            <i className="fas fa-plus mr-1"></i> {t("common.add_new", "Thêm mới")}
+            <i className="fas fa-plus mr-1"></i>
+            {t('add')}
           </button>
         )}
       </div>
@@ -42,21 +43,21 @@ export default function ExperienceCard({
                     
                     <div className="flex justify-between items-start">
                         <div>
-                            <h4 className="text-xl font-semibold text-blueGray-800">{exp.position}</h4> {/* Sửa title -> position cho khớp Modal */}
+                            <h4 className="text-xl font-semibold text-blueGray-800">{exp.position}</h4>
                             <div className="text-lg text-blueGray-600 font-medium">{exp.companyName}</div>
                             <div className="text-sm text-blueGray-400 mt-1 mb-2 italic">
                                 <i className="far fa-calendar-alt mr-1"></i>
-                                {formatDate(exp.startDate)} - {exp.endDate ? formatDate(exp.endDate) : t("common.present", "Hiện tại")}
+                                {formatDate(exp.startDate)} - {exp.endDate ? formatDate(exp.endDate) : t("present")}
                             </div>
                         </div>
                         
                         {/* Action Buttons */}
                         {!readOnly && (
                           <div className="flex space-x-3 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
-                               <button onClick={() => onEdit(exp)} className="text-blueGray-400 hover:text-lightBlue-500" title={t("common.edit", "Sửa")}>
+                               <button onClick={() => onEdit(exp)} className="text-blueGray-400 hover:text-lightBlue-500" title={t("edit")}>
                                   <i className="fas fa-pencil-alt"></i>
                                </button>
-                               <button onClick={() => onDelete(exp.id)} className="text-blueGray-400 hover:text-red-500" title={t("common.delete", "Xóa")}>
+                               <button onClick={() => onDelete(exp.id)} className="text-blueGray-400 hover:text-red-500" title={t("delete")}>
                                   <i className="fas fa-trash"></i>
                                </button>
                           </div>
@@ -74,7 +75,7 @@ export default function ExperienceCard({
                                     <i className="fas fa-trophy text-emerald-500 mt-1 mr-2 text-base"></i>
                                     <div>
                                         <span className="font-bold text-emerald-700 block uppercase text-xs mb-1">
-                                            {t('profile.achievement', 'Thành tích nổi bật')}
+                                            {t('achievement')}
                                         </span>
                                         <span className="text-blueGray-700">
                                             {exp.achievement}
@@ -88,10 +89,10 @@ export default function ExperienceCard({
         </div>
       ) : (
         <div className="text-center py-8 bg-blueGray-50 rounded-lg border border-dashed border-blueGray-300">
-            <p className="text-blueGray-500 mb-2">{t("profile.no_experience", "Chưa có kinh nghiệm làm việc nào.")}</p>
+            <p className="text-blueGray-500 mb-2">{t("no_experience")}</p>
             {!readOnly && (
               <button className="text-lightBlue-500 font-bold text-sm hover:underline" onClick={onAdd}>
-                  {t("profile.add_first_experience", "Thêm kinh nghiệm đầu tiên")}
+                  {t("add_first_experience")}
               </button>
             )}
         </div>
@@ -105,5 +106,5 @@ ExperienceCard.propTypes = {
   onAdd: PropTypes.func,
   onEdit: PropTypes.func,
   onDelete: PropTypes.func,
-  readOnly: PropTypes.bool
+  readOnly: PropTypes.bool,
 };

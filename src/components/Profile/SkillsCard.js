@@ -11,21 +11,27 @@ export default function SkillsCard({
 }) {
   const { t } = useTranslation();
 
+  // Helper để dịch Level (VD: BEGINNER -> Mới bắt đầu)
+  const renderLevel = (level) => {
+    if (!level) return "";
+    // Giả sử level là "BEGINNER", key sẽ là "level_beginner"
+    return t(`level_${level.toLowerCase()}`, level);
+  };
+
   return (
     <div className="bg-white p-6 rounded-lg shadow-md border border-blueGray-200 mt-6">
       <div className="flex justify-between items-center mb-4">
         <h3 className="text-xl font-bold text-blueGray-700">
-          {t('skills', 'Skills')}
+          {t('skills_title')}
         </h3>
         
         {!readOnly && (
           <button 
             onClick={onAdd}
-            // Sửa text-brand -> text-lightBlue-500
             className="text-lightBlue-500 text-sm font-semibold hover:opacity-80 transition-all focus:outline-none"
           >
             <i className="fas fa-plus mr-1"></i>
-            {t('add', 'Add')}
+            {t('add')}
           </button>
         )}
       </div>
@@ -36,7 +42,6 @@ export default function SkillsCard({
             <div
               key={skill.id || index}
               onClick={() => !readOnly && onEdit && onEdit(skill)}
-              // Sửa các class brand -> lightBlue
               className={`
                 relative inline-flex items-center px-3 py-1 rounded-full text-sm font-medium border border-blueGray-200 transition-all
                 ${!readOnly 
@@ -49,7 +54,7 @@ export default function SkillsCard({
               
               {skill.level && (
                 <span className={`text-xs ml-1 ${!readOnly ? 'text-blueGray-400 group-hover:text-lightBlue-500' : 'text-blueGray-500'}`}>
-                  • {skill.level}
+                  • {renderLevel(skill.level)}
                 </span>
               )}
 
@@ -69,8 +74,9 @@ export default function SkillsCard({
           ))}
         </div>
       ) : (
-        <div className="text-left text-blueGray-500 py-2">
-          <p>{t('no_skills_added', 'No skills added yet')}</p>
+        <div className="text-center text-blueGray-500 py-6 bg-blueGray-50 rounded">
+          <i className="fas fa-tools text-4xl mb-3 text-blueGray-300"></i>
+          <p>{t('no_skills_added')}</p>
         </div>
       )}
     </div>

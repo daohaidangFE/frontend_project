@@ -19,12 +19,11 @@ export default function ApplyJobModal({
   const handleSubmit = async () => {
     setIsSending(true);
     try {
-        // Gọi hàm onConfirm được truyền từ JobDetail.js
-        // Hàm này giờ sẽ chứa logic gọi API thật từ jobService
+        // Call parent's onConfirm (API logic in parent)
         await onConfirm({ coverLetter });
-        setCoverLetter(""); // Reset form sau khi thành công
+        setCoverLetter(""); 
     } catch (error) {
-        // Lỗi sẽ được JobDetail.js bắt và hiển thị toast
+        // Error handled in parent
     } finally {
         setIsSending(false);
     }
@@ -40,7 +39,7 @@ export default function ApplyJobModal({
             <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t">
               <h3 className="text-xl font-bold text-blueGray-700">
                 <i className="fas fa-paper-plane mr-2 text-brand"></i>
-                {t('apply_job', 'Ứng tuyển việc làm')}
+                {t('apply_job')}
               </h3>
               <button
                 className="p-1 ml-auto border-0 text-blueGray-400 hover:text-red-500 float-right text-3xl leading-none font-semibold outline-none focus:outline-none transition-colors"
@@ -56,7 +55,7 @@ export default function ApplyJobModal({
             <div className="relative p-6 flex-auto">
               <div className="mb-4 bg-lightBlue-50 p-4 rounded-lg border border-lightBlue-100">
                 <p className="text-sm text-blueGray-600">
-                  {t('applying_for', 'Bạn đang ứng tuyển vị trí')}:
+                  {t('applying_for')}:
                 </p>
                 <h4 className="text-lg font-bold text-blueGray-800 uppercase mt-1">{jobTitle}</h4>
                 <p className="text-sm font-semibold text-brand mt-1">
@@ -64,16 +63,16 @@ export default function ApplyJobModal({
                 </p>
               </div>
 
-              {/* Phần kiểm tra CV */}
+              {/* Check CV Status */}
               <div className="mb-4 p-4 bg-emerald-50 rounded-lg border border-emerald-100">
                   <label className="text-xs font-bold uppercase text-emerald-700 block mb-2">
                       <i className="fas fa-file-pdf mr-2"></i>
-                      CV sẽ được gửi đi:
+                      CV
                   </label>
                   {cvUrl ? (
                       <div className="flex items-center justify-between">
                           <span className="text-sm text-emerald-600 font-medium">
-                              {t('cv_ready', 'CV hiện tại đã sẵn sàng')}
+                              {t('cv_ready')}
                           </span>
                           <a 
                             href={cvUrl} 
@@ -81,27 +80,27 @@ export default function ApplyJobModal({
                             rel="noreferrer" 
                             className="text-xs bg-white text-emerald-600 px-2 py-1 rounded border border-emerald-200 hover:bg-emerald-600 hover:text-white transition-all shadow-sm"
                           >
-                              {t('preview', 'Xem lại CV')}
+                              {t('preview')}
                           </a>
                       </div>
                   ) : (
                       <div className="text-red-500 text-sm font-bold flex items-center">
                           <i className="fas fa-exclamation-triangle mr-2"></i> 
-                          {t('no_cv_warning', 'Cảnh báo: Bạn chưa tải CV lên hồ sơ!')}
+                          {t('no_cv_warning')}
                       </div>
                   )}
               </div>
 
-              {/* Nhập Cover Letter */}
+              {/* Cover Letter Input */}
               <div className="mt-4">
                   <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
-                      {t('cover_letter', 'Thư giới thiệu / Lời nhắn')} 
-                      <span className="text-blueGray-400 lowercase font-normal ml-1">({t('optional', 'không bắt buộc')})</span>
+                      {t('cover_letter')} 
+                      <span className="text-blueGray-400 lowercase font-normal ml-1">({t('optional')})</span>
                   </label>
                   <textarea
                       rows="5"
                       className="border border-blueGray-200 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-blueGray-50 rounded text-sm focus:bg-white focus:outline-none focus:ring-1 focus:ring-brand w-full ease-linear transition-all duration-150"
-                      placeholder={t('cover_letter_placeholder', 'Giới thiệu ngắn gọn về bản thân và lý do bạn phù hợp...')}
+                      placeholder={t('cover_letter_placeholder')}
                       value={coverLetter}
                       onChange={(e) => setCoverLetter(e.target.value)}
                   />
@@ -116,7 +115,7 @@ export default function ApplyJobModal({
                 onClick={onClose}
                 disabled={isSending}
               >
-                {t('cancel', 'Đóng')}
+                {t('cancel')}
               </button>
               
               <button
@@ -126,9 +125,9 @@ export default function ApplyJobModal({
                 disabled={isSending || !cvUrl}
               >
                 {isSending ? (
-                    <><i className="fas fa-spinner fa-spin mr-2"></i> {t('sending', 'Đang nộp hồ sơ...')}</>
+                    <><i className="fas fa-spinner fa-spin mr-2"></i> {t('sending')}</>
                 ) : (
-                    <><i className="fas fa-check mr-2"></i> {t('confirm_apply', 'Xác nhận ứng tuyển')}</>
+                    <><i className="fas fa-check mr-2"></i> {t('confirm_apply')}</>
                 )}
               </button>
             </div>

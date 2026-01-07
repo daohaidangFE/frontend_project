@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 export default function JobCard({ job }) {
   const { t } = useTranslation();
 
-  // Helper function để định dạng ngày tháng nếu chưa có
+  // Helper function format date
   const displayDate = (dateString) => {
     if (!dateString) return "";
     return new Date(dateString).toLocaleDateString("vi-VN");
@@ -20,7 +20,7 @@ export default function JobCard({ job }) {
             <i className="fas fa-building"></i>
           </div>
           <h6 className="text-blueGray-500 text-xs font-bold uppercase truncate">
-            {job.companyName || t('unknown_company', 'Công ty ẩn danh')}
+            {job.companyName || t('unknown_company')}
           </h6>
         </div>
 
@@ -43,10 +43,10 @@ export default function JobCard({ job }) {
           )}
         </div>
 
-        {/* --- ĐỊA ĐIỂM (LOCATION) - PHẦN MỚI THÊM --- */}
+        {/* Location */}
         <div className="flex items-center text-blueGray-500 text-xs mb-3">
           <i className="fas fa-map-marker-alt mr-2 text-blueGray-400"></i>
-          <span className="truncate">{job.location || t('location_not_specified', 'Toàn quốc')}</span>
+          <span className="truncate">{job.location || t('location_not_specified')}</span>
         </div>
 
         {/* Description */}
@@ -64,7 +64,7 @@ export default function JobCard({ job }) {
             to={`/student/jobs/${job.id}`}
             className="text-brand font-bold text-xs uppercase hover:underline"
           >
-            {t('view_detail', 'Chi tiết')} <i className="fas fa-arrow-right ml-1"></i>
+            {t('view_detail')} <i className="fas fa-arrow-right ml-1"></i>
           </Link>
         </div>
       </div>

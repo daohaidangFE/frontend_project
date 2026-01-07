@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next"; // 1. Import hook
 
 const formatDate = (dateString) => {
   if (!dateString) return "N/A";
@@ -21,6 +22,7 @@ const getStatusColor = (status) => {
 };
 
 export default function CardCandidateTable({ candidates, pagination, onPageChange, isLoading, color = "light" }) {
+  const { t } = useTranslation(); // 2. Khởi tạo t
   const { pageNumber, totalPages } = pagination;
 
   return (
@@ -30,7 +32,7 @@ export default function CardCandidateTable({ candidates, pagination, onPageChang
           <div className="flex flex-wrap items-center">
             <div className="relative w-full px-4 max-w-full flex-grow flex-1">
               <h3 className={"font-semibold text-lg " + (color === "light" ? "text-blueGray-700" : "text-white")}>
-                Danh sách ứng viên ({pagination?.totalElements || 0})
+                {t('candidate_list_title')} ({pagination?.totalElements || 0})
               </h3>
             </div>
           </div>
@@ -41,27 +43,28 @@ export default function CardCandidateTable({ candidates, pagination, onPageChang
             <thead>
               <tr>
                 <th className={"px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left " + (color === "light" ? "bg-blueGray-50 text-blueGray-500 border-blueGray-100" : "bg-lightBlue-800 text-lightBlue-300 border-lightBlue-700")}>
-                  Ứng viên
+                  {t('candidate_header')}
                 </th>
                 <th className={"px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left " + (color === "light" ? "bg-blueGray-50 text-blueGray-500 border-blueGray-100" : "bg-lightBlue-800 text-lightBlue-300 border-lightBlue-700")}>
-                  Trạng thái
+                  {t('status_header')}
                 </th>
                 <th className={"px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left " + (color === "light" ? "bg-blueGray-50 text-blueGray-500 border-blueGray-100" : "bg-lightBlue-800 text-lightBlue-300 border-lightBlue-700")}>
-                  Thời gian nộp
+                  {t('applied_date_header')}
                 </th>
                 <th className={"px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left " + (color === "light" ? "bg-blueGray-50 text-blueGray-500 border-blueGray-100" : "bg-lightBlue-800 text-lightBlue-300 border-lightBlue-700")}>
-                  Hành động
+                  {t('action_header')}
                 </th>
               </tr>
             </thead>
             <tbody>
               {isLoading ? (
-                 <tr><td colSpan="4" className="text-center py-4 p-4">Đang tải dữ liệu...</td></tr>
+                 <tr><td colSpan="4" className="text-center py-4 p-4">{t('loading')}</td></tr>
               ) : candidates.length === 0 ? (
-                 <tr><td colSpan="4" className="text-center py-4 p-4">Chưa có ứng viên nào ứng tuyển.</td></tr>
+                 <tr><td colSpan="4" className="text-center py-4 p-4">{t('no_candidates_applied')}</td></tr>
               ) : (
                 candidates.map((app) => (
                   <tr key={app.id}>
+                    {/* Cột 1: Ứng viên */}
                     <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left flex items-center">
                       <img
                         src={app.studentAvatar || "https://i.pinimg.com/736x/8b/16/7a/8b167af653c2399dd93b952a48740620.jpg"} 
@@ -78,21 +81,26 @@ export default function CardCandidateTable({ candidates, pagination, onPageChang
                           )}
                       </div>
                     </td>
+
+                    {/* Cột 2: Trạng thái */}
                     <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                       <span className={`px-2 py-1 rounded font-bold text-xs ${getStatusColor(app.status)}`}>
                         {app.status}
                       </span>
                     </td>
+
+                    {/* Cột 3: Thời gian nộp */}
                     <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                       {formatDate(app.appliedAt)}
                     </td>
+
+                    {/* Cột 4: Hành động */}
                     <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                      
                       <Link 
                         to={`/employer/candidates/${app.id}`} 
                         className="text-lightBlue-500 hover:text-lightBlue-700 font-bold text-xs uppercase bg-lightBlue-100 px-3 py-2 rounded transition-colors"
                       >
-                        <i className="fas fa-eye mr-1"></i> Xem hồ sơ
+                        <i className="fas fa-eye mr-1"></i> {t('view_profile_action')}
                       </Link>
                     </td>
                   </tr>
@@ -110,17 +118,17 @@ export default function CardCandidateTable({ candidates, pagination, onPageChang
                 onClick={() => onPageChange(pageNumber - 1)}
                 className={`px-3 py-1 rounded text-xs font-semibold uppercase border ${pageNumber === 0 ? 'bg-gray-100 text-gray-400 border-gray-200' : 'bg-white text-indigo-500 border-indigo-500 hover:bg-indigo-500 hover:text-white transition-all'}`}
              >
-               Trước
+               {t('prev')}
              </button>
              <span className="text-xs flex items-center font-semibold text-blueGray-600 px-2">
-               Trang {pageNumber + 1} / {totalPages}
+               {t('page_info', { page: pageNumber + 1, total: totalPages })}
              </span>
              <button
                 disabled={pageNumber >= totalPages - 1}
                 onClick={() => onPageChange(pageNumber + 1)}
                 className={`px-3 py-1 rounded text-xs font-semibold uppercase border ${pageNumber >= totalPages - 1 ? 'bg-gray-100 text-gray-400 border-gray-200' : 'bg-white text-indigo-500 border-indigo-500 hover:bg-indigo-500 hover:text-white transition-all'}`}
              >
-               Sau
+               {t('next')}
              </button>
           </div>
         )}

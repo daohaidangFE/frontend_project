@@ -21,7 +21,7 @@ ReactDOM.render(
     {/* Cung cấp context xác thực cho toàn app */}
 
       <BrowserRouter>
-        <LanguageSwitcher />
+        {/* <LanguageSwitcher /> */}
 
         <Switch>
           {/* Khu vực quản trị */}

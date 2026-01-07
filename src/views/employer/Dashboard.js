@@ -1,57 +1,60 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 export default function EmployerDashboard() {
+  const { t } = useTranslation();
+
   return (
     <>
       <div className="flex flex-wrap">
-        {/* CARD 1: Tin đang hiển thị */}
+        {/* CARD 1: Active Jobs */}
         <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
           <StatCard 
-            title="Tin đang hiển thị"
+            title={t('active_jobs')}
             value="3"
             icon="fas fa-briefcase"
             color="bg-emerald-500"
-            footer="2 tin đang chờ duyệt"
+            footer={t('pending_jobs_count')}
             footerIcon="fas fa-clock"
             footerColor="text-orange-500"
           />
         </div>
 
-        {/* CARD 2: Ứng viên mới */}
+        {/* CARD 2: New Candidates */}
         <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
           <StatCard 
-            title="Ứng viên mới"
+            title={t('new_candidates')}
             value="12"
             icon="fas fa-users"
             color="bg-lightBlue-500"
-            footer="Tăng 15% so với tuần trước"
+            footer={t('increase_since_last_week')}
             footerIcon="fas fa-arrow-up"
             footerColor="text-emerald-500"
           />
         </div>
 
-        {/* CARD 3: Sắp hết hạn */}
+        {/* CARD 3: Expiring Soon */}
         <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
           <StatCard 
-            title="Sắp hết hạn"
+            title={t('expiring_soon')}
             value="1"
             icon="fas fa-hourglass-half"
             color="bg-orange-500"
-            footer="Hết hạn trong 3 ngày tới"
+            footer={t('expires_in_days')}
             footerIcon="fas fa-exclamation-triangle"
             footerColor="text-red-500"
           />
         </div>
 
-        {/* CARD 4: Tổng lượt xem (Giả định) */}
+        {/* CARD 4: Total Views */}
         <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
           <StatCard 
-            title="Tổng lượt xem"
+            title={t('total_views')}
             value="450"
             icon="fas fa-chart-bar"
             color="bg-red-500"
-            footer="Cập nhật 1 giờ trước"
+            footer={t('updated_ago')}
             footerIcon="fas fa-sync"
             footerColor="text-blueGray-500"
           />
@@ -59,39 +62,39 @@ export default function EmployerDashboard() {
       </div>
 
       <div className="flex flex-wrap mt-4">
-        {/* CỘT TRÁI: Ứng viên mới nhất */}
+        {/* LEFT COLUMN: Recent Candidates */}
         <div className="w-full xl:w-8/12 mb-12 xl:mb-0 px-4">
           <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded">
             <div className="rounded-t mb-0 px-4 py-3 border-0">
               <div className="flex flex-wrap items-center">
                 <div className="relative w-full px-4 max-w-full flex-grow flex-1">
                   <h3 className="font-semibold text-base text-blueGray-700">
-                    Ứng viên mới nộp hồ sơ
+                    {t('newly_applied_candidates')}
                   </h3>
                 </div>
                 <div className="relative w-full px-4 max-w-full flex-grow flex-1 text-right">
                   <Link
-                    to="/employer/dashboard" // Sau này trỏ tới trang All Candidates
+                    to="/employer/dashboard"
                     className="bg-indigo-500 text-white active:bg-indigo-600 text-xs font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                   >
-                    Xem tất cả
+                    {t('view_all')}
                   </Link>
                 </div>
               </div>
             </div>
             <div className="block w-full overflow-x-auto">
-              {/* Bảng ứng viên rút gọn */}
+              {/* Short Candidates Table */}
               <table className="items-center w-full bg-transparent border-collapse">
                 <thead>
                   <tr>
                     <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
-                      Tên ứng viên
+                      {t('candidate_name')}
                     </th>
                     <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
-                      Vị trí ứng tuyển
+                      {t('applied_position')}
                     </th>
                     <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
-                      Ngày nộp
+                      {t('applied_date')}
                     </th>
                   </tr>
                 </thead>
@@ -104,7 +107,7 @@ export default function EmployerDashboard() {
                       Frontend Intern
                     </td>
                     <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                      Vừa xong
+                      {t('just_now')}
                     </td>
                   </tr>
                   <tr>
@@ -115,7 +118,7 @@ export default function EmployerDashboard() {
                       Java Backend
                     </td>
                     <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                      1 giờ trước
+                      {t('hours_ago')}
                     </td>
                   </tr>
                 </tbody>
@@ -124,24 +127,24 @@ export default function EmployerDashboard() {
           </div>
         </div>
         
-        {/* CỘT PHẢI: Shortcut hoặc tin tức */}
+        {/* RIGHT COLUMN: Shortcuts */}
         <div className="w-full xl:w-4/12 px-4">
           <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded">
             <div className="rounded-t mb-0 px-4 py-3 border-0">
               <div className="flex flex-wrap items-center">
                 <div className="relative w-full px-4 max-w-full flex-grow flex-1">
                   <h3 className="font-semibold text-base text-blueGray-700">
-                    Phím tắt
+                    {t('shortcuts')}
                   </h3>
                 </div>
               </div>
             </div>
             <div className="p-4 flex flex-col gap-3">
                 <Link to="/employer/create-job" className="w-full bg-emerald-500 text-white font-bold text-xs px-4 py-3 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150 text-center uppercase">
-                    <i className="fas fa-plus-circle mr-2"></i> Đăng tin mới
+                    <i className="fas fa-plus-circle mr-2"></i> {t('post_new_job')}
                 </Link>
                 <Link to="/employer/my-jobs" className="w-full bg-lightBlue-500 text-white font-bold text-xs px-4 py-3 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150 text-center uppercase">
-                    <i className="fas fa-list mr-2"></i> Quản lý tin
+                    <i className="fas fa-list mr-2"></i> {t('manage_jobs')}
                 </Link>
             </div>
           </div>
@@ -151,7 +154,7 @@ export default function EmployerDashboard() {
   );
 }
 
-// Component con hiển thị thẻ thống kê
+// Sub-component for Stat Card
 function StatCard({ title, value, icon, color, footer, footerIcon, footerColor }) {
     return (
         <div className="relative flex flex-col min-w-0 break-words bg-white rounded mb-6 xl:mb-0 shadow-lg">

@@ -3,8 +3,10 @@ import jobService from "services/jobService";
 import Swal from "sweetalert2";
 import { toast } from "react-toastify";
 import AdminPostDetailModal from "components/Modals/AdminPostDetailModal.js";
+import { useTranslation } from 'react-i18next';
 
 export default function AdminJobApproval() {
+  const { t } = useTranslation();
   const [pendingPosts, setPendingPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedPost, setSelectedPost] = useState(null);
@@ -17,38 +19,48 @@ export default function AdminJobApproval() {
   const loadData = async () => {
     try {
       const data = await jobService.getPendingPosts();
+      console.log("Dữ liệu Pending Posts:", data);
+      if (data.length > 0) {
+          console.log("Skill của bài đầu tiên:", data[0].skills);
+      }
       setPendingPosts(data);
     } catch (error) {
-      toast.error("🚀 Không thể tải danh sách bài đăng!");
+      toast.error(t('error')); 
     } finally {
       setLoading(false);
     }
   };
 
-  const onViewDetail = (post) => {
-    setSelectedPost(post);
-    setIsModalOpen(true);
+  const onViewDetail = async (summaryPost) => {
+      try {
+        const fullPostData = await jobService.getAdminJobDetail(summaryPost.id);
+        
+        setSelectedPost(fullPostData);
+        setIsModalOpen(true);
+      } catch (error) {
+        toast.error(t('fetch_detail_error'));
+      }
   };
 
   const onApprove = async (postId) => {
     Swal.fire({
-      title: "Phê duyệt bài đăng?",
-      text: "Tin tuyển dụng này sẽ được hiển thị công khai cho sinh viên.",
+      title: t('confirm_approve_title'),
+      text: t('confirm_approve_text'),
       icon: "question",
       showCancelButton: true,
       confirmButtonColor: "#10b981",
       cancelButtonColor: "#64748b",
-      confirmButtonText: "Đồng ý, duyệt ngay!",
-      cancelButtonText: "Hủy",
+      confirmButtonText: t('confirm'),
+      cancelButtonText: t('cancel'),
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
           await jobService.approvePost(postId);
           setPendingPosts(prev => prev.filter(p => p.id !== postId));
           setIsModalOpen(false);
-          toast.success("✅ Đã phê duyệt bài đăng thành công!");
+          toast.success(`✅ ${t('approve_success')}`);
         } catch (error) {
-          toast.error("❌ Phê duyệt thất bại!");
+          toast.error(`❌ ${t('approve_error')}`);
         }
       }
     });
@@ -56,23 +68,23 @@ export default function AdminJobApproval() {
 
   const onReject = async (postId) => {
     Swal.fire({
-      title: "Từ chối bài đăng?",
-      text: "Bạn có chắc chắn muốn từ chối phê duyệt bài đăng này?",
+      title: t('confirm_reject_title'),
+      text: t('confirm_reject_text'),
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#f43f5e",
       cancelButtonColor: "#64748b",
-      confirmButtonText: "Đúng, từ chối!",
-      cancelButtonText: "Quay lại",
+      confirmButtonText: t('confirm'),
+      cancelButtonText: t('cancel'),
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
           await jobService.rejectPost(postId);
           setPendingPosts(prev => prev.filter(p => p.id !== postId));
           setIsModalOpen(false);
-          toast.info("📋 Đã từ chối bài đăng.");
+          toast.info(`📋 ${t('reject_success')}`);
         } catch (error) {
-          toast.error("❌ Thao tác thất bại!");
+          toast.error(`❌ ${t('reject_error')}`);
         }
       }
     });
@@ -82,7 +94,7 @@ export default function AdminJobApproval() {
     return (
       <div className="flex items-center justify-center min-h-screen text-blueGray-500">
         <i className="fas fa-spinner fa-spin mr-2"></i>
-        Đang tải dữ liệu...
+        {t('loading')}
       </div>
     );
   }
@@ -94,7 +106,7 @@ export default function AdminJobApproval() {
         {/* Header */}
         <h2 className="text-xl font-bold mb-6 border-b pb-3 text-blueGray-700 flex items-center">
           <i className="fas fa-clipboard-check mr-2 text-emerald-500"></i>
-          Danh sách bài đăng chờ phê duyệt
+          {t('manage_job_posts')} 
         </h2>
 
         {/* Table */}
@@ -102,10 +114,10 @@ export default function AdminJobApproval() {
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-blueGray-50 text-blueGray-500 uppercase text-xs font-bold">
-                <th className="px-5 py-3 border-b">Thông tin bài đăng</th>
-                <th className="px-5 py-3 border-b">Địa điểm</th>
-                <th className="px-5 py-3 border-b">Ngày tạo</th>
-                <th className="px-5 py-3 border-b text-center">Hành động</th>
+                <th className="px-5 py-3 border-b">{t('job_info_header')}</th>
+                <th className="px-5 py-3 border-b">{t('location')}</th>
+                <th className="px-5 py-3 border-b">{t('created_at')}</th>
+                <th className="px-5 py-3 border-b text-center">{t('action_header')}</th>
               </tr>
             </thead>
 
@@ -143,13 +155,14 @@ export default function AdminJobApproval() {
                         onClick={() => onApprove(post.id)}
                         className="bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-full shadow text-xs font-bold uppercase mr-2 transition"
                       >
-                        Duyệt
+                        {t('approve')}
                       </button>
+                      
                       <button
                         onClick={() => onReject(post.id)}
                         className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-full shadow text-xs font-bold uppercase transition"
                       >
-                        Từ chối
+                        {t('reject')}
                       </button>
                     </td>
                   </tr>
@@ -158,7 +171,7 @@ export default function AdminJobApproval() {
                 <tr>
                   <td colSpan="4" className="text-center py-16 text-blueGray-400">
                     <i className="fas fa-inbox text-3xl mb-3 block"></i>
-                    Không có bài đăng nào cần phê duyệt.
+                    {t('no_pending_posts')}
                   </td>
                 </tr>
               )}
@@ -167,7 +180,6 @@ export default function AdminJobApproval() {
         </div>
       </div>
 
-      {/* Modal */}
       <AdminPostDetailModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}

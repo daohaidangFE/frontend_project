@@ -1,22 +1,21 @@
-import React, { useEffect } from "react"; // 1. Thêm useEffect
+import React, { useEffect } from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
 
-// Import hooks
-import { useAuth } from "context/AuthContext"; // 2. Import useAuth
+import { useAuth } from "context/AuthContext";
 
-// Import components
 import MainNavbar from "components/Navbars/MainNavbar.js";
 import MainFooter from "components/Footers/MainFooter.js";
 import HomePage from "views/common/HomePage.js";
 import CompanyList from "views/common/CompanyList.js";
-
+import HeaderNavbar from "components/Navbars/HeaderNavbar"; 
 import PublicStudentProfile from "views/student/PublicStudentProfile.js";
 
 export default function MainLayout() {
   
   return (
     <>
-      <MainNavbar />
+      {/* <MainNavbar /> */}
+      <HeaderNavbar />
       <main className="pt-20">
         <Switch>
           <Route path="/" exact component={HomePage} />

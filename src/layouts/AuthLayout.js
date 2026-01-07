@@ -1,15 +1,25 @@
 // src/layouts/AuthLayout.js
 import React from "react";
-import { Switch, Route, Redirect } from "react-router-dom";
+import { Switch, Route, Redirect, Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 // views
 import Login from "views/auth/Login.js";
 import Register from "views/auth/Register.js";
 import ForgotPassword from "views/auth/ForgotPassword.js"
+import LanguageSwitcher from "components/LanguageSwitcher/LanguageSwitcher.js";
 
 export default function AuthLayout() {
+  const { t } = useTranslation();
   return (
     <main className="flex justify-center items-stretch min-h-screen bg-slate-50">
+      <div className="absolute top-5 left-5 z-50 flex items-center gap-2">
+        
+        <Link to="/" className="bg-white text-indigo-600 hover:text-indigo-800 text-xs font-bold uppercase px-3 py-2 rounded-full shadow hover:shadow-md transition-all">
+           <i className="fas fa-arrow-left mr-2"></i> {t('home_button')}
+        </Link>
+        <LanguageSwitcher />
+      </div>
       <div className="w-full mx-0 flex bg-white shadow-lg overflow-hidden">
 
         {/* Cột chứa form */}

@@ -7,7 +7,7 @@
   "dependencies": {
     "@fortawesome/fontawesome-free": "5.15.3",
     "@popperjs/core": "2.9.1",
-    "@stomp/stompjs": "^7.2.1",
+    "@stomp/stompjs": "^6.1.2",
     "@tailwindcss/forms": "0.2.1",
     "autoprefixer": "10.2.5",
     "axios": "^1.12.2",
@@ -27,7 +27,6 @@
     "react-scripts": "5.0.1",
     "react-toastify": "^11.0.5",
     "sockjs-client": "^1.6.1",
-    "stompjs": "^2.3.3",
     "sweetalert2": "^11.26.17",
     "tailwindcss": "2.0.4"
   },

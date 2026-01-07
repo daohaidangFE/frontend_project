@@ -69,6 +69,30 @@ const jobService = {
     return response.data?.data || response.data?.result || response.data;
   },
 
+  getAdminJobDetail: async (postId) => {
+    const response = await apiClient.get(`${JOB_API_URL}/admin/detail`, {
+      params: { postId }
+    });
+    
+    let jobData = unwrap(response);
+
+    if (jobData && jobData.companyId && !jobData.companyName) {
+      try {
+        const companyRes = await apiClient.get(`${PROFILE_API_URL}/companies/${jobData.companyId}`);
+        const companyData = unwrap(companyRes);
+        jobData.companyName = companyData?.name || "Công ty ẩn danh";
+        
+        if (!jobData.companyLogo && companyData?.logo) {
+             jobData.companyLogo = companyData.logo;
+        }
+      } catch (err) {
+        jobData.companyName = "Công ty ẩn danh";
+      }
+    }
+    
+    return jobData;
+  },
+
   updateApplicationStatus: async (applicationId, status) => {
     const response = await apiClient.put(`/applications/${applicationId}/status`, null, {
         params: { status }

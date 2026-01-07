@@ -1,19 +1,16 @@
-import apiClient from "./apiClient";
+import apiClient from "./apiClient"; // Nhớ import đúng file bạn vừa tạo
 
 const AUTH_URL = "/auth";
 
 // Login
 const loginWithApi = async (email, password) => {
-  // Call API
   const response = await apiClient.post(`${AUTH_URL}/login`, {
     email,
     password,
   });
 
-  // Flat data from backend
   const authData = response.data.data;
 
-  // Build user object
   const user = {
     userId: authData.userId,
     email,
@@ -22,7 +19,6 @@ const loginWithApi = async (email, password) => {
     avatar: authData.avatar || null,
   };
 
-  // Save storage
   localStorage.setItem("accessToken", authData.accessToken);
   localStorage.setItem("refreshToken", authData.refreshToken);
   localStorage.setItem("user", JSON.stringify(user));
@@ -35,7 +31,6 @@ const registerWithApi = async (userData) => {
   const response = await apiClient.post(`${AUTH_URL}/register`, userData);
   const authData = response.data.data;
 
-  // Save token
   localStorage.setItem("accessToken", authData.accessToken);
   localStorage.setItem("refreshToken", authData.refreshToken);
 
@@ -50,31 +45,53 @@ const registerWithApi = async (userData) => {
   return { user };
 };
 
+const logoutWithApi = async () => {
+  try {
+    const refreshToken = localStorage.getItem("refreshToken");
+    if (refreshToken) {
+      await apiClient.post(`${AUTH_URL}/logout`, { refreshToken });
+    }
+  } catch (err) {
+    console.error("Logout API error:", err);
+  } finally {
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+    localStorage.removeItem("user");
+    window.location.href = "/auth/login";
+  }
+};
+
 const authService = {
   login: loginWithApi,
   register: registerWithApi,
+  logout: logoutWithApi,
 
   // Safe get user
   getCurrentUser: () => {
     const userStr = localStorage.getItem("user");
     if (!userStr || userStr === "undefined") return null;
-
     try {
       return JSON.parse(userStr);
     } catch (err) {
-      console.error("Parse user failed:", err);
       localStorage.removeItem("user");
       return null;
     }
   },
 
-  // Clear auth data
-  logout: () => {
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("refreshToken");
-    localStorage.removeItem("user");
-    window.location.href = "/auth/login";
+  isAuthenticated: () => {
+    return !!localStorage.getItem("accessToken");
   },
+
+  hasRole: (role) => {
+    const userStr = localStorage.getItem("user");
+    if (!userStr) return false;
+    try {
+      const user = JSON.parse(userStr);
+      return user.role === role;
+    } catch (e) {
+      return false;
+    }
+  }
 };
 
 export default authService;

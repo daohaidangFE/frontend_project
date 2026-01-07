@@ -11,7 +11,7 @@ export default function Sidebar() {
     <>
       <nav className="md:left-0 md:block md:fixed md:top-0 md:bottom-0 md:overflow-y-auto md:flex-row md:flex-nowrap md:overflow-hidden shadow-xl bg-white flex flex-wrap items-center justify-between relative md:w-64 z-10 py-4 px-6">
         <div className="md:flex-col md:items-stretch md:min-h-full md:flex-nowrap px-0 flex flex-wrap items-center justify-between w-full mx-auto">
-          {/* Toggler (Mobile) */}
+          {/* Toggler */}
           <button
             className="cursor-pointer text-black opacity-50 md:hidden px-3 py-1 text-xl leading-none bg-transparent rounded border border-solid border-transparent"
             type="button"
@@ -28,7 +28,7 @@ export default function Sidebar() {
             Internship Hub
           </Link>
 
-          {/* User (chỉ hiển thị trên mobile) */}
+          {/* User */}
           <ul className="md:hidden items-center flex flex-wrap list-none">
             <li className="inline-block relative">
               <UserDropdown />
@@ -42,7 +42,7 @@ export default function Sidebar() {
               collapseShow
             }
           >
-            {/* Collapse header (cho mobile) */}
+            {/* Collapse header */}
             <div className="md:min-w-full md:hidden block pb-4 mb-4 border-b border-solid border-blueGray-200">
               <div className="flex flex-wrap">
                 <div className="w-6/12">
@@ -70,19 +70,42 @@ export default function Sidebar() {
             
             {/* Heading */}
             <h6 className="md:min-w-full text-blueGray-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline">
-              {t('admin_section', "Quản trị viên")}
+              {t('admin_section')}
             </h6>
 
             {/* Navigation */}
             <ul className="md:flex-col md:min-w-full flex flex-col list-none">
               
-              {/* 1. Quản lý Tin tuyển dụng (Tất cả) */}
+              {/* 1. Quản lý Người dùng */}
+              <li className="items-center">
+                <Link
+                  className={
+                    "text-xs uppercase py-3 font-bold block " +
+                    (window.location.href.indexOf("/admin/users") !== -1
+                      ? "text-lightBlue-500 hover:opacity-80"
+                      : "text-blueGray-700 hover:text-blueGray-500")
+                  }
+                  to="/admin/users"
+                >
+                  <i
+                    className={
+                      "fas fa-users mr-2 text-sm " +
+                      (window.location.href.indexOf("/admin/users") !== -1
+                        ? "opacity-75"
+                        : "text-blueGray-300")
+                    }
+                  ></i>{" "}
+                  {t('manage_users')}
+                </Link>
+              </li>
+
+              {/* 2. Quản lý Tin tuyển dụng */}
               <li className="items-center">
                 <Link
                   className={
                     "text-xs uppercase py-3 font-bold block " +
                     (window.location.href.indexOf("/admin/job-posts") !== -1
-                      ? "text-brand hover:opacity-80"
+                      ? "text-lightBlue-500 hover:opacity-80"
                       : "text-blueGray-700 hover:text-blueGray-500")
                   }
                   to="/admin/job-posts"
@@ -95,17 +118,17 @@ export default function Sidebar() {
                         : "text-blueGray-300")
                     }
                   ></i>{" "}
-                  {t('manage_job_posts', "Quản lý Tin tuyển dụng")}
+                  {t('manage_job_posts')}
                 </Link>
               </li>
 
-              {/* 2. MỚI: Phê duyệt bài đăng (Chỉ PENDING) */}
+              {/* 3. Phê duyệt bài đăng */}
               <li className="items-center">
                 <Link
                   className={
                     "text-xs uppercase py-3 font-bold block " +
                     (window.location.href.indexOf("/admin/job-approval") !== -1
-                      ? "text-brand hover:opacity-80"
+                      ? "text-lightBlue-500 hover:opacity-80"
                       : "text-blueGray-700 hover:text-blueGray-500")
                   }
                   to="/admin/job-approval"
@@ -118,7 +141,30 @@ export default function Sidebar() {
                         : "text-blueGray-300")
                     }
                   ></i>{" "}
-                  {t('approve_job_posts', "Phê duyệt bài đăng")}
+                  {t('approve_job_posts')}
+                </Link>
+              </li>
+
+              {/* 4. Quản lý Kỹ năng */}
+              <li className="items-center">
+                <Link
+                  className={
+                    "text-xs uppercase py-3 font-bold block " +
+                    (window.location.href.indexOf("/admin/skills") !== -1
+                      ? "text-lightBlue-500 hover:opacity-80"
+                      : "text-blueGray-700 hover:text-blueGray-500")
+                  }
+                  to="/admin/skills"
+                >
+                  <i
+                    className={
+                      "fas fa-laptop-code mr-2 text-sm " +
+                      (window.location.href.indexOf("/admin/skills") !== -1
+                        ? "opacity-75"
+                        : "text-blueGray-300")
+                    }
+                  ></i>{" "}
+                  {t('manage_skills')}
                 </Link>
               </li>
 

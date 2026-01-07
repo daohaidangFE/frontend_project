@@ -6,6 +6,7 @@ const formatDate = (dateString) => {
   if (!dateString) return '';
   try {
     const date = new Date(dateString);
+    // Format mm/yyyy
     return `${date.getMonth() + 1}/${date.getFullYear()}`;
   } catch {
     return dateString;
@@ -25,17 +26,16 @@ export default function EducationCard({
     <div className="bg-white p-6 rounded-lg shadow-md border border-blueGray-200 mt-6">
       <div className="flex justify-between items-center mb-4">
         <h3 className="text-xl font-bold text-blueGray-700">
-          {t('education', 'Education')}
+          {t('education_title')}
         </h3>
         
         {!readOnly && (
           <button 
             onClick={onAdd}
-            // Sửa text-brand -> text-lightBlue-500
             className="text-lightBlue-500 text-sm font-semibold hover:opacity-80 transition-all focus:outline-none"
           >
             <i className="fas fa-plus mr-1"></i>
-            {t('add', 'Add')}
+            {t('add')}
           </button>
         )}
       </div>
@@ -54,7 +54,7 @@ export default function EducationCard({
                   </p>
                   <p className="text-sm text-blueGray-500 mt-1">
                     <i className="far fa-calendar-alt mr-2"></i>
-                    {formatDate(edu.startDate)} - {edu.endDate ? formatDate(edu.endDate) : t('present', 'Present')}
+                    {formatDate(edu.startDate)} - {edu.endDate ? formatDate(edu.endDate) : t('present')}
                   </p>
                   {edu.description && (
                     <p className="text-sm text-blueGray-500 mt-2 whitespace-pre-line">
@@ -80,7 +80,7 @@ export default function EducationCard({
       ) : (
         <div className="text-center text-blueGray-500 py-6 bg-blueGray-50 rounded">
           <i className="fas fa-graduation-cap text-4xl mb-3 text-blueGray-300"></i>
-          <p>{t('no_education_added', 'No education history added yet')}</p>
+          <p>{t('no_education_added')}</p>
         </div>
       )}
     </div>

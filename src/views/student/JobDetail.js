@@ -1,29 +1,27 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useHistory, Link } from "react-router-dom";
-import apiClient from "services/apiClient";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
-
-// --- IMPORT MODAL & SERVICE ---
-// import ApplyJobModal from "components/Modals/ApplyJobModal";
+import apiClient from "services/apiClient";
 import profileService from "services/profileService";
-
 import ApplyModal from "components/Modals/ApplyModal";
 
+import { useAuth } from "context/AuthContext";
+
 export default function JobDetail() {
-  const { id } = useParams();                 // Lấy jobId từ URL
+  const { id } = useParams();                 
   const history = useHistory();
   const { t } = useTranslation();
-  
-  const [job, setJob] = useState(null);       // Data job
+
+  const { user } = useAuth(); 
+
+  const [job, setJob] = useState(null);       
   const [loading, setLoading] = useState(true);
 
-  // --- STATE APPLY ---
   const [showApplyModal, setShowApplyModal] = useState(false);
   const [currentUserProfile, setCurrentUserProfile] = useState(null);
   const [isCheckingProfile, setIsCheckingProfile] = useState(true);
 
-  // ================== 1. FETCH JOB DETAIL ==================
   useEffect(() => {
     async function fetchJobData() {
       try {
@@ -31,10 +29,11 @@ export default function JobDetail() {
           params: { postId: id }
         });
 
-        // Chuẩn hoá data từ BE
         let jobData = res.data.data || res.data.result || res.data;
 
-        // Fetch thêm thông tin công ty nếu có companyId
+        // console.log("Dữ liệu Job chi tiết:", jobData); 
+        // console.log("Skills nhận được:", jobData.skills);
+
         if (jobData.companyId) {
           try {
             const companyRes = await apiClient.get(`/companies/${jobData.companyId}`);
@@ -47,14 +46,14 @@ export default function JobDetail() {
             };
           } catch (err) {
             console.warn("Không lấy được công ty", err);
-            jobData.companyName = t("unknown_company", "Công ty ẩn danh");
+            jobData.companyName = t("unknown_company");
           }
         }
 
         setJob(jobData);
       } catch (error) {
         console.error(error);
-        toast.error(t("post_not_found", "Không tìm thấy bài đăng!"));
+        toast.error(t("post_not_found"));
         history.push("/student/jobs");
       } finally {
         setLoading(false);
@@ -67,50 +66,48 @@ export default function JobDetail() {
   // ================== 2. FETCH USER PROFILE ==================
   useEffect(() => {
     async function fetchMe() {
+      // Chỉ fetch profile nếu đã có user (đã đăng nhập)
+      if (!user) {
+          setIsCheckingProfile(false);
+          return;
+      }
+
       try {
         setIsCheckingProfile(true);
         const userData = await profileService.getMe();
         if (userData) setCurrentUserProfile(userData);
       } catch (e) {
-        console.warn("Chưa đăng nhập hoặc lỗi profile:", e);
+        console.warn("Lỗi lấy profile:", e);
       } finally {
         setIsCheckingProfile(false);
       }
     }
     fetchMe();
-  }, []);
+  }, [user]); // Chạy lại khi user thay đổi
 
-  // ================== 3. HANDLE APPLY ==================
-const handleApplyClick = () => {
-      if (isCheckingProfile) {
-        toast.info("Đang kiểm tra thông tin...");
+  const handleApplyClick = () => {
+      if (!user) {
+        toast.info(t("login_required_to_apply"));
+        history.push("/auth/login");
         return;
       }
 
-      // Chưa đăng nhập -> Giữ lại
-      if (!currentUserProfile) {
-        toast.info(t("login_required", "Vui lòng đăng nhập để ứng tuyển!"));
-        history.push("/auth/login");
+      // 2. Nếu đang load profile thì đợi xíu
+      if (isCheckingProfile) {
+        toast.info(t("checking_info"));
         return;
       }
 
       setShowApplyModal(true);
   };
 
-  // Sau khi confirm apply
-  const handleConfirmApply = async () => {
-    toast.success(t("apply_success", "Đã gửi hồ sơ thành công!"));
-    setShowApplyModal(false);
-  };
-
-  // ================== LOADING STATE ==================
   if (loading) {
     return (
       <div className="min-h-screen flex justify-center items-center bg-blueGray-100">
         <div className="text-center">
-          <i className="fas fa-circle-notch fa-spin text-4xl text-brand mb-4"></i>
+          <i className="fas fa-circle-notch fa-spin text-4xl text-lightBlue-500 mb-4"></i>
           <p className="text-blueGray-500 font-medium">
-            {t("loading_data", "Đang tải dữ liệu...")}
+            {t("loading_data")}
           </p>
         </div>
       </div>
@@ -119,7 +116,6 @@ const handleApplyClick = () => {
 
   if (!job) return null;
 
-  // ================== RENDER ==================
   return (
     <div className="bg-blueGray-100 min-h-screen pb-20">
 
@@ -131,18 +127,16 @@ const handleApplyClick = () => {
         />
 
         <div className="container mx-auto px-4 relative z-10">
-          {/* Breadcrumb */}
           <div className="text-blueGray-300 text-sm mb-6">
-            <Link to="/" className="hover:text-white">Trang chủ</Link>
+            <Link to="/" className="hover:text-white">{t("home")}</Link>
             <span className="mx-2">/</span>
-            <Link to="/student/jobs" className="hover:text-white">Việc làm</Link>
+            <Link to="/student/jobs" className="hover:text-white">{t("jobs")}</Link>
             <span className="mx-2">/</span>
             <span className="text-white opacity-80 truncate">{job.title}</span>
           </div>
 
           <div className="flex flex-col md:flex-row items-start md:items-center">
-            {/* Logo */}
-            <div className="w-24 h-24 bg-white rounded-xl flex items-center justify-center shadow-2xl mb-4 md:mr-8">
+            <div className="w-24 h-24 bg-white rounded-xl flex items-center justify-center shadow-2xl mb-4 md:mr-8 overflow-hidden">
               {job.companyLogo ? (
                 <img src={job.companyLogo} alt="Logo" className="w-16 h-16 object-contain" />
               ) : (
@@ -150,7 +144,6 @@ const handleApplyClick = () => {
               )}
             </div>
 
-            {/* Title */}
             <div className="text-white flex-1">
               <h1 className="text-3xl md:text-4xl font-bold mb-3">{job.title}</h1>
               <div className="flex flex-wrap gap-4 text-blueGray-200">
@@ -160,7 +153,7 @@ const handleApplyClick = () => {
                 </span>
                 <span className="bg-white/20 px-3 py-1 rounded-full text-sm">
                   <i className="fas fa-clock mr-2" />
-                  {job.duration || "Toàn thời gian"}
+                  {job.duration || t("full_time")}
                 </span>
               </div>
             </div>
@@ -169,14 +162,10 @@ const handleApplyClick = () => {
             <div className="hidden md:block">
               <button
                 onClick={handleApplyClick}
-                disabled={isCheckingProfile}
-                className={`font-bold uppercase text-sm px-8 py-4 rounded-lg transition
-                  ${isCheckingProfile
-                    ? "bg-blueGray-400 text-blueGray-200"
-                    : "bg-emerald-500 text-white hover:bg-emerald-600"}`}
+                className="bg-emerald-500 text-white hover:bg-emerald-600 font-bold uppercase text-sm px-8 py-4 rounded-lg transition shadow-lg"
               >
                 <i className="fas fa-paper-plane mr-2" />
-                {isCheckingProfile ? "Checking..." : "Ứng tuyển ngay"}
+                {t("apply_now")}
               </button>
             </div>
           </div>
@@ -187,57 +176,59 @@ const handleApplyClick = () => {
       <div className="container mx-auto px-4 -mt-24 relative z-20">
         <div className="flex flex-wrap">
 
-          {/* MAIN CONTENT */}
           <div className="w-full lg:w-8/12 px-4 mb-6">
             <div className="bg-white shadow-xl rounded-lg p-8">
-
-              {/* Skills */}
               {job.skills?.length > 0 && (
-                <div className="mb-8 border-b pb-8">
-                  <h6 className="font-bold mb-4">Kỹ năng chuyên môn</h6>
-                  <div className="flex flex-wrap gap-3">
-                    {job.skills.map(skill => (
-                      <span
-                        key={skill.id}
-                        className="bg-lightBlue-50 text-lightBlue-600 px-4 py-2 rounded-lg text-sm font-bold"
-                      >
-                        {skill.name}
-                      </span>
-                    ))}
-                  </div>
+                <div className="mb-8 border-b border-blueGray-100 pb-8">
+                  <h6 className="font-bold text-lg text-blueGray-700 mb-4">{t("technical_skills")}</h6>
+                    <div className="flex flex-wrap gap-2">
+                      {job.skills.map((skill, index) => (
+                        <span
+                          key={skill.id || index}
+                          className="bg-blueGray-100 text-blueGray-700 px-3 py-1 rounded text-sm font-semibold border border-blueGray-200"
+                        >
+                          {/* Tên Skill */}
+                          {skill.skillName} 
+                          
+                          {/* Mức độ (nằm trong ngoặc đơn, chữ nhạt hơn chút) */}
+                          {skill.importanceLevel && (
+                            <span className="font-normal text-blueGray-500 ml-1">
+                              ({skill.importanceLevel})
+                            </span>
+                          )}
+                        </span>
+                      ))}
+                    </div>
                 </div>
               )}
 
-              {/* Description */}
               <div>
-                <h6 className="font-bold mb-4">Mô tả chi tiết</h6>
-                <div className="text-blueGray-600 whitespace-pre-line text-justify">
+                <h6 className="font-bold text-lg text-blueGray-700 mb-4">{t("job_description_title")}</h6>
+                <div className="text-blueGray-600 whitespace-pre-line text-justify leading-relaxed">
                   {job.description}
                 </div>
               </div>
             </div>
           </div>
 
-          {/* SIDEBAR */}
           <div className="w-full lg:w-4/12 px-4">
             <div className="bg-white shadow-xl rounded-lg p-6 mb-6">
-              <InfoItem icon="fa-money-bill-wave" color="emerald" label="Mức lương" value="Thỏa thuận" />
-              <InfoItem icon="fa-map-marker-alt" color="red" label="Địa điểm" value={job.location} />
-              <InfoItem icon="fa-briefcase" color="orange" label="Hình thức" value={job.workMode} />
+              <InfoItem icon="fa-money-bill-wave" color="emerald" label={t("salary")} value={t("negotiable")} />
+              <InfoItem icon="fa-map-marker-alt" color="red" label={t("location_label")} value={job.location} />
+              <InfoItem icon="fa-briefcase" color="orange" label={t("work_mode_label")} value={job.workMode} />
             </div>
 
             {/* Apply Mobile */}
             <button
               onClick={handleApplyClick}
-              className="w-full bg-emerald-500 text-white font-bold py-3 rounded md:hidden"
+              className="w-full bg-emerald-500 text-white font-bold py-3 rounded-lg shadow-lg md:hidden hover:bg-emerald-600 transition-all"
             >
-              Ứng tuyển ngay
+              {t("apply_now")}
             </button>
           </div>
         </div>
       </div>
 
-      {/* APPLY MODAL */}
       <ApplyModal
         show={showApplyModal}
         setShow={setShowApplyModal}
@@ -248,7 +239,6 @@ const handleApplyClick = () => {
   );
 }
 
-// ================== SUB COMPONENT ==================
 function InfoItem({ icon, color, label, value }) {
   const colorClasses = {
     emerald: "text-emerald-500 bg-emerald-100",
@@ -257,12 +247,12 @@ function InfoItem({ icon, color, label, value }) {
   };
 
   return (
-    <div className="flex items-center mb-4">
+    <div className="flex items-center mb-4 last:mb-0">
       <div className={`w-10 h-10 rounded-lg flex items-center justify-center mr-4 ${colorClasses[color]}`}>
         <i className={`fas ${icon}`} />
       </div>
       <div>
-        <div className="text-xs text-blueGray-400 font-bold">{label}</div>
+        <div className="text-xs text-blueGray-400 font-bold uppercase">{label}</div>
         <div className="text-blueGray-700 font-semibold">{value || "N/A"}</div>
       </div>
     </div>

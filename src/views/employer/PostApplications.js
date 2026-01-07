@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 
 // Components
 import CardCandidateTable from "components/Cards/CardCandidateTable.js";
@@ -9,6 +11,7 @@ import applyingService from "services/applyingService";
 
 export default function PostApplications() {
   const { postId } = useParams();
+  const { t } = useTranslation();
   const [candidates, setCandidates] = useState([]);
   const [pagination, setPagination] = useState({
     pageNumber: 0,
@@ -33,15 +36,17 @@ export default function PostApplications() {
         });
       }
     } catch (error) {
-      console.error("Failed to load candidates", error);
+      toast.error(t('fetch_candidates_error'));
     } finally {
       setIsLoading(false);
     }
   };
+
   useEffect(() => {
     if (postId) {
       fetchCandidates(0);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [postId]);
 
   const handlePageChange = (newPage) => {

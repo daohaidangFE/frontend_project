@@ -8,7 +8,6 @@ export default function PrivateRoute({ component: Component, allowedRoles, ...re
     const { isLoggedIn, user, isLoading } = useAuth();
     const { t } = useTranslation();
 
-    // Hiển thị Loading trong lúc chờ Auth Context khởi tạo
     if (isLoading) {
         return (
             <div className="flex justify-center items-center h-screen">

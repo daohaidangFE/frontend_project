@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next"; // 1. Import hook
 
 export default function ConfirmModal({ 
   isOpen, 
@@ -6,10 +7,12 @@ export default function ConfirmModal({
   onConfirm, 
   title, 
   message, 
-  confirmText = "Đồng ý", 
-  cancelText = "Hủy bỏ",
-  isDanger = false // Nếu true thì nút màu đỏ, false thì màu xanh
+  confirmText, 
+  cancelText,
+  isDanger = false 
 }) {
+  const { t } = useTranslation(); // 2. Khởi tạo t
+
   if (!isOpen) return null;
 
   return (
@@ -51,14 +54,16 @@ export default function ConfirmModal({
                 type="button"
                 onClick={onClose}
               >
-                {cancelText}
+                {/* Sử dụng prop truyền vào hoặc fallback về 'cancel' trong i18n */}
+                {cancelText || t('cancel')}
               </button>
               <button
                 className={`${isDanger ? 'bg-red-500 active:bg-red-600' : 'bg-emerald-500 active:bg-emerald-600'} text-white font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150`}
                 type="button"
                 onClick={onConfirm}
               >
-                {confirmText}
+                {/* Sử dụng prop truyền vào hoặc fallback về 'confirm' trong i18n */}
+                {confirmText || t('confirm')}
               </button>
             </div>
           </div>

@@ -19,6 +19,9 @@ export default function AuthNavbar() {
                 </div>
                 <div className="lg:flex flex-grow items-center lg:bg-opacity-0 lg:shadow-none">
                     <ul className="flex flex-col lg:flex-row list-none lg:ml-auto">
+                        <li className="flex items-center mr-4">
+                            <LanguageSwitcher />
+                        </li>
                         <li className="flex items-center ml-4">
                             <Link to="/">
                                 <button
@@ -28,9 +31,6 @@ export default function AuthNavbar() {
                                     {t('home_button')}
                                 </button>
                             </Link>
-                        </li>
-                        <li className="flex items-center">
-                            <LanguageSwitcher />
                         </li>
                     </ul>
                 </div>

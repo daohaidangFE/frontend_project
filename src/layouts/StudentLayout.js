@@ -1,57 +1,62 @@
 import React from "react";
-import { Switch, Redirect, Route } from "react-router-dom"; // THÊM Route vào đây
-import StudentNavbar from "components/Navbars/StudentNavbar.js"; 
+import { Switch, Redirect } from "react-router-dom";
+
+// Components
+import HeaderNavbar from "components/Navbars/HeaderNavbar"; 
 import MainFooter from "components/Footers/MainFooter.js";
 import PrivateRoute from "components/common/PrivateRoute.js";
+import ChatWidget from "components/Chat/ChatWidget"; 
+
+// Views
 import JobList from "views/student/JobList.js";
 import JobDetail from "views/student/JobDetail.js";
 import AppliedJobs from "views/student/AppliedJobs.js";
-
 import StudentProfile from "views/student/StudentProfile.js";
 
 export default function StudentLayout() {
   return (
     <>
-      <StudentNavbar />
-      <main className="pt-20">
+      <HeaderNavbar />
+      <main className="pt-20 bg-blueGray-100 min-h-screen">
         <Switch>
+          {/* 1. Trang Profile */}
           <PrivateRoute 
             path="/student/profile" 
             exact 
             component={StudentProfile} 
             allowedRoles={['STUDENT']} 
           />
+
+          {/* 2. Trang danh sách việc làm */}
           <PrivateRoute 
             path="/student/jobs" 
             exact 
             component={JobList} 
             allowedRoles={['STUDENT']} 
           />
+
+          {/* 3. Chi tiết việc làm */}
           <PrivateRoute 
             path="/student/jobs/:id" 
             exact 
             component={JobDetail} 
             allowedRoles={['STUDENT']} 
           />
+
           <PrivateRoute 
-            path="/student/applied-jobs" 
+            path="/student/my-applications" 
             exact 
             component={AppliedJobs} 
             allowedRoles={['STUDENT']} 
           />
           
-          {/* THÊM ROUTE CHAT Ở ĐÂY */}
-          {/* <PrivateRoute 
-            path="/student/messages" 
-            exact 
-            component={Messages} 
-            allowedRoles={['STUDENT']} 
-          /> */}
+          {/* Default Redirect */}
           <Redirect from="/student" to="/student/jobs" />
         </Switch>
       </main>
       <MainFooter />
-      {/* <FloatingChatButton /> */}
+
+      <ChatWidget />
     </>
   );
 }

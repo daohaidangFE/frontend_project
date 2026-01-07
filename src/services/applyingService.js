@@ -23,11 +23,10 @@ const applyingService = {
     });
   },
   
-  // Cập nhật trạng thái (Duyệt/Từ chối)
-  // Gửi status qua params để khớp với @RequestParam trong Spring Boot
-  updateStatus: (applicationId, status) => {
-    return apiClient.put(`/applying/v1/employer/applications/${applicationId}/status`, null, {
-        params: { status } 
+  updateStatus: (applicationId, status, note = "") => {
+    return apiClient.patch(`/applying/v1/employer/applications/${applicationId}/status`, {
+        status: status,
+        note: note
     });
   }
 };

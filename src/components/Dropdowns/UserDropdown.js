@@ -28,13 +28,12 @@ const UserDropdown = () => {
 
   const displayName = user.fullName || user.role;
 
-  // 👇👇👇 SỬA: Logic chọn đường dẫn dựa trên Role 👇👇👇
   const profileLink = user.role === 'EMPLOYER' ? "/employer/jobs" : "/student/profile";
 
   return (
     <div className="relative" ref={dropdownRef}>
       <button
-        className="text-blueGray-700 hover:text-blueGray-500 
+        className="text-white hover:text-blueGray-400 
         px-3 py-2 flex items-center text-xs uppercase font-bold transition-colors duration-300"
         onClick={() => setDropdownOpen(!dropdownOpen)}
       >
@@ -44,7 +43,6 @@ const UserDropdown = () => {
       
       {dropdownOpen && (
         <div className="absolute top-full right-0 mt-2 py-2 bg-white rounded-md shadow-xl z-50 min-w-max whitespace-nowrap">
-          {/* 👇👇👇 SỬA: Dùng biến profileLink thay vì hardcode đường dẫn */}
           <Link
             to={profileLink}
             className="flex items-center px-4 py-2 text-sm text-blueGray-700 hover:bg-blueGray-100 transition-colors duration-300"

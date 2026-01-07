@@ -18,9 +18,7 @@ export default function CompanyCard({ company }) {
               <img 
                 src={(!company.logoUrl || imgError) ? defaultAvatar : company.logoUrl} 
                 alt={company.name} 
-                // object-cover là chìa khóa để ảnh không bị méo, lấp đầy vòng tròn
                 className="w-full h-full object-cover"
-                // Nếu load ảnh bị lỗi, lập tức chuyển sang ảnh mặc định
                 onError={() => setImgError(true)}
               />
             </div>
@@ -42,17 +40,17 @@ export default function CompanyCard({ company }) {
           <div className="flex flex-wrap gap-4 text-sm text-blueGray-600">
             <div className="flex items-center">
               <span className="font-bold mr-1">{t('industry')}:</span> 
-              <span className="text-blueGray-500">{company.industry || "N/A"}</span>
+              <span className="text-blueGray-500">{company.industry || t('unknown')}</span>
             </div>
             <div className="flex items-center">
               <span className="font-bold mr-1">{t('company_size')}:</span> 
-              <span className="text-blueGray-500">{company.companySize || "N/A"}</span>
+              <span className="text-blueGray-500">{company.companySize || t('unknown')}</span>
             </div>
           </div>
           
           {/* Description - Giới hạn 2 dòng để layout luôn đều */}
           <p className="mt-3 text-blueGray-500 text-sm line-clamp-2 h-10 italic">
-            {company.description || "Chưa có mô tả."}
+            {company.description || t('no_description')}
           </p>
 
           {/* Website Button */}
