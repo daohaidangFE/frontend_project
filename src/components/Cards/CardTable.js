@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import jobService from "services/jobService";
-import AdminPostDetailModal from "components/Modals/AdminPostDetailModal.js"; // Tận dụng lại Modal xịn xò lúc nãy
+import AdminPostViewModal from "components/Modals/AdminPostViewModal.js";
 
 export default function AdminAllJobsTable({ color = "light" }) {
   const { t } = useTranslation();
@@ -194,12 +194,10 @@ export default function AdminAllJobsTable({ color = "light" }) {
         </div>
       </div>
 
-      <AdminPostDetailModal
+      <AdminPostViewModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         post={selectedPost}
-        onApprove={() => {}} 
-        onReject={() => {}}
       />
     </>
   );

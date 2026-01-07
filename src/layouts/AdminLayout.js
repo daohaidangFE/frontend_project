@@ -11,6 +11,7 @@ import UserTables from "views/admin/UserTables.js";
 import AdminDashboard from "views/admin/AdminDashboard";
 import SkillManagement from "views/admin/SkillManagement.js"; 
 import Settings from "views/admin/Settings.js";
+import AdminRejectedHiddenJobsTable from "views/admin/AdminRejectedHiddenJobsTable";
 
 export default function Admin() {
   return (
@@ -25,6 +26,7 @@ export default function Admin() {
             <Route path="/admin/users" exact component={UserTables} />
             <Route path="/admin/job-posts" exact component={JobPostManagement} />
             <Route path="/admin/job-approval" exact component={AdminJobApproval} />
+            <Route path="/admin/job-hidden" exact component={AdminRejectedHiddenJobsTable} />
             <Route path="/admin/skills" exact component={SkillManagement} />
             <Route path="/admin/settings" exact component={Settings} />
             <Redirect from="/admin" to="/admin/users" />

@@ -144,6 +144,31 @@ export default function Sidebar() {
                   {t('manage_job_posts')}
                 </Link>
               </li>
+              
+
+               {/* 2. Quản lý Tin tuyển dụng bị từ chối */}
+              <li className="items-center">
+                <Link
+                  className={
+                    "text-xs uppercase py-3 font-bold block " +
+                    (window.location.href.indexOf("/admin/job-hidden") !== -1
+                      ? "text-lightBlue-500 hover:opacity-80"
+                      : "text-blueGray-700 hover:text-blueGray-500")
+                  }
+                  to="/admin/job-hidden"
+                >
+                  <i
+                    className={
+                      "fas fa-briefcase mr-2 text-sm " +
+                      (window.location.href.indexOf("/admin/job-hidden") !== -1
+                        ? "opacity-75"
+                        : "text-blueGray-300")
+                    }
+                  ></i>{" "}
+                  {t('manage_job_posts_hidden')}
+                </Link>
+              </li>     
+
 
               {/* 3. Phê duyệt bài đăng */}
               <li className="items-center">

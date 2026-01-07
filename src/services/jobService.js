@@ -110,6 +110,11 @@ const jobService = {
     return unwrap(response) || [];
   },
 
+  getRejectedAndHiddenPosts: async () => {
+    const response = await apiClient.get(`${JOB_API_URL}/rejected-hidden`);
+    return unwrap(response) || [];
+  },
+
   getStudentPublicProfile: async (studentId) => {
     const response = await apiClient.get(`${PROFILE_API_URL}/${studentId}`);
     return response.data?.data || response.data;

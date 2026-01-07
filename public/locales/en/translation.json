@@ -610,5 +610,9 @@
   "settings_section": "Settings section",
 
   "skill_name": "skill name",
-  "category_name": "category name"
+  "category_name": "category name",
+  "manage_job_posts_hidden": "Manage Hidden & Rejected Posts",
+  "view_job_detail":"View job detail",
+  "archive_jobs":"Reject & Hidden Posts",
+   "all_job_posts": "Active posts"
 }

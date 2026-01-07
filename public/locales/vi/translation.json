@@ -613,5 +613,10 @@
   "settings_section": "Hệ thống",
 
   "skill_name": "Tên kĩ năng",
-  "category_name": "Tên danh mục"
+  "category_name": "Tên danh mục",
+  "manage_job_posts_hidden": "Quản lý tin ẩn & từ chối",
+
+  "view_job_detail":"Chi tiết tin tuyển dụng",
+  "archive_jobs":"Bài viết đã ẩn & từ chối",
+  "all_job_posts": "Danh sách toàn bộ tin tuyển dụng"
 }
