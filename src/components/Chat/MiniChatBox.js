@@ -5,7 +5,7 @@ import { Stomp } from "@stomp/stompjs";
 import { useTranslation } from "react-i18next";
 import messageService from "../../services/messageService";
 
-const WS_URL = "http://localhost:8084/ws";
+const WS_URL = process.env.REACT_APP_WS_URL
 
 /* Message item */
 const ChatMessageItem = ({ message, isMe }) => {
