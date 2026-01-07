@@ -19,8 +19,8 @@ export default function EmployerLayout() {
       <div className="relative md:ml-64 bg-blueGray-100 min-h-screen">
         <AdminNavbar />
         
-        <div className="relative bg-lightBlue-600 pb-32 pt-12"></div>
-        
+        <div className="relative bg-blueGray-800 md:pt-32 pb-32 pt-12"></div>      
+
         <div className="px-4 md:px-10 mx-auto w-full -mt-24">
           <Switch>
             <Route path="/employer/create-job" exact component={CreateJob} />

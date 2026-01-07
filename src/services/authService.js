@@ -1,4 +1,4 @@
-import apiClient from "./apiClient"; // Nhớ import đúng file bạn vừa tạo
+import apiClient from "./apiClient"; 
 
 const AUTH_URL = "/auth";
 
@@ -61,10 +61,16 @@ const logoutWithApi = async () => {
   }
 };
 
+// --- Change Password ---
+const changePassword = async (data) => {
+    return await apiClient.post(`${AUTH_URL}/change-password`, data);
+};
+
 const authService = {
   login: loginWithApi,
   register: registerWithApi,
   logout: logoutWithApi,
+  changePassword: changePassword,
 
   // Safe get user
   getCurrentUser: () => {

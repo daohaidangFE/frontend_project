@@ -596,5 +596,19 @@
   "pending_approvals": "Danh sách chờ duyệt mới nhất",
 
   "company": "Công ty",
-  "view_and_approve": "Xem & Duyệt"
+  "view_and_approve": "Xem & Duyệt",
+
+  "settings_account": "Cài đặt tài khoản",
+  "security": "Bảo mật",
+  "current_password": "Mật khẩu hiện tại",
+  "new_password": "Mật khẩu mới",
+  "confirm_new_password": "Nhập lại mật khẩu mới",
+  "change_password": "Đổi mật khẩu",
+  "password_mismatch": "Mật khẩu xác nhận không khớp",
+  "password_too_short": "Mật khẩu quá ngắn",
+  "change_password_success": "Đổi mật khẩu thành công",
+
+  "dashboard": "Tổng quan",
+  "settings": "Cài đặt",
+  "settings_section": "Hệ thống"
 }

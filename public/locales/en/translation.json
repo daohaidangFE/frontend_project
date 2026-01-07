@@ -593,5 +593,19 @@
   "pending_approvals": "Latest Pending Approvals",
 
   "company": "Company",
-  "view_and_approve": "View & Approve"
+  "view_and_approve": "View & Approve",
+
+  "settings_account": "Account Settings",
+  "security": "Security",
+  "current_password": "Current Password",
+  "new_password": "New Password",
+  "confirm_new_password": "Confirm New Password",
+  "change_password": "Change Password",
+  "password_mismatch": "Passwords do not match",
+  "password_too_short": "Password is too short",
+  "change_password_success": "Password changed successfully",
+
+  "dashboard": "Dashboard",
+  "settings": "Settings",
+  "settings_section": "Settings section"
 }

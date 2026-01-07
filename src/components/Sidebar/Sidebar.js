@@ -48,7 +48,7 @@ export default function Sidebar() {
                 <div className="w-6/12">
                   <Link
                     className="md:block text-left md:pb-2 text-blueGray-600 mr-0 inline-block whitespace-nowrap text-sm uppercase font-bold p-4 px-0"
-                    to="/admin"
+                    to="/admin/dashboard"
                   >
                     Internship Hub
                   </Link>
@@ -76,6 +76,29 @@ export default function Sidebar() {
             {/* Navigation */}
             <ul className="md:flex-col md:min-w-full flex flex-col list-none">
               
+              {/* --- 0. DASHBOARD (MỚI THÊM) --- */}
+              <li className="items-center">
+                <Link
+                  className={
+                    "text-xs uppercase py-3 font-bold block " +
+                    (window.location.href.indexOf("/admin/dashboard") !== -1
+                      ? "text-lightBlue-500 hover:opacity-80"
+                      : "text-blueGray-700 hover:text-blueGray-500")
+                  }
+                  to="/admin/dashboard"
+                >
+                  <i
+                    className={
+                      "fas fa-tv mr-2 text-sm " +
+                      (window.location.href.indexOf("/admin/dashboard") !== -1
+                        ? "opacity-75"
+                        : "text-blueGray-300")
+                    }
+                  ></i>{" "}
+                  {t('dashboard') || "Dashboard"}
+                </Link>
+              </li>
+
               {/* 1. Quản lý Người dùng */}
               <li className="items-center">
                 <Link
@@ -167,8 +190,40 @@ export default function Sidebar() {
                   {t('manage_skills')}
                 </Link>
               </li>
-
             </ul>
+
+            {/* Divider ngăn cách phần Settings */}
+            <hr className="my-4 md:min-w-full" />
+            
+            <h6 className="md:min-w-full text-blueGray-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline">
+              {t('settings_section') || "Cấu hình"}
+            </h6>
+
+            <ul className="md:flex-col md:min-w-full flex flex-col list-none md:mb-4">
+              {/* --- 5. SETTINGS */}
+              <li className="items-center">
+                <Link
+                  className={
+                    "text-xs uppercase py-3 font-bold block " +
+                    (window.location.href.indexOf("/admin/settings") !== -1
+                      ? "text-lightBlue-500 hover:opacity-80"
+                      : "text-blueGray-700 hover:text-blueGray-500")
+                  }
+                  to="/admin/settings"
+                >
+                  <i
+                    className={
+                      "fas fa-cogs mr-2 text-sm " +
+                      (window.location.href.indexOf("/admin/settings") !== -1
+                        ? "opacity-75"
+                        : "text-blueGray-300")
+                    }
+                  ></i>{" "}
+                  {t('settings')}
+                </Link>
+              </li>
+            </ul>
+
           </div>
         </div>
       </nav>
