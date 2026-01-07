@@ -568,5 +568,33 @@
   "image_message": "📷 [Hình ảnh]",
   "you_prefix": "Bạn",
   "messages_header": "Tin nhắn",
-  "no_conversations": "Chưa có cuộc trò chuyện nào."
+  "no_conversations": "Chưa có cuộc trò chuyện nào.",
+  
+  "tip_update_info": "Cập nhật đầy đủ thông tin công ty.",
+  "tip_check_candidates": "Kiểm tra danh sách ứng viên hàng ngày.",
+  "tip_use_chat": "Sử dụng chat để trao đổi nhanh.",
+  "tip_close_expired": "Đóng các bài tuyển dụng đã hết hạn.",
+
+  "total_posted": "Tổng tin đã đăng",
+  "total_applicants": "Tổng lượt ứng tuyển",
+  "closed_jobs": "Đã đóng / Hết hạn",
+  "needs_attention": "Cần chú ý",
+  "recent_job_posts": "Bài đăng gần đây",
+  "job_title": "Tiêu đề công việc",
+  "status": "Trạng thái",
+  "posted_date": "Ngày đăng",
+  "action": "Hành động",
+  "tips": "Mẹo",
+  "tips_for_employer": "Mẹo cho nhà tuyển dụng",
+
+  "total_users": "Tổng người dùng",
+  "system_users": "Trong hệ thống",
+  "pending_jobs": "Tin chờ duyệt",
+  "needs_action": "Cần xử lý ngay",
+  "total_jobs": "Tổng tin đăng",
+  "active_posts": "Đang hoạt động",
+  "pending_approvals": "Danh sách chờ duyệt mới nhất",
+
+  "company": "Công ty",
+  "view_and_approve": "Xem & Duyệt"
 }

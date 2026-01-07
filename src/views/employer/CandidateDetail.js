@@ -29,17 +29,27 @@ export default function CandidateDetail() {
   // Lấy User hiện tại (Nhà tuyển dụng) từ localStorage
   const currentUser = JSON.parse(localStorage.getItem("user")); 
 
-  useEffect(() => {
+useEffect(() => {
     let active = true;
 
     async function fetchData() {
       try {
         setLoading(true);
+        // 1. Lấy chi tiết đơn ứng tuyển
         const appRes = await applyingService.getApplicationDetail(id);
         const appPayload = appRes.data.data;
 
-        if (active) setApplication(appPayload);
+        if (active) {
+            setApplication(appPayload);
+            
+            // --- SỬA Ở ĐÂY: Lấy CV URL từ đơn ứng tuyển ---
+            if (appPayload.cvUrl) {
+                setCvUrl(appPayload.cvUrl);
+            }
+            // ----------------------------------------------
+        }
 
+        // 2. Lấy thông tin sinh viên (để hiện avatar, tên, sđt...)
         if (appPayload && appPayload.studentId) {
           try {
             const profileRes = await profileService.getStudentById(appPayload.studentId);
@@ -47,9 +57,13 @@ export default function CandidateDetail() {
 
             if (active) {
               setStudent(profileData);
-              if (profileData.cvUrl) {
-                setCvUrl(profileData.cvUrl);
+              
+              // --- QUAN TRỌNG: XÓA hoặc COMMENT dòng này ---
+              // Nếu application chưa có cvUrl (fallback) thì mới lấy của profile
+              if (!appPayload.cvUrl && profileData.cvUrl) {
+                 setCvUrl(profileData.cvUrl);
               }
+              // ---------------------------------------------
             }
           } catch (e) {
             console.error("Lỗi tải profile student", e);

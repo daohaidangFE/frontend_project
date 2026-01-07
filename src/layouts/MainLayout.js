@@ -3,7 +3,6 @@ import { Switch, Route, Redirect } from "react-router-dom";
 
 import { useAuth } from "context/AuthContext";
 
-import MainNavbar from "components/Navbars/MainNavbar.js";
 import MainFooter from "components/Footers/MainFooter.js";
 import HomePage from "views/common/HomePage.js";
 import CompanyList from "views/common/CompanyList.js";

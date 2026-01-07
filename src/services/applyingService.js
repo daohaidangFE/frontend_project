@@ -23,11 +23,17 @@ const applyingService = {
     });
   },
   
+  // Cập nhật trạng thái đơn (Duyệt/Từ chối)
   updateStatus: (applicationId, status, note = "") => {
     return apiClient.patch(`/applying/v1/employer/applications/${applicationId}/status`, {
         status: status,
         note: note
     });
+  },
+
+  // Lấy thống kê Dashboard
+  getDashboardStats: (jobPostIds) => {
+    return apiClient.post("/applying/v1/stats", jobPostIds);
   }
 };
 

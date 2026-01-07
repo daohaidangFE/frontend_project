@@ -19,7 +19,6 @@ export default function StudentLayout() {
       <HeaderNavbar />
       <main className="pt-20 bg-blueGray-100 min-h-screen">
         <Switch>
-          {/* 1. Trang Profile */}
           <PrivateRoute 
             path="/student/profile" 
             exact 

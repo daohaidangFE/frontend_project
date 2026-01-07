@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import apiClient from "../../services/apiClient";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useTranslation } from "react-i18next"; // 1. Import hook
+import { useTranslation } from "react-i18next";
 
 export default function UserTables() {
-  const { t } = useTranslation(); // 2. Khởi tạo t
+  const { t } = useTranslation();
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [pagination, setPagination] = useState({ page: 0, totalPages: 0 });

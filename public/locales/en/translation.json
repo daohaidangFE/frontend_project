@@ -565,5 +565,33 @@
   "image_message": "📷 [Image]",
   "you_prefix": "You",
   "messages_header": "Messages",
-  "no_conversations": "No conversations yet."
+  "no_conversations": "No conversations yet.",
+  
+  "tip_update_info": "Update company profile completely.",
+  "tip_check_candidates": "Check candidate list daily.",
+  "tip_use_chat": "Use chat for quick communication.",
+  "tip_close_expired": "Close expired job posts.",
+
+  "total_posted": "Total Posted",
+  "total_applicants": "Total Applicants",
+  "closed_jobs": "Closed / Expired",
+  "needs_attention": "Needs Attention",
+  "recent_job_posts": "Recent Job Posts",
+  "job_title": "Job Title",
+  "status": "Status",
+  "posted_date": "Posted Date",
+  "action": "Action",
+  "tips": "Tips",
+  "tips_for_employer": "Tips for Employers",
+
+  "total_users": "Total Users",
+  "system_users": "System Users",
+  "pending_jobs": "Pending Jobs",
+  "needs_action": "Needs Action",
+  "total_jobs": "Total Job Posts",
+  "active_posts": "Active Posts",
+  "pending_approvals": "Latest Pending Approvals",
+
+  "company": "Company",
+  "view_and_approve": "View & Approve"
 }
