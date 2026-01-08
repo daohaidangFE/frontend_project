@@ -14,6 +14,11 @@ export default function Settings() {
   });
   const [loading, setLoading] = useState(false);
 
+  // State để quản lý việc ẩn/hiện mật khẩu cho từng trường
+  const [showOldPassword, setShowOldPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
   useEffect(() => {
     const user = authService.getCurrentUser();
     if (user) {
@@ -60,28 +65,19 @@ export default function Settings() {
 
   return (
     <>
-      
       <div className="flex flex-wrap">
-        
         <div className="w-full lg:w-4/12 px-4">
           <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-xl rounded-lg">
             <div className="px-6 py-6">
               <div className="text-center">
-                {/* Tên hiển thị to, rõ ràng */}
                 <h3 className="text-xl font-bold leading-normal mb-2 text-blueGray-700 uppercase">
                   {currentUser?.fullName || "Administrator"}
                 </h3>
-                
-                {/* Role hiển thị ngay dưới tên */}
                 <div className="text-xs font-bold uppercase tracking-wide text-blueGray-400 mb-4">
                   <i className="fas fa-shield-alt mr-2 text-sm"></i>
                   {currentUser?.role || "SYSTEM_ADMIN"}
                 </div>
-
-                {/* Đường kẻ mờ ngăn cách */}
                 <hr className="my-4 border-b-1 border-blueGray-200" />
-
-                {/* Email */}
                 <div className="text-sm text-blueGray-600">
                   <i className="fas fa-envelope mr-2 text-blueGray-400"></i>
                   {currentUser?.email}
@@ -91,7 +87,6 @@ export default function Settings() {
           </div>
         </div>
 
-        {/* CARD PHẢI: FORM */}
         <div className="w-full lg:w-8/12 px-4">
           <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-blueGray-100 border-0">
             <div className="rounded-t bg-white mb-0 px-6 py-6">
@@ -115,13 +110,21 @@ export default function Settings() {
                       <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
                         {t('current_password') || "Mật khẩu hiện tại"}
                       </label>
-                      <input
-                        type="password"
-                        name="oldPassword"
-                        value={passwords.oldPassword}
-                        onChange={handleChange}
-                        className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                      />
+                      <div className="relative flex w-full flex-wrap items-stretch">
+                        <input
+                          type={showOldPassword ? "text" : "password"}
+                          name="oldPassword"
+                          value={passwords.oldPassword}
+                          onChange={handleChange}
+                          className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150 pr-10"
+                        />
+                        <span 
+                          className="z-10 h-full leading-snug font-normal text-center text-blueGray-300 absolute bg-transparent rounded text-base items-center justify-center w-8 right-0 pr-3 pt-3 cursor-pointer"
+                          onClick={() => setShowOldPassword(!showOldPassword)}
+                        >
+                          <i className={showOldPassword ? "fas fa-eye" : "fas fa-eye-slash"}></i>
+                        </span>
+                      </div>
                     </div>
                   </div>
 
@@ -131,13 +134,21 @@ export default function Settings() {
                       <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
                         {t('new_password') || "Mật khẩu mới"}
                       </label>
-                      <input
-                        type="password"
-                        name="newPassword"
-                        value={passwords.newPassword}
-                        onChange={handleChange}
-                        className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                      />
+                      <div className="relative flex w-full flex-wrap items-stretch">
+                        <input
+                          type={showNewPassword ? "text" : "password"}
+                          name="newPassword"
+                          value={passwords.newPassword}
+                          onChange={handleChange}
+                          className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150 pr-10"
+                        />
+                        <span 
+                          className="z-10 h-full leading-snug font-normal text-center text-blueGray-300 absolute bg-transparent rounded text-base items-center justify-center w-8 right-0 pr-3 pt-3 cursor-pointer"
+                          onClick={() => setShowNewPassword(!showNewPassword)}
+                        >
+                          <i className={showNewPassword ? "fas fa-eye" : "fas fa-eye-slash"}></i>
+                        </span>
+                      </div>
                     </div>
                   </div>
 
@@ -147,25 +158,33 @@ export default function Settings() {
                       <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
                         {t('confirm_new_password') || "Xác nhận mật khẩu mới"}
                       </label>
-                      <input
-                        type="password"
-                        name="confirmPassword"
-                        value={passwords.confirmPassword}
-                        onChange={handleChange}
-                        className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                      />
+                      <div className="relative flex w-full flex-wrap items-stretch">
+                        <input
+                          type={showConfirmPassword ? "text" : "password"}
+                          name="confirmPassword"
+                          value={passwords.confirmPassword}
+                          onChange={handleChange}
+                          className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150 pr-10"
+                        />
+                        <span 
+                          className="z-10 h-full leading-snug font-normal text-center text-blueGray-300 absolute bg-transparent rounded text-base items-center justify-center w-8 right-0 pr-3 pt-3 cursor-pointer"
+                          onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                        >
+                          <i className={showConfirmPassword ? "fas fa-eye" : "fas fa-eye-slash"}></i>
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </div>
 
                 <div className="mt-6 px-4">
-                    <button
-                        className="bg-lightBlue-500 text-white active:bg-lightBlue-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
-                        type="submit"
-                        disabled={loading}
-                    >
-                        {loading ? t('processing') : t('change_password')}
-                    </button>
+                  <button
+                    className="bg-lightBlue-500 text-white active:bg-lightBlue-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
+                    type="submit"
+                    disabled={loading}
+                  >
+                    {loading ? t('processing') : t('change_password')}
+                  </button>
                 </div>
               </form>
             </div>

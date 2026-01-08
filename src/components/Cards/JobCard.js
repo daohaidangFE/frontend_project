@@ -14,11 +14,27 @@ export default function JobCard({ job }) {
   return (
     <div className="relative flex flex-col min-w-0 break-words bg-white w-full h-full shadow-lg rounded-lg hover:-translate-y-1 transition-all duration-200 border border-transparent hover:border-blueGray-200">
       <div className="px-4 py-5 flex-auto flex flex-col">
-        {/* Company Header */}
         <div className="flex items-center mb-3">
-          <div className="w-10 h-10 rounded-full bg-blueGray-100 flex items-center justify-center text-blueGray-500 mr-3 flex-shrink-0">
-            <i className="fas fa-building"></i>
+          <div className="w-10 h-10 rounded-full bg-blueGray-100 flex items-center justify-center text-blueGray-500 mr-3 flex-shrink-0 overflow-hidden border border-blueGray-200 p-2">
+            {job.companyLogo ? (
+              <img 
+                src={job.companyLogo} 
+                alt={job.companyName}
+                className="w-full h-full object-cover rounded-full" 
+                onError={(e) => {
+                    e.target.style.display = 'none';
+                    const iconSibling = e.target.parentNode.querySelector('i');
+                    if (iconSibling) iconSibling.style.display = 'block';
+                }}
+              />
+            ) : null}
+            
+            <i 
+                className="fas fa-building" 
+                style={{ display: job.companyLogo ? 'none' : 'block', fontSize: '1.1rem' }} 
+            ></i>
           </div>
+
           <h6 className="text-blueGray-500 text-xs font-bold uppercase truncate">
             {job.companyName || t('unknown_company')}
           </h6>

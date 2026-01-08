@@ -2,6 +2,7 @@ import apiClient from "./apiClient";
 
 const PROFILE_V2_URL = "/profile/v2/students/me";
 const COMPANY_URL = "/profile/v1/companies";
+const EMPLOYER_URL = "/profile/v1/employers";
 
 const unwrap = (response) => response.data?.data || response.data?.result || response.data;
 
@@ -71,20 +72,15 @@ const profileService = {
 
     // --- COMPANY ---
     getAllCompanies: async () => {
-        const response = await apiClient.get(`${COMPANY_URL}/all`);
+        const response = await apiClient.get(COMPANY_URL);
         return unwrap(response) || [];
     },
 
     getCompanyById: async (id) => {
-        try {
-            const response = await apiClient.get(`${COMPANY_URL}/all`);
-            const allCompanies = unwrap(response) || [];
-            return allCompanies.find(comp => String(comp.id) === String(id)) || null;
-        } catch (error) {
-            console.error("Lỗi khi tìm công ty theo ID:", error);
-            return null;
-        }
+        const response = await apiClient.get(`${COMPANY_URL}/${id}`);
+        return unwrap(response);
     },
+
     getAllSkills: async () => {
         const response = await apiClient.get(`${PROFILE_V2_URL}/skills`);
         return unwrap(response) || [];
@@ -95,6 +91,30 @@ const profileService = {
     },
     deleteSkill: async (id) => {
         await apiClient.delete(`${PROFILE_V2_URL}/skills/${id}`);
+    },
+
+    getMyEmployerProfile: async () => {
+        const response = await apiClient.get(`${EMPLOYER_URL}/me`);
+        return unwrap(response);
+    },
+    createCompany: async (companyData) => {
+        const response = await apiClient.post(`${EMPLOYER_URL}/me/company`, companyData);
+        return unwrap(response);
+    },
+
+    joinCompany: async (companyId) => {
+        const response = await apiClient.patch(`${EMPLOYER_URL}/me/company`, { companyId });
+        return unwrap(response);
+    },
+
+    updateEmployerProfile: async (data) => {
+        const response = await apiClient.patch(`${EMPLOYER_URL}/me/profile`, data);
+        return unwrap(response);
+    },
+
+    updateCompany: async (data) => {
+        const response = await apiClient.patch(`${COMPANY_URL}/me`, data);
+        return unwrap(response);
     }
 };
 

@@ -614,9 +614,44 @@
 
   "skill_name": "Tên kĩ năng",
   "category_name": "Tên danh mục",
-  "manage_job_posts_hidden": "Quản lý tin ẩn & từ chối",
+  "manage_job_posts_hidden": "Tin ẩn & từ chối",
 
   "view_job_detail":"Chi tiết tin tuyển dụng",
   "archive_jobs":"Bài viết đã ẩn & từ chối",
-  "all_job_posts": "Danh sách toàn bộ tin tuyển dụng"
+  "all_job_posts": "Danh sách toàn bộ tin tuyển dụng",
+
+  "welcome_employer": "Chào mừng nhà tuyển dụng",
+  "onboarding_subtitle": "Bạn cần liên kết với một công ty để bắt đầu đăng tin",
+  "join_existing": "Tham gia có sẵn",
+  "create_new_company": "Tạo công ty mới",
+  "search_company": "Tìm kiếm công ty",
+  "no_company_found": "Không tìm thấy công ty nào",
+  "join_now": "Tham gia ngay",
+  "join_success": "Tham gia công ty thành công!",
+  "join_error": "Lỗi khi tham gia công ty",
+  "create_error": "Lỗi khi tạo công ty",
+  "creating": "Đang tạo...",
+  "create_and_join": "Tạo và Tham gia",
+  "industry_placeholder": "VD: IT, Marketing...",
+  "company_size_placeholder": "VD: 50-100 nhân viên",
+  "website_url": "Website URL",
+
+  "load_profile_error": "Không thể tải thông tin hồ sơ",
+  "update_company_success": "Cập nhật thông tin công ty thành công",
+
+  "personal_info": "Thông tin cá nhân",
+  "gender_unknown": "Không xác định",
+
+  "company_profile": "Hồ sơ công ty",
+  "company_info": "Thông tin công ty",
+  "about_company": "Giới thiệu công ty",
+  "profile_settings": "Thiết lập hồ sơ",
+  "save_company_info": "Lưu thông tin công ty",
+
+  "location_all": "Tất cả địa điểm",
+  "searching": "Đang tìm kiếm...",
+  "no_results_found": "Không tìm thấy kết quả",
+  "try_changing_filters": "Thử thay đổi từ khóa hoặc bộ lọc.",
+  "prev_page": "Trước",
+  "next_page": "Sau"
 }

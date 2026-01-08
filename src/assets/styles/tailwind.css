@@ -2017,6 +2017,10 @@ select {
   line-height: 1.25;
 }
 
+.leading-snug {
+  line-height: 1.375;
+}
+
 .leading-normal {
   line-height: 1.5;
 }
@@ -2581,6 +2585,10 @@ select {
   padding-bottom: 0.5rem;
 }
 
+.pt-3 {
+  padding-top: 0.75rem;
+}
+
 .pr-3 {
   padding-right: 0.75rem;
 }
@@ -2684,6 +2692,14 @@ select {
 .placeholder-blueGray-300::placeholder {
   --tw-placeholder-opacity: 1;
   color: rgba(203, 213, 225, var(--tw-placeholder-opacity));
+}
+
+.pointer-events-none {
+  pointer-events: none;
+}
+
+.pointer-events-auto {
+  pointer-events: auto;
 }
 
 .fixed {
@@ -3685,6 +3701,10 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
 
   .md\:col-span-1 {
     grid-column: span 1 / span 1;
+  }
+
+  .md\:col-span-2 {
+    grid-column: span 2 / span 2;
   }
 
   .md\:col-span-3 {

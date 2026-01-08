@@ -24,34 +24,34 @@ export default function JobDetail() {
 
   useEffect(() => {
     async function fetchJobData() {
-      try {
-        const res = await apiClient.get(`/internship-post/detail`, {
-          params: { postId: id }
-        });
+    try {
+      const res = await apiClient.get(`/internship-post/detail`, {
+        params: { postId: id }
+      });
 
-        let jobData = res.data.data || res.data.result || res.data;
+      // Lấy dữ liệu bài đăng từ ApiResponse
+      let jobData = res.data.data; 
 
-        // console.log("Dữ liệu Job chi tiết:", jobData); 
-        // console.log("Skills nhận được:", jobData.skills);
-
-        if (jobData.companyId) {
-          try {
-            const companyRes = await apiClient.get(`/companies/${jobData.companyId}`);
+      if (jobData && jobData.companyId) {
+        try {
+            const companyRes = await apiClient.get(`/profile/v1/companies/${jobData.companyId}`);
+            const companyData = companyRes.data.data;
+            
             jobData = { 
-              ...jobData, 
-              companyName: companyRes.data.name || companyRes.data.result?.name,
-              companyAddress: companyRes.data.address || "Hà Nội, Việt Nam",
-              companyWebsite: companyRes.data.website || "#",
-              companyLogo: companyRes.data.logo
+                ...jobData, 
+                companyName: companyData?.name,
+                companyAddress: companyData?.address,
+                companyLogo: companyData?.logoUrl
             };
-          } catch (err) {
-            console.warn("Không lấy được công ty", err);
-            jobData.companyName = t("unknown_company");
-          }
+        } catch (err) {
+            console.warn("Không tìm thấy công ty (ID ảo):", err);
+            jobData.companyName = "Công ty đang cập nhật";
+            jobData.companyAddress = "Việt Nam";
         }
+      }
 
-        setJob(jobData);
-      } catch (error) {
+      setJob(jobData);
+    } catch (error) {
         console.error(error);
         toast.error(t("post_not_found"));
         history.push("/student/jobs");
@@ -63,10 +63,8 @@ export default function JobDetail() {
     if (id) fetchJobData();
   }, [id, history, t]);
 
-  // ================== 2. FETCH USER PROFILE ==================
   useEffect(() => {
     async function fetchMe() {
-      // Chỉ fetch profile nếu đã có user (đã đăng nhập)
       if (!user) {
           setIsCheckingProfile(false);
           return;
@@ -74,7 +72,7 @@ export default function JobDetail() {
 
       try {
         setIsCheckingProfile(true);
-        const userData = await profileService.getMe();
+        const userData = await profileService.getStudentProfile();
         if (userData) setCurrentUserProfile(userData);
       } catch (e) {
         console.warn("Lỗi lấy profile:", e);

@@ -611,8 +611,43 @@
 
   "skill_name": "skill name",
   "category_name": "category name",
-  "manage_job_posts_hidden": "Manage Hidden & Rejected Posts",
+  "manage_job_posts_hidden": "Hidden & Rejected Posts",
   "view_job_detail":"View job detail",
   "archive_jobs":"Reject & Hidden Posts",
-   "all_job_posts": "Active posts"
+   "all_job_posts": "Active posts",
+
+   "welcome_employer": "Welcome Employer",
+  "onboarding_subtitle": "You need to link with a company to start posting jobs",
+  "join_existing": "Join Existing",
+  "create_new_company": "Create New Company",
+  "search_company": "Search Company",
+  "no_company_found": "No company found",
+  "join_now": "Join Now",
+  "join_success": "Joined company successfully!",
+  "join_error": "Error joining company",
+  "create_error": "Error creating company",
+  "creating": "Creating...",
+  "create_and_join": "Create and Join",
+  "industry_placeholder": "e.g., IT, Marketing...",
+  "company_size_placeholder": "e.g., 50-100 employees",
+  "website_url": "Website URL",
+
+  "load_profile_error": "Failed to load profile information",
+  "update_company_success": "Company information updated successfully",
+
+  "personal_info": "Personal Information",
+  "gender_unknown": "Unknown",
+
+  "company_profile": "Company Profile",
+  "company_info": "Company Information",
+  "about_company": "About Company",
+  "save_company_info": "Save Company Information",
+  "profile_settings": "Profile Settings",
+  
+  "location_all": "All Locations",
+  "searching": "Searching...",
+  "no_results_found": "No results found",
+  "try_changing_filters": "Try changing keywords or filters.",
+  "prev_page": "Prev",
+  "next_page": "Next"
 }

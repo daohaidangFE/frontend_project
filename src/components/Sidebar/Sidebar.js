@@ -159,7 +159,7 @@ export default function Sidebar() {
                 >
                   <i
                     className={
-                      "fas fa-briefcase mr-2 text-sm " +
+                      "fas fa-eye-slash mr-2 text-sm " +
                       (window.location.href.indexOf("/admin/job-hidden") !== -1
                         ? "opacity-75"
                         : "text-blueGray-300")
