@@ -663,5 +663,50 @@
   "prev_page": "Trước",
   "next_page": "Sau",
   "match_score": "Độ phù hợp",
-  "matched_skills": "Kỹ năng phù hợp"
+  "all_locations": "Tất cả địa điểm",
+  "all_work_modes": "Tất cả hình thức",
+  "matched_skills": "Kỹ năng phù hợp",
+
+  "job_summary": "Tóm tắt công việc",
+  "work_mode": "Hình thức",
+  "posted_at": "Ngày đăng",
+  "expired_at": "Hạn nộp",
+  "onsite": "Làm tại văn phòng",
+  "remote": "Làm từ xa",
+  "hybrid": "Linh hoạt (Hybrid)",
+  "cv_tip_skills": "* Hãy đảm bảo CV của bạn có các kỹ năng: {{skills}}",
+  "my_cv_navbar": "CV của tôi",
+
+  "manage_cv": "Quản lý danh sách CV",
+  "add_new_cv": "Thêm CV mới",
+  "cv_name": "Tên CV",
+  "actions": "Hành động",
+  "no_cv_found": "Bạn chưa có CV nào.",
+  "default": "Mặc định",
+  "set_default": "Đặt mặc định",
+  "delete_cv": "Xóa CV",
+
+  "load_cv_error": "Không thể tải danh sách CV",
+  "set_default_success": "Đã đặt CV làm mặc định thành công",
+  "set_default_failed": "Lỗi khi đặt CV mặc định",
+  "delete_cv_success": "Đã xóa CV thành công",
+  "delete_cv_failed": "Không thể xóa CV này",
+
+  "confirm_delete_cv_title": "Xác nhận xóa CV",
+  "confirm_delete_cv_msg": "Bạn có chắc chắn muốn xóa bản CV này? Thao tác này không thể hoàn tác.",
+
+
+  "cv_default_status": "CV mặc định đã sẵn sàng",
+  "cv_view_default": "Xem CV mặc định",
+  "manage_all_cvs": "Quản lý danh sách CV",
+
+  "cv_upload_more": "Tải lên CV khác",
+  "default_tag": "Mặc định",
+  "edit_cv": "Sửa tên CV",
+
+  "uploading": "Đang tải...",
+
+  "edit_cv_name": "Đổi tên CV",
+  "update_failed": "Cập nhật thất bại"
+
 }

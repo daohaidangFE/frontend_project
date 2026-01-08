@@ -659,5 +659,50 @@
   "update_profile": "Manage CV Now",
   "student_access_only": "This page is for Students only",
   "match_score": "Match Score",
-  "matched_skills": "Matched Skills"
+  "all_locations": "All Locations",
+  "all_work_modes": "All Work Modes",
+  "matched_skills": "Matched Skills",
+
+  "job_summary": "Job Summary",
+  "work_mode": "Work Mode",
+  "posted_at": "Posted Date",
+  "expired_at": "Expiry Date",
+  "onsite": "On-site",
+  "remote": "Remote",
+  "hybrid": "Hybrid",
+  "cv_tip_skills": "* Make sure your CV includes these skills: {{skills}}",
+  "my_cv_navbar": "My CV",
+
+   "manage_cv": "CV Management",
+  "add_new_cv": "Add New CV",
+  "cv_name": "CV Name",
+  "actions": "Actions",
+  "no_cv_found": "You don't have any CVs yet.",
+  "default": "Default",
+  "set_default": "Set as default",
+  "delete_cv": "Delete CV",
+
+  "load_cv_error": "Failed to load CV list",
+  "set_default_success": "CV has been set as default successfully",
+  "set_default_failed": "Failed to set CV as default",
+  "delete_cv_success": "CV deleted successfully",
+  "delete_cv_failed": "Unable to delete this CV",
+
+  "confirm_delete_cv_title": "Confirm CV Deletion",
+  "confirm_delete_cv_msg": "Are you sure you want to delete this CV? This action cannot be undone.",
+
+  "cv_default_status": "Your default CV is ready",
+  "cv_view_default": "View default CV",
+  "manage_all_cvs": "Manage CV list",
+
+  "cv_upload_more": "Upload another CV",
+
+  "default_tag": "Default",
+  "edit_cv": "Edit CV name",
+
+  "uploading": "Uploading...",
+
+
+  "edit_cv_name": "Edit CV name",
+  "update_failed": "Failed to update CV name"
 }

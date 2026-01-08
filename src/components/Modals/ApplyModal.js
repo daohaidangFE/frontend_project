@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { useTranslation } from "react-i18next"; // 1. Import hook
+import { useTranslation } from "react-i18next";
 import cvService from "services/cvService";
 import applyingService from "services/applyingService";
 
@@ -47,10 +47,10 @@ export default function ApplyModal({ show, setShow, jobPostId, jobTitle }) {
 
       if (listCvs.length > 0) {
         // Default to latest CV
-        const latestCv = listCvs[listCvs.length - 1];
+        const defaultCv = listCvs.find(cv => cv.default === true) || listCvs[listCvs.length - 1];
         
-        setSelectedCvId(latestCv.id);
-        setSelectedCvName(latestCv.cvName || `CV #${latestCv.id}`);
+        setSelectedCvId(defaultCv.id);
+        setSelectedCvName(defaultCv.cvName || `CV #${defaultCv.id}`);
       }
     } catch (err) {
       setErrorMessage(t('error')); // General error
@@ -138,13 +138,17 @@ export default function ApplyModal({ show, setShow, jobPostId, jobTitle }) {
                             <div className="flex-1">
                                 {selectedCvName}
                             </div>
-                            <span className="text-xs bg-emerald-500 text-white px-2 py-1 rounded">{t('latest_tag')}</span>
+                            <span className="text-[10px] bg-emerald-500 text-white px-2 py-1 rounded uppercase font-bold">
+                              {cvs.find(c => c.id === selectedCvId)?.default 
+                                ? t('default_tag', 'Mặc định') 
+                                : t('latest_tag', 'Mới nhất')}
+                          </span>
                         </div>
                     ) : (
                         <div className="text-sm text-orange-500 bg-orange-100 p-3 rounded border border-orange-200">
                             <i className="fas fa-exclamation-circle mr-2"></i>
                             {t('no_cv_text')} 
-                            <Link to="/student/profile" className="ml-1 font-bold underline text-orange-600 hover:text-orange-800">
+                            <Link to="/student/cv-management" className="ml-1 font-bold underline text-orange-600 hover:text-orange-800">
                                 {t('upload_cv_link')}
                             </Link>
                         </div>

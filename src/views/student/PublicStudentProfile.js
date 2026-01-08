@@ -14,6 +14,7 @@ export default function PublicStudentProfile() {
     const fetchPublicData = async () => {
       try {
         const data = await profileService.getStudentById(id);
+        console.log(data);
         setProfile(data);
       } catch (error) {
         toast.error(t("public_profile_not_found"));

@@ -6,7 +6,7 @@ export default function JobCard({ job }) {
   const { t } = useTranslation();
 
   // Helper function format date
-  const displayDate = (dateString) => {
+  const formatDate = (dateString) => {
     if (!dateString) return "";
     return new Date(dateString).toLocaleDateString("vi-VN");
   };
@@ -14,7 +14,7 @@ export default function JobCard({ job }) {
   return (
     <div className="relative flex flex-col min-w-0 break-words bg-white w-full h-full shadow-lg rounded-lg hover:-translate-y-1 transition-all duration-200 border border-transparent hover:border-blueGray-200">
       
-      {/* --- HIỂN THỊ ĐIỂM MATCH (Chỉ hiện khi có matchScore) --- */}
+      {/* --- HIỂN THỊ ĐIỂM MATCH --- */}
       {job.matchScore !== undefined && (
         <div className="absolute -top-2 -right-2 z-10">
           <div className="bg-orange-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-md border-2 border-white">
@@ -25,6 +25,7 @@ export default function JobCard({ job }) {
       )}
 
       <div className="px-4 py-5 flex-auto flex flex-col">
+        {/* Header: Logo & Company Name */}
         <div className="flex items-center mb-3">
           <div className="w-10 h-10 rounded-full bg-blueGray-100 flex items-center justify-center text-blueGray-500 mr-3 flex-shrink-0 overflow-hidden border border-blueGray-200 p-2">
             {job.companyLogo ? (
@@ -54,7 +55,7 @@ export default function JobCard({ job }) {
           </h5>
         </Link>
 
-        {/* --- HIỂN THỊ SKILL MATCH (Chỉ hiện ở trang gợi ý) --- */}
+        {/* --- HIỂN THỊ SKILL MATCH --- */}
         {job.matchedSkills && job.matchedSkills.length > 0 && (
           <div className="mb-3">
             <div className="flex flex-wrap gap-1">
@@ -84,10 +85,20 @@ export default function JobCard({ job }) {
           )}
         </div>
 
-        {/* Location */}
-        <div className="flex items-center text-blueGray-500 text-xs mb-3">
-          <i className="fas fa-map-marker-alt mr-2 text-blueGray-400"></i>
-          <span className="truncate">{job.location || t('location_not_specified')}</span>
+        {/* Location & Expiration Date */}
+        <div className="flex flex-col gap-1 mb-3">
+          <div className="flex items-center text-blueGray-500 text-xs">
+            <i className="fas fa-map-marker-alt mr-2 text-blueGray-400 w-4 text-center"></i>
+            <span className="truncate">{job.location || t('location_not_specified')}</span>
+          </div>
+          
+          {/* Ngày hết hạn làm đẹp ở đây */}
+          {job.expiredAt && (
+            <div className="flex items-center text-red-500 text-xs font-medium">
+              <i className="fas fa-calendar-times mr-2 w-4 text-center"></i>
+              <span>{t('expires')}: {formatDate(job.expiredAt)}</span>
+            </div>
+          )}
         </div>
 
         {/* Description */}
@@ -95,11 +106,11 @@ export default function JobCard({ job }) {
           {job.description}
         </p>
 
-        {/* Footer: Date & Detail Link */}
+        {/* Footer: Created Date & Detail Link */}
         <div className="border-t border-blueGray-100 pt-4 mt-auto flex justify-between items-center">
           <span className="text-xs text-blueGray-400">
             <i className="far fa-clock mr-1"></i>
-            {displayDate(job.createdAt)}
+            {formatDate(job.createdAt)}
           </span>
           <Link
             to={`/student/jobs/${job.id}`}

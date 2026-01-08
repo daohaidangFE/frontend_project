@@ -39,7 +39,7 @@ export default function ExperienceCard({
             {experiences.map((exp, index) => (
                 <div key={exp.id || index} className="relative pl-8 border-l-2 border-blueGray-200 last:border-0 group">
                     {/* Timeline Dot */}
-                    <div className="absolute -left-2 top-0 w-4 h-4 rounded-full bg-lightBlue-500 border-2 border-white shadow-sm z-10"></div>
+                    <div className="absolute -left-2 top-0 w-4 h-4 rounded-full bg-lightBlue-500 border-2 border-white shadow-sm"></div>
                     
                     <div className="flex justify-between items-start">
                         <div>

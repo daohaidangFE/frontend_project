@@ -26,25 +26,22 @@ import cvService from "services/cvService";
 export default function Profile() {
   const { t } = useTranslation();
   
+  const [showCVPreview, setShowCVPreview] = useState(false);
   // State Data
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
 
   // State Modal Form
-  const [modalType, setModalType] = useState(null); // 'about', 'education', 'experience', 'skill'
+  const [modalType, setModalType] = useState(null);
   const [editingItem, setEditingItem] = useState(null);
 
-  // State Modal Confirm Delete
   const [confirmModal, setConfirmModal] = useState({
       isOpen: false,
-      type: null, // 'education', 'experience', 'skill'
+      type: null, 
       id: null
-  });
-
-  // --- 1. LOAD DATA ---
+  })
   const fetchProfile = async () => {
     try {
-      // Gọi song song các API để tiết kiệm thời gian
       const [studentData, educations, experiences, skills, cvList] = await Promise.all([
         profileService.getStudentProfile(),
         profileService.getAllEducations().catch(() => []),
@@ -53,12 +50,13 @@ export default function Profile() {
         cvService.getMyCVs().catch(() => [])
       ]);
 
-      // Lấy CV mới nhất
-      if (cvList && cvList.length > 0) {
-        cvList.sort((a, b) => b.id - a.id);
+      let displayCv = cvList.find(cv => cv.default === true);
+
+      if (!displayCv && cvList.length > 0) {
+        displayCv = [...cvList].sort((a, b) => b.id - a.id)[0];
       }
-      const displayCv = cvList[0]; 
-      const cvUrl = displayCv ? displayCv.cvUrl : null;
+
+    const cvUrl = displayCv ? displayCv.cvUrl : null;
 
       setProfile({
         ...studentData,
@@ -191,7 +189,7 @@ export default function Profile() {
           <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-xl rounded-lg -mt-64">
             <div className="px-6 relative">
               
-              <div className="absolute top-4 right-4 z-50 flex flex-wrap gap-3">
+              <div className="absolute top-4 right-4 flex flex-wrap gap-3">
                 <Link
                   to="/student/my-applications"
                   className="bg-blueGray-700 hover:bg-blueGray-800 text-white font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-150 flex items-center gap-2"
@@ -261,7 +259,7 @@ export default function Profile() {
                       </div>
 
                       {/* CV Card */}
-                      <CVCard profile={profile} onUploadSuccess={fetchProfile} />
+                      <CVCard profile={profile} onUploadSuccess={fetchProfile} onPreview={() => setShowCVPreview(true)} />
                       
                       {/* Skills Card */}
                       <div className="mt-6">
@@ -343,6 +341,42 @@ export default function Profile() {
           message={t("confirm_delete_message")}
           isDanger={true}
       />
+      {showCVPreview && profile?.cvUrl && (
+  <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
+    {/* Nền đen mờ */}
+    <div
+      className="fixed inset-0 bg-black opacity-60 z-[9998]"
+      onClick={() => setShowCVPreview(false)}
+    ></div>
+    <div 
+      className="relative w-full max-w-2xl bg-white shadow-2xl rounded-lg overflow-hidden z-[9999] flex flex-col" 
+      style={{ height: '80vh' }}
+    >
+      {/* Header */}
+      <div className="flex-none flex items-center justify-between px-4 py-3 border-b bg-blueGray-50">
+        <h3 className="text-lg font-bold text-blueGray-700">
+          <i className="fas fa-file-pdf mr-2 text-red-500"></i>
+          {t("cv_preview", "Xem trước CV")}
+        </h3>
+        <button
+          className="text-blueGray-400 hover:text-red-500 text-2xl outline-none"
+          onClick={() => setShowCVPreview(false)}
+        >
+          &times;
+        </button>
+      </div>
+      {/* Body */}
+      <div className="flex-1 w-full overflow-auto">
+        <iframe
+          src={`${profile.cvUrl}#view=FitH&toolbar=0&navpanes=0&scrollbar=1`}
+          title="CV Preview"
+          className="w-full border-none"
+          style={{ minHeight: '1000px', height: '100%' }}
+        />
+      </div>
+    </div>
+  </div>
+)}
     </>
   );
 }

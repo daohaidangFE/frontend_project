@@ -69,6 +69,18 @@ export default function HeaderNavbar() {
               </Link>
             </li>
 
+            {isLoggedIn && user?.role === 'STUDENT' && (
+              <li className="flex items-center">
+                <Link 
+                  to="/student/cv-management"
+                  className={getLinkClass("/student/cv-management")}
+                >
+                  <i className="fas fa-file-pdf text-lg leading-lg mr-2" />{" "}
+                  {t("my_cv_navbar", "CV của tôi")}
+                </Link>
+              </li>
+            )}
+
             <li className="flex items-center">
                <Link to="/companies" className={getLinkClass("/companies")}>
                  <i className="fas fa-building text-lg leading-lg mr-2" />{" "}

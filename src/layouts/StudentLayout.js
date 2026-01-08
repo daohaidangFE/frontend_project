@@ -12,6 +12,7 @@ import JobList from "views/student/JobList.js";
 import JobDetail from "views/student/JobDetail.js";
 import AppliedJobs from "views/student/AppliedJobs.js";
 import StudentProfile from "views/student/StudentProfile.js";
+import CVManagement from "views/student/CVManagement.js"; 
 
 export default function StudentLayout() {
   return (
@@ -23,6 +24,13 @@ export default function StudentLayout() {
             path="/student/profile" 
             exact 
             component={StudentProfile} 
+            allowedRoles={['STUDENT']} 
+          />
+
+          <PrivateRoute 
+            path="/student/cv-management" 
+            exact 
+            component={CVManagement} 
             allowedRoles={['STUDENT']} 
           />
 
