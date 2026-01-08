@@ -652,6 +652,15 @@
   "searching": "Đang tìm kiếm...",
   "no_results_found": "Không tìm thấy kết quả",
   "try_changing_filters": "Thử thay đổi từ khóa hoặc bộ lọc.",
+
+  "suggested_jobs_title": "Việc làm gợi ý cho bạn",
+  "suggested_jobs_desc": "Hệ thống AI phân tích CV của bạn để tìm công việc phù hợp nhất dựa trên kỹ năng và kinh nghiệm.",
+  "analyzing_profile": "AI đang phân tích hồ sơ và tìm việc...",
+  "no_matches_found": "Chưa tìm thấy công việc phù hợp",
+  "update_cv_hint": "Hãy đảm bảo bạn đã tải lên CV và đặt nó làm mặc định để AI có thể gợi ý tốt nhất.",
+  "update_profile": "Quản lý CV ngay",
+  "student_access_only": "Trang này chỉ dành cho Sinh viên",
   "prev_page": "Trước",
-  "next_page": "Sau"
+  "next_page": "Sau",
+  "match_score": "Độ phù hợp"
 }

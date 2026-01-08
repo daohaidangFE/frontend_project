@@ -649,5 +649,14 @@
   "no_results_found": "No results found",
   "try_changing_filters": "Try changing keywords or filters.",
   "prev_page": "Prev",
-  "next_page": "Next"
+  "next_page": "Next",
+
+  "suggested_jobs_title": "Suggested Jobs for You",
+  "suggested_jobs_desc": "Our AI system analyzes your CV to find the best match based on your skills and experience.",
+  "analyzing_profile": "AI is analyzing your profile and finding jobs...",
+  "no_matches_found": "No matching jobs found",
+  "update_cv_hint": "Make sure you have uploaded a CV and set it as default for the best AI recommendations.",
+  "update_profile": "Manage CV Now",
+  "student_access_only": "This page is for Students only",
+  "match_score": "Match Score"
 }
