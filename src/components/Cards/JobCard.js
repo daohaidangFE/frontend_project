@@ -13,6 +13,17 @@ export default function JobCard({ job }) {
 
   return (
     <div className="relative flex flex-col min-w-0 break-words bg-white w-full h-full shadow-lg rounded-lg hover:-translate-y-1 transition-all duration-200 border border-transparent hover:border-blueGray-200">
+      
+      {/* --- HIỂN THỊ ĐIỂM MATCH (Chỉ hiện khi có matchScore) --- */}
+      {job.matchScore !== undefined && (
+        <div className="absolute -top-2 -right-2 z-10">
+          <div className="bg-orange-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-md border-2 border-white">
+            <i className="fas fa-bullseye mr-1"></i>
+            {Math.round(job.matchScore * 100)}% Match
+          </div>
+        </div>
+      )}
+
       <div className="px-4 py-5 flex-auto flex flex-col">
         <div className="flex items-center mb-3">
           <div className="w-10 h-10 rounded-full bg-blueGray-100 flex items-center justify-center text-blueGray-500 mr-3 flex-shrink-0 overflow-hidden border border-blueGray-200 p-2">
@@ -28,11 +39,7 @@ export default function JobCard({ job }) {
                 }}
               />
             ) : null}
-            
-            <i 
-                className="fas fa-building" 
-                style={{ display: job.companyLogo ? 'none' : 'block', fontSize: '1.1rem' }} 
-            ></i>
+            <i className="fas fa-building" style={{ display: job.companyLogo ? 'none' : 'block', fontSize: '1.1rem' }}></i>
           </div>
 
           <h6 className="text-blueGray-500 text-xs font-bold uppercase truncate">
@@ -46,6 +53,24 @@ export default function JobCard({ job }) {
             {job.title}
           </h5>
         </Link>
+
+        {/* --- HIỂN THỊ SKILL MATCH (Chỉ hiện ở trang gợi ý) --- */}
+        {job.matchedSkills && job.matchedSkills.length > 0 && (
+          <div className="mb-3">
+            <div className="flex flex-wrap gap-1">
+              {job.matchedSkills.slice(0, 3).map((skill, index) => (
+                <span key={index} className="text-[10px] font-bold bg-emerald-50 text-emerald-600 px-2 py-0.5 rounded border border-emerald-100 uppercase">
+                  <i className="fas fa-check mr-1"></i>{skill}
+                </span>
+              ))}
+              {job.matchedSkills.length > 3 && (
+                <span className="text-[10px] text-blueGray-400 font-bold self-center">
+                  +{job.matchedSkills.length - 3}
+                </span>
+              )}
+            </div>
+          </div>
+        )}
 
         {/* Tags: WorkMode & Position */}
         <div className="flex flex-wrap gap-2 mb-3">

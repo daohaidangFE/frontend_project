@@ -662,5 +662,6 @@
   "student_access_only": "Trang này chỉ dành cho Sinh viên",
   "prev_page": "Trước",
   "next_page": "Sau",
-  "match_score": "Độ phù hợp"
+  "match_score": "Độ phù hợp",
+  "matched_skills": "Kỹ năng phù hợp"
 }

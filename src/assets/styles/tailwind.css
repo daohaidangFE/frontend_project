@@ -1423,11 +1423,6 @@ select {
   background-color: rgba(30, 41, 59, var(--tw-bg-opacity));
 }
 
-.hover\:bg-brand:hover {
-  --tw-bg-opacity: 1;
-  background-color: rgba(0, 177, 79, var(--tw-bg-opacity));
-}
-
 .focus\:bg-white:focus {
   --tw-bg-opacity: 1;
   background-color: rgba(255, 255, 255, var(--tw-bg-opacity));
@@ -1825,6 +1820,10 @@ select {
 
 .self-end {
   align-self: flex-end;
+}
+
+.self-center {
+  align-self: center;
 }
 
 .justify-start {
@@ -2597,10 +2596,6 @@ select {
   padding-bottom: 0.75rem;
 }
 
-.pl-3 {
-  padding-left: 0.75rem;
-}
-
 .pt-4 {
   padding-top: 1rem;
 }
@@ -2726,11 +2721,6 @@ select {
   left: 0px;
 }
 
-.inset-y-0 {
-  top: 0px;
-  bottom: 0px;
-}
-
 .top-0 {
   top: 0px;
 }
@@ -2785,6 +2775,14 @@ select {
 
 .top-24 {
   top: 6rem;
+}
+
+.-top-2 {
+  top: -0.5rem;
+}
+
+.-right-2 {
+  right: -0.5rem;
 }
 
 .-left-2 {
@@ -3624,11 +3622,6 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
     overflow-y: auto;
   }
 
-  .md\:py-0 {
-    padding-top: 0px;
-    padding-bottom: 0px;
-  }
-
   .md\:px-10 {
     padding-left: 2.5rem;
     padding-right: 2.5rem;
@@ -3695,24 +3688,8 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .md\:grid-cols-12 {
-    grid-template-columns: repeat(12, minmax(0, 1fr));
-  }
-
-  .md\:col-span-1 {
-    grid-column: span 1 / span 1;
-  }
-
   .md\:col-span-2 {
     grid-column: span 2 / span 2;
-  }
-
-  .md\:col-span-3 {
-    grid-column: span 3 / span 3;
-  }
-
-  .md\:col-span-5 {
-    grid-column: span 5 / span 5;
   }
 }
 

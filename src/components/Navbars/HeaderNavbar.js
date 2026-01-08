@@ -65,7 +65,7 @@ export default function HeaderNavbar() {
                 className={getLinkClass("/student/jobs")}
               >
                 <i className="fas fa-briefcase text-lg leading-lg mr-2" />{" "}
-                {t("jobs", "Jobs")}
+                {t("suggested_jobs_title", "Jobs")}
               </Link>
             </li>
 

@@ -658,5 +658,6 @@
   "update_cv_hint": "Make sure you have uploaded a CV and set it as default for the best AI recommendations.",
   "update_profile": "Manage CV Now",
   "student_access_only": "This page is for Students only",
-  "match_score": "Match Score"
+  "match_score": "Match Score",
+  "matched_skills": "Matched Skills"
 }
