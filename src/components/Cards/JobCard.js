@@ -6,7 +6,6 @@ import PropTypes from 'prop-types';
 export default function JobCard({ job }) {
   const { t } = useTranslation();
 
-  // Helper function format date
   const formatDate = (dateString) => {
     if (!dateString) return "";
     return new Date(dateString).toLocaleDateString("vi-VN");
@@ -15,12 +14,12 @@ export default function JobCard({ job }) {
   return (
     <div className="relative flex flex-col min-w-0 break-words bg-white w-full h-full shadow-lg rounded-lg hover:-translate-y-1 transition-all duration-200 border border-transparent hover:border-blueGray-200">
       
-      {/* --- HIỂN THỊ ĐIỂM MATCH --- */}
+      {/* --- MATCH SCORE --- */}
       {job.matchScore !== undefined && (
         <div className="absolute -top-2 -right-2 z-10">
           <div className="bg-orange-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-md border-2 border-white">
             <i className="fas fa-bullseye mr-1"></i>
-            {Math.round(job.matchScore * 100)}% Match
+            {Math.round(job.matchScore * 100)}%
           </div>
         </div>
       )}
@@ -44,24 +43,30 @@ export default function JobCard({ job }) {
             <i className="fas fa-building" style={{ display: job.companyLogo ? 'none' : 'block', fontSize: '1.1rem' }}></i>
           </div>
 
-          <h6 className="text-blueGray-500 text-xs font-bold uppercase truncate">
+          {/* truncate: Tự động ... nếu tên công ty quá dài trên 1 dòng */}
+          <h6 className="text-blueGray-500 text-xs font-bold uppercase truncate flex-1" title={job.companyName}>
             {job.companyName || t('unknown_company')}
           </h6>
         </div>
 
         {/* Job Title */}
-        <Link to={`/student/jobs/${job.id}`} className="block mb-2">
-          <h5 className="text-lg font-bold text-blueGray-700 hover:text-brand transition-colors line-clamp-2 min-h-[56px]">
+        <Link to={`/student/jobs/${job.id}`} className="block mb-2 group">
+          {/* line-clamp-2: Tối đa 2 dòng, quá sẽ ... */}
+          <h5 
+            className="text-lg font-bold text-blueGray-700 group-hover:text-brand transition-colors line-clamp-2 min-h-[56px] break-words"
+            title={job.title} // Hover vào sẽ hiện full tên
+          >
             {job.title}
           </h5>
         </Link>
 
-        {/* --- HIỂN THỊ SKILL MATCH --- */}
+        {/* --- SKILL MATCH --- */}
         {job.matchedSkills && job.matchedSkills.length > 0 && (
-          <div className="mb-3">
+          <div className="mb-3 h-[26px] overflow-hidden"> 
+             {/* Set height cứng hoặc overflow hidden để tránh skills nhảy dòng làm lệch card */}
             <div className="flex flex-wrap gap-1">
               {job.matchedSkills.slice(0, 3).map((skill, index) => (
-                <span key={index} className="text-[10px] font-bold bg-emerald-50 text-emerald-600 px-2 py-0.5 rounded border border-emerald-100 uppercase">
+                <span key={index} className="text-[10px] font-bold bg-emerald-50 text-emerald-600 px-2 py-0.5 rounded border border-emerald-100 uppercase whitespace-nowrap">
                   <i className="fas fa-check mr-1"></i>{skill}
                 </span>
               ))}
@@ -74,23 +79,24 @@ export default function JobCard({ job }) {
           </div>
         )}
 
-        {/* Tags: WorkMode & Position */}
+        {/* Tags */}
         <div className="flex flex-wrap gap-2 mb-3">
-          <span className="text-xs font-semibold inline-block py-1 px-2 rounded text-emerald-600 bg-emerald-100 uppercase">
+          <span className="text-xs font-semibold inline-block py-1 px-2 rounded text-emerald-600 bg-emerald-100 uppercase whitespace-nowrap">
             {job.workMode}
           </span>
           {job.position && (
-            <span className="text-xs font-semibold inline-block py-1 px-2 rounded text-lightBlue-600 bg-lightBlue-100 uppercase">
+            <span className="text-xs font-semibold inline-block py-1 px-2 rounded text-lightBlue-600 bg-lightBlue-100 uppercase whitespace-nowrap">
               {job.position}
             </span>
           )}
         </div>
 
-        {/* Location & Distance (Sửa ở đây) */}
+        {/* Location */}
         <div className="flex flex-col gap-1 mb-3">
-          <div className="flex items-center text-blueGray-500 text-xs">
-            <i className="fas fa-map-marker-alt mr-2 text-blueGray-400 w-4 text-center"></i>
-            <span className="truncate">
+          <div className="flex items-center text-blueGray-500 text-xs w-full">
+            <i className="fas fa-map-marker-alt mr-2 text-blueGray-400 w-4 text-center flex-shrink-0"></i>
+            {/* truncate: ... nếu địa chỉ dài */}
+            <span className="truncate block flex-1" title={job.location}> 
                 {job.location || t('location_not_specified')}
                 {job.distanceKm && (
                     <span className="ml-1 font-bold text-indigo-500">
@@ -102,14 +108,24 @@ export default function JobCard({ job }) {
           
           {job.expiredAt && (
             <div className="flex items-center text-red-500 text-xs font-medium">
-              <i className="fas fa-calendar-times mr-2 w-4 text-center"></i>
+              <i className="fas fa-calendar-times mr-2 w-4 text-center flex-shrink-0"></i>
               <span>{t('expires')}: {formatDate(job.expiredAt)}</span>
             </div>
           )}
         </div>
 
         {/* Description */}
-        <p className="text-blueGray-500 text-sm mb-4 line-clamp-3 flex-grow italic">
+        <p 
+          className="text-blueGray-500 text-sm mb-4 flex-grow italic break-words"
+          style={{
+            display: '-webkit-box',
+            WebkitLineClamp: 3, // Số dòng muốn hiển thị (3 dòng)
+            WebkitBoxOrient: 'vertical',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis'
+          }}
+          title={job.description} // Hover vào sẽ thấy full text
+        >
           {job.description}
         </p>
 
@@ -121,7 +137,7 @@ export default function JobCard({ job }) {
           </span>
           <Link
             to={`/student/jobs/${job.id}`}
-            className="text-brand font-bold text-xs uppercase hover:underline"
+            className="text-brand font-bold text-xs uppercase hover:underline whitespace-nowrap"
           >
             {t('view_detail')} <i className="fas fa-arrow-right ml-1"></i>
           </Link>
@@ -130,3 +146,8 @@ export default function JobCard({ job }) {
     </div>
   );
 }
+
+// Kiểm tra PropTypes nếu cần
+JobCard.propTypes = {
+  job: PropTypes.object.isRequired,
+};
