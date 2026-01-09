@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import PropTypes from 'prop-types';
 
 export default function JobCard({ job }) {
   const { t } = useTranslation();
@@ -85,14 +86,20 @@ export default function JobCard({ job }) {
           )}
         </div>
 
-        {/* Location & Expiration Date */}
+        {/* Location & Distance (Sửa ở đây) */}
         <div className="flex flex-col gap-1 mb-3">
           <div className="flex items-center text-blueGray-500 text-xs">
             <i className="fas fa-map-marker-alt mr-2 text-blueGray-400 w-4 text-center"></i>
-            <span className="truncate">{job.location || t('location_not_specified')}</span>
+            <span className="truncate">
+                {job.location || t('location_not_specified')}
+                {job.distanceKm && (
+                    <span className="ml-1 font-bold text-indigo-500">
+                        ({job.distanceKm} km)
+                    </span>
+                )}
+            </span>
           </div>
           
-          {/* Ngày hết hạn làm đẹp ở đây */}
           {job.expiredAt && (
             <div className="flex items-center text-red-500 text-xs font-medium">
               <i className="fas fa-calendar-times mr-2 w-4 text-center"></i>
@@ -106,7 +113,7 @@ export default function JobCard({ job }) {
           {job.description}
         </p>
 
-        {/* Footer: Created Date & Detail Link */}
+        {/* Footer */}
         <div className="border-t border-blueGray-100 pt-4 mt-auto flex justify-between items-center">
           <span className="text-xs text-blueGray-400">
             <i className="far fa-clock mr-1"></i>

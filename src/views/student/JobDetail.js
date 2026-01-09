@@ -50,7 +50,6 @@ export default function JobDetail() {
   if (loading) return <div className="text-center mt-20"><i className="fas fa-circle-notch fa-spin text-4xl text-emerald-500"></i></div>;
   if (!job) return null;
 
-  // Logic màu sắc cho Importance Level từ Response của mày
   const getSkillStyle = (level) => {
     if (level === 'HIGH') return "bg-red-50 text-red-700 border-red-100";
     if (level === 'MEDIUM') return "bg-orange-50 text-orange-700 border-orange-100";
