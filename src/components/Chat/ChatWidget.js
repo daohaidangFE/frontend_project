@@ -2,20 +2,25 @@ import React, { useState, useEffect } from "react";
 import moment from "moment";
 import { useTranslation } from "react-i18next";
 import messageService from "../../services/messageService";
+import profileService from "../../services/profileService";
 import MiniChatBox from "./MiniChatBox";
 
 /* Conversation item */
 const ConversationItem = ({ conversation, onClick, currentUserId }) => {
   const { t } = useTranslation();
-  const { lastMessage, unreadCount, otherUserInfo, receiver  } = conversation;
+  const { lastMessage, unreadCount, otherUserInfo, receiver } = conversation;
 
+  // Ưu tiên otherUserInfo, fallback sang receiver
   const userInfo = otherUserInfo || receiver;
 
-  // Target user
-  const targetName = otherUserInfo?.fullName || t("default_user");
+  // Target user - hỗ trợ cả Student và Employer
+  const targetName = userInfo?.fullName || 
+                     userInfo?.companyName || 
+                     userInfo?.name || 
+                     t("default_user");
   const targetAvatar =
-    otherUserInfo?.avatarUrl ||
-    `https://ui-avatars.com/api/?name=${targetName}&background=random&size=128`;
+    userInfo?.avatarUrl ||
+    `https://ui-avatars.com/api/?name=${encodeURIComponent(targetName)}&background=random&size=128`;
 
   // Last message preview
   let previewText = t("start_chat_now");
@@ -31,7 +36,7 @@ const ConversationItem = ({ conversation, onClick, currentUserId }) => {
   }
 
   const targetUserForChat = {
-    id: otherUserInfo?.userId,
+    id: userInfo?.userId || userInfo?.id,
     fullName: targetName,
     avatarUrl: targetAvatar,
   };
@@ -98,8 +103,54 @@ const ChatWidget = () => {
   const loadConversations = async () => {
     try {
       const data = await messageService.getConversations();
+      
       if (Array.isArray(data)) {
-        setConversations(data.filter((c) => c.lastMessage));
+        // Enhance conversations với thông tin user đầy đủ
+        const enhanced = await Promise.all(
+          data.map(async (conv) => {
+            const userInfo = conv.otherUserInfo || conv.receiver;
+            
+            // Nếu thiếu fullName, fetch thông tin từ API
+            if (userInfo && !userInfo.fullName && userInfo.id) {
+              try {
+                // Thử fetch từ student trước
+                try {
+                  const studentData = await profileService.getStudentById(userInfo.id);
+                  if (studentData && studentData.fullName) {
+                    return {
+                      ...conv,
+                      otherUserInfo: {
+                        userId: userInfo.id,
+                        fullName: studentData.fullName,
+                        avatarUrl: studentData.avatarUrl
+                      }
+                    };
+                  }
+                } catch (err) {
+                  // Không phải student, thử employer
+                  const employerData = await profileService.getEmployerById(userInfo.id);
+                  if (employerData) {
+                    return {
+                      ...conv,
+                      otherUserInfo: {
+                        userId: userInfo.id,
+                        fullName: employerData.company?.name || employerData.name,
+                        avatarUrl: employerData.company?.logoUrl || null,
+                        companyName: employerData.company?.name
+                      }
+                    };
+                  }
+                }
+              } catch (error) {
+                console.error('Error fetching user info:', error);
+              }
+            }
+            
+            return conv;
+          })
+        );
+        
+        setConversations(enhanced.filter((c) => c.lastMessage));
       }
     } catch (e) {
       console.error(e);
@@ -164,8 +215,6 @@ const ChatWidget = () => {
           ))
         )}
       </div>
-
-
     </div>
   );
 };
