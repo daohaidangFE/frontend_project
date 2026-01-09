@@ -124,7 +124,7 @@ const profileService = {
 
     updateAvatar: async (file) => {
         const formData = new FormData();
-        formData.append('avatar', file);
+        formData.append('file', file);
         const response = await apiClient.patch(`${PROFILE_V2_URL}/avatar`, formData, {
             headers: { 'Content-Type': 'multipart/form-data' }
         });
