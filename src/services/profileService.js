@@ -121,6 +121,15 @@ const profileService = {
         const response = await apiClient.get(`${EMPLOYER_URL}/${userId}`);
         return unwrap(response);
     },
+
+    updateAvatar: async (file) => {
+        const formData = new FormData();
+        formData.append('avatar', file);
+        const response = await apiClient.patch(`${PROFILE_V2_URL}/avatar`, formData, {
+            headers: { 'Content-Type': 'multipart/form-data' }
+        });
+        return unwrap(response);
+    }
 };
 
 export default profileService;

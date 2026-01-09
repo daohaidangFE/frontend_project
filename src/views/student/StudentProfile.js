@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
-import Swal from "sweetalert2";
 
 // UI Components
 import AboutCard from "components/Profile/AboutCard";
@@ -17,6 +16,7 @@ import ExperienceModal from "components/Modals/ExperienceModal";
 import SkillModal from "components/Modals/SkillModal";
 import AboutModal from "components/Modals/AboutModal";
 import ConfirmModal from "components/Modals/ConfirmModal";
+import AvatarUploadModal from "components/Modals/AvatarUploadModal";
 
 // Services
 import profileService from "services/profileService";
@@ -27,6 +27,8 @@ export default function Profile() {
   const { t } = useTranslation();
   
   const [showCVPreview, setShowCVPreview] = useState(false);
+  const [showAvatarModal, setShowAvatarModal] = useState(false);
+  
   // State Data
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -39,7 +41,8 @@ export default function Profile() {
       isOpen: false,
       type: null, 
       id: null
-  })
+  });
+
   const fetchProfile = async () => {
     try {
       const [studentData, educations, experiences, skills, cvList] = await Promise.all([
@@ -56,7 +59,7 @@ export default function Profile() {
         displayCv = [...cvList].sort((a, b) => b.id - a.id)[0];
       }
 
-    const cvUrl = displayCv ? displayCv.cvUrl : null;
+      const cvUrl = displayCv ? displayCv.cvUrl : null;
 
       setProfile({
         ...studentData,
@@ -135,6 +138,18 @@ export default function Profile() {
     }
   };
 
+  const handleAvatarUpload = async (file) => {
+    try {
+      await profileService.updateAvatar(file);
+      toast.success(t("avatar_updated_success", "Cập nhật ảnh đại diện thành công"));
+      fetchProfile();
+    } catch (error) {
+      console.error(error);
+      toast.error(t("avatar_update_error", "Không thể cập nhật ảnh đại diện"));
+      throw error;
+    }
+  };
+
   // --- 4. DELETE HANDLERS ---
   const requestDelete = (type, id) => {
       setConfirmModal({ isOpen: true, type, id });
@@ -197,14 +212,6 @@ export default function Profile() {
                   <i className="fas fa-file-alt"></i>
                   <span>{t("my_applications", "Hồ sơ đã nộp")}</span>
                 </Link>
-                <Link
-                  to={`/p/${profile.userId}`}
-                  target="_blank"
-                  className="bg-white text-blueGray-700 hover:bg-blueGray-50 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-150 flex items-center gap-2"
-                >
-                  <span>{t("view_public_profile")}</span>
-                  <i className="fas fa-arrow-right"></i>
-                </Link>
               </div>
 
               {/* Avatar Section */}
@@ -223,12 +230,12 @@ export default function Profile() {
                           </div>
                       )}
                       
-                      {/* Button Edit Avatar (Dummy) */}
+                      {/* Button Edit Avatar */}
                       <button
                         className="absolute bg-blueGray-700 hover:bg-lightBlue-500 text-white p-2 rounded-full shadow-lg transition-all duration-200 border-2 border-white flex items-center justify-center cursor-pointer"
                         style={{ width: "30px", height: "30px", bottom: "-70px", left: "50px" }}
                         type="button"
-                        onClick={() => toast.info(t("feature_coming_soon"))}
+                        onClick={() => setShowAvatarModal(true)}
                       >
                         <i className="fas fa-camera text-xs"></i>
                       </button>
@@ -341,42 +348,49 @@ export default function Profile() {
           message={t("confirm_delete_message")}
           isDanger={true}
       />
+
+      {/* Avatar Upload Modal */}
+      <AvatarUploadModal
+        isOpen={showAvatarModal}
+        onClose={() => setShowAvatarModal(false)}
+        onUploadSuccess={handleAvatarUpload}
+        currentAvatarUrl={profile?.avatarUrl}
+      />
+
+      {/* CV Preview Modal */}
       {showCVPreview && profile?.cvUrl && (
-  <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
-    {/* Nền đen mờ */}
-    <div
-      className="fixed inset-0 bg-black opacity-60 z-[9998]"
-      onClick={() => setShowCVPreview(false)}
-    ></div>
-    <div 
-      className="relative w-full max-w-2xl bg-white shadow-2xl rounded-lg overflow-hidden z-[9999] flex flex-col" 
-      style={{ height: '80vh' }}
-    >
-      {/* Header */}
-      <div className="flex-none flex items-center justify-between px-4 py-3 border-b bg-blueGray-50">
-        <h3 className="text-lg font-bold text-blueGray-700">
-          <i className="fas fa-file-pdf mr-2 text-red-500"></i>
-          {t("cv_preview", "Xem trước CV")}
-        </h3>
-        <button
-          className="text-blueGray-400 hover:text-red-500 text-2xl outline-none"
-          onClick={() => setShowCVPreview(false)}
-        >
-          &times;
-        </button>
-      </div>
-      {/* Body */}
-      <div className="flex-1 w-full overflow-auto">
-        <iframe
-          src={`${profile.cvUrl}#view=FitH&toolbar=0&navpanes=0&scrollbar=1`}
-          title="CV Preview"
-          className="w-full border-none"
-          style={{ minHeight: '1000px', height: '100%' }}
-        />
-      </div>
-    </div>
-  </div>
-)}
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
+          <div
+            className="fixed inset-0 bg-black opacity-60 z-[9998]"
+            onClick={() => setShowCVPreview(false)}
+          ></div>
+          <div 
+            className="relative w-full max-w-2xl bg-white shadow-2xl rounded-lg overflow-hidden z-[9999] flex flex-col" 
+            style={{ height: '80vh' }}
+          >
+            <div className="flex-none flex items-center justify-between px-4 py-3 border-b bg-blueGray-50">
+              <h3 className="text-lg font-bold text-blueGray-700">
+                <i className="fas fa-file-pdf mr-2 text-red-500"></i>
+                {t("cv_preview", "Xem trước CV")}
+              </h3>
+              <button
+                className="text-blueGray-400 hover:text-red-500 text-2xl outline-none"
+                onClick={() => setShowCVPreview(false)}
+              >
+                &times;
+              </button>
+            </div>
+            <div className="flex-1 w-full overflow-auto">
+              <iframe
+                src={`${profile.cvUrl}#view=FitH&toolbar=0&navpanes=0&scrollbar=1`}
+                title="CV Preview"
+                className="w-full border-none"
+                style={{ minHeight: '1000px', height: '100%' }}
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }
