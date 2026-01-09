@@ -56,9 +56,15 @@ export default function AdminPostViewModal({ isOpen, onClose, post }) {
                   <h5 className="text-sm font-bold uppercase text-blueGray-400 mb-3 border-b pb-1">
                     {t('job_description')}
                   </h5>
-                  <div className="text-blueGray-600 text-sm leading-relaxed whitespace-pre-line">
-                    {post.description}
-                  </div>
+                  <div className="bg-blueGray-50 p-4 rounded-lg border border-blueGray-100">
+  <div 
+    // Dùng style cứng để ép chiều cao tối đa là 300px
+    style={{ maxHeight: '300px', overflowY: 'auto' }} 
+    className="text-blueGray-600 text-sm leading-relaxed whitespace-pre-line pr-2 custom-scrollbar break-words"
+  >
+    {post.description}
+  </div>
+</div>
                 </div>
               </div>
 

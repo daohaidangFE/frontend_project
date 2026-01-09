@@ -8,12 +8,22 @@ export default function AdminPostDetailModal({ isOpen, onClose, post, onApprove,
 
   return (
     <>
-      {/* Backdrop */}
-      <div className="fixed inset-0 z-40 bg-black opacity-50" onClick={onClose}></div>
+      {/* Backdrop: Lớp phủ mờ phía sau */}
+      <div 
+        className="fixed inset-0 z-40 bg-black opacity-50 transition-opacity" 
+        onClick={onClose}
+      ></div>
 
-      {/* Modal Content */}
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 outline-none focus:outline-none">
-        <div className="relative w-full max-w-4xl mx-auto bg-white rounded-lg shadow-2xl flex flex-col max-h-[90vh]">
+      {/* Modal Wrapper: Căn giữa modal */}
+      <div 
+        className="fixed inset-0 z-50 flex items-center justify-center p-4 outline-none focus:outline-none"
+        onClick={onClose} // Nhấn vào vùng trống bên ngoài modal content sẽ đóng
+      >
+        {/* Modal Content */}
+        <div 
+          className="relative w-full max-w-4xl mx-auto bg-white rounded-lg shadow-2xl flex flex-col max-h-[90vh]"
+          onClick={(e) => e.stopPropagation()} // Ngăn sự kiện click bị truyền ra lớp backdrop
+        >
           
           {/* Header */}
           <div className="flex items-center justify-between p-5 border-b border-solid border-blueGray-200 rounded-t bg-blueGray-50">
@@ -33,7 +43,7 @@ export default function AdminPostDetailModal({ isOpen, onClose, post, onApprove,
           <div className="relative p-6 flex-auto overflow-y-auto">
             <div className="flex flex-wrap">
               {/* Cột trái: Thông tin chính */}
-              <div className="w-full lg:w-8/12 pr-4 border-r border-blueGray-100">
+              <div className="w-full lg:w-8/12 pr-4 lg:border-r border-blueGray-100">
                 <h4 className="text-2xl font-bold text-blueGray-800 mb-2">{post.title}</h4>
                 <div className="flex items-center text-sm text-blueGray-500 mb-4">
                   <i className="fas fa-building mr-2"></i>
@@ -53,14 +63,21 @@ export default function AdminPostDetailModal({ isOpen, onClose, post, onApprove,
                   <h5 className="text-sm font-bold uppercase text-blueGray-400 mb-3 border-b pb-1">
                     {t('job_description')}
                   </h5>
-                  <div className="text-blueGray-600 text-sm leading-relaxed whitespace-pre-line">
-                    {post.description}
-                  </div>
+                  {/* BOX DESCRIPTION CÓ SCROLL */}
+                  <div className="bg-blueGray-50 p-4 rounded-lg border border-blueGray-100">
+  <div 
+    // Dùng style cứng để ép chiều cao tối đa là 300px
+    style={{ maxHeight: '300px', overflowY: 'auto' }} 
+    className="text-blueGray-600 text-sm leading-relaxed whitespace-pre-line pr-2 custom-scrollbar break-words"
+  >
+    {post.description}
+  </div>
+</div>
                 </div>
               </div>
 
               {/* Cột phải: Kỹ năng & Meta data */}
-              <div className="w-full lg:w-4/12 pl-4">
+              <div className="w-full lg:w-4/12 pl-4 mt-6 lg:mt-0">
                 <div className="mb-6">
                   <h5 className="text-sm font-bold uppercase text-blueGray-400 mb-3 border-b pb-1">
                     {t('required_skills')}
@@ -122,6 +139,24 @@ export default function AdminPostDetailModal({ isOpen, onClose, post, onApprove,
           </div>
         </div>
       </div>
+
+      {/* Thêm một chút CSS cho thanh scroll mượt hơn (Optional) */}
+      <style jsx>{`
+        .custom-scrollbar::-webkit-scrollbar {
+          width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+          background: #f1f1f1;
+          border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+          background: #cbd5e1;
+          border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+          background: #94a3b8;
+        }
+      `}</style>
     </>
   );
 }

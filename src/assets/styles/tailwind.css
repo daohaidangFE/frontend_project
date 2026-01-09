@@ -1263,11 +1263,6 @@ select {
   background-color: rgba(239, 68, 68, var(--tw-bg-opacity));
 }
 
-.bg-gray-50 {
-  --tw-bg-opacity: 1;
-  background-color: rgba(250, 250, 250, var(--tw-bg-opacity));
-}
-
 .bg-gray-100 {
   --tw-bg-opacity: 1;
   background-color: rgba(244, 244, 245, var(--tw-bg-opacity));
@@ -1784,6 +1779,10 @@ select {
   cursor: not-allowed;
 }
 
+.disabled\:cursor-not-allowed:disabled {
+  cursor: not-allowed;
+}
+
 .block {
   display: block;
 }
@@ -2285,6 +2284,10 @@ select {
   max-width: 24rem;
 }
 
+.max-w-md {
+  max-width: 28rem;
+}
+
 .max-w-lg {
   max-width: 32rem;
 }
@@ -2622,6 +2625,10 @@ select {
 
 .pb-1 {
   padding-bottom: 0.25rem;
+}
+
+.pr-2 {
+  padding-right: 0.5rem;
 }
 
 .pb-2 {
@@ -3780,6 +3787,10 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
 @media (min-width: 1024px) {
   .lg\:bg-opacity-0 {
     --tw-bg-opacity: 0;
+  }
+
+  .lg\:border-r {
+    border-right-width: 1px;
   }
 
   .lg\:block {

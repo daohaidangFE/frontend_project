@@ -1,5 +1,5 @@
 import React from "react";
-import { useTranslation } from "react-i18next"; // 1. Import hook
+import { useTranslation } from "react-i18next";
 
 export default function ConfirmModal({ 
   isOpen, 
@@ -11,17 +11,21 @@ export default function ConfirmModal({
   cancelText,
   isDanger = false 
 }) {
-  const { t } = useTranslation(); // 2. Khởi tạo t
+  const { t } = useTranslation();
 
   if (!isOpen) return null;
 
   return (
     <>
-      {/* Backdrop (Lớp mờ đen phía sau) */}
+      {/* Container chính: Đóng vai trò là Backdrop có thể click */}
       <div 
         className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
+        onClick={onClose} // Nhấn ra vùng trống sẽ gọi onClose
       >
-        <div className="relative w-auto my-6 mx-auto max-w-sm">
+        <div 
+          className="relative w-auto my-6 mx-auto max-w-sm"
+          onClick={(e) => e.stopPropagation()} // Ngăn sự kiện click lan ra ngoài làm đóng modal
+        >
           {/* Content */}
           <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
             
@@ -31,10 +35,10 @@ export default function ConfirmModal({
                 {title}
               </h3>
               <button
-                className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
+                className="p-1 ml-auto bg-transparent border-0 text-black opacity-30 float-right text-3xl leading-none font-semibold outline-none focus:outline-none hover:opacity-100"
                 onClick={onClose}
               >
-                <span className="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
+                <span className="text-black h-6 w-6 text-2xl block outline-none focus:outline-none">
                   ×
                 </span>
               </button>
@@ -54,7 +58,6 @@ export default function ConfirmModal({
                 type="button"
                 onClick={onClose}
               >
-                {/* Sử dụng prop truyền vào hoặc fallback về 'cancel' trong i18n */}
                 {cancelText || t('cancel')}
               </button>
               <button
@@ -62,7 +65,6 @@ export default function ConfirmModal({
                 type="button"
                 onClick={onConfirm}
               >
-                {/* Sử dụng prop truyền vào hoặc fallback về 'confirm' trong i18n */}
                 {confirmText || t('confirm')}
               </button>
             </div>
@@ -70,7 +72,7 @@ export default function ConfirmModal({
         </div>
       </div>
       
-      {/* Black Overlay */}
+      {/* Black Overlay (Chỉ dùng để làm mờ nền) */}
       <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
     </>
   );
