@@ -140,7 +140,7 @@ export default function SuggestedJobsPage() {
               ...jobDetail,
               matchScore: match.score,
               matchedSkills: match.matchedSkills,
-              distanceKm: match.distanceKm, // Bổ sung khoảng cách
+              distanceKm: match.distanceKm,
               companyId: match.companyId || jobDetail.companyId,
             };
           } catch (err) {

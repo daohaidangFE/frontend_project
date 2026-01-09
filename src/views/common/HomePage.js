@@ -51,6 +51,7 @@ export default function HomePage() {
     fetchProvinces();
   }, []);
 
+  // --- HÀM ĐÃ ĐƯỢC SỬA LẠI LOGIC ---
   const fetchJobsData = async (pageIndex = 0) => {
     setLoading(true);
     try {
@@ -66,7 +67,11 @@ export default function HomePage() {
 
       if (data && data.content) {
         const rawJobs = data.content;
+
+        // 1. Lấy danh sách ID công ty (lọc trùng & null)
         const uniqueCompanyIds = [...new Set(rawJobs.map((j) => j.companyId).filter((id) => id))];
+
+        // 2. Gọi API lấy thông tin các công ty
         const companyInfos = await Promise.all(
           uniqueCompanyIds.map(async (id) => {
             try {
@@ -78,16 +83,30 @@ export default function HomePage() {
           })
         );
 
+        // 3. Tạo Map để tra cứu nhanh
         const companyMap = {};
         companyInfos.forEach((item) => {
           if (item.data) companyMap[item.id] = item.data;
         });
 
-        const enrichedJobs = rawJobs.map((job) => ({
-          ...job,
-          companyName: companyMap[job.companyId]?.name || t("unknown_company"),
-          companyLogo: companyMap[job.companyId]?.logoUrl,
-        }));
+        // 4. Gộp dữ liệu (Fix lỗi không hiện tên)
+        const enrichedJobs = rawJobs.map((job) => {
+          // Nếu tìm thấy công ty trong Map -> Lấy thông tin từ Map
+          if (job.companyId && companyMap[job.companyId]) {
+            const comp = companyMap[job.companyId];
+            return {
+              ...job,
+              companyName: comp.name,
+              companyLogo: comp.logoUrl,
+            };
+          }
+          // Nếu không tìm thấy -> Giữ nguyên (hoặc gán Unknown nếu chưa có)
+          return {
+            ...job,
+            companyName: job.companyName || t("unknown_company"),
+            companyLogo: job.companyLogo || null,
+          };
+        });
 
         setJobs(enrichedJobs);
         setTotalPages(data.totalPages || 0);
@@ -103,6 +122,7 @@ export default function HomePage() {
       setLoading(false);
     }
   };
+  // ------------------------------------
 
   useEffect(() => {
     fetchJobsData(page);
@@ -144,7 +164,7 @@ export default function HomePage() {
               {t("home_hero_subtitle")}
             </p>
 
-            {/* --- SEARCH FORM (KHÔNG ICON, FIX DROPUP) --- */}
+            {/* --- SEARCH FORM --- */}
             <div className="bg-white rounded shadow-xl p-1.5 md:p-2 text-left max-w-5xl mx-auto relative z-20">
               <form onSubmit={handleSearch} className="grid grid-cols-1 md:grid-cols-12 gap-2">
                 

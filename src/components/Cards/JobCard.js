@@ -119,12 +119,12 @@ export default function JobCard({ job }) {
           className="text-blueGray-500 text-sm mb-4 flex-grow italic break-words"
           style={{
             display: '-webkit-box',
-            WebkitLineClamp: 3, // Số dòng muốn hiển thị (3 dòng)
+            WebkitLineClamp: 3,
             WebkitBoxOrient: 'vertical',
             overflow: 'hidden',
             textOverflow: 'ellipsis'
           }}
-          title={job.description} // Hover vào sẽ thấy full text
+          title={job.description}
         >
           {job.description}
         </p>
