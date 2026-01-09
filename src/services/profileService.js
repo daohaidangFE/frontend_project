@@ -115,7 +115,12 @@ const profileService = {
     updateCompany: async (data) => {
         const response = await apiClient.patch(`${COMPANY_URL}/me`, data);
         return unwrap(response);
-    }
+    },
+
+    getEmployerById: async (userId) => {
+        const response = await apiClient.get(`${EMPLOYER_URL}/${userId}`);
+        return unwrap(response);
+    },
 };
 
 export default profileService;

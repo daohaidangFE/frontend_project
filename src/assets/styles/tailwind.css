@@ -1700,14 +1700,6 @@ select {
   border-top-right-radius: 0.75rem;
 }
 
-.rounded-br-none {
-  border-bottom-right-radius: 0px;
-}
-
-.rounded-bl-none {
-  border-bottom-left-radius: 0px;
-}
-
 .border-solid {
   border-style: solid;
 }
@@ -1848,16 +1840,8 @@ select {
   align-content: center;
 }
 
-.self-end {
-  align-self: flex-end;
-}
-
 .self-center {
   align-self: center;
-}
-
-.justify-start {
-  justify-content: flex-start;
 }
 
 .justify-end {
@@ -1898,10 +1882,6 @@ select {
 
 .float-right {
   float: right;
-}
-
-.font-sans {
-  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 
 .font-normal {
@@ -2450,6 +2430,10 @@ select {
 .focus\:outline-none:focus {
   outline: 2px solid transparent;
   outline-offset: 2px;
+}
+
+.overflow-auto {
+  overflow: auto;
 }
 
 .overflow-hidden {
@@ -3363,12 +3347,12 @@ select {
   white-space: pre-line;
 }
 
-.whitespace-pre-wrap {
-  white-space: pre-wrap;
-}
-
 .break-words {
   overflow-wrap: break-word;
+}
+
+.break-all {
+  word-break: break-all;
 }
 
 .w-2 {

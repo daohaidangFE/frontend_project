@@ -7,7 +7,6 @@ import messageService from "../../services/messageService";
 
 const WS_URL = process.env.REACT_APP_WS_URL
 
-/* Message item */
 const ChatMessageItem = ({ message, isMe }) => {
   const { t } = useTranslation();
   const { content, messageType, sentAt } = message;
@@ -26,32 +25,75 @@ const ChatMessageItem = ({ message, isMe }) => {
         />
       );
     }
-    return <p className="text-sm break-words whitespace-pre-wrap">{content}</p>;
+    return (
+      <p 
+        style={{ 
+          fontSize: '14px',
+          wordBreak: 'break-word',
+          overflowWrap: 'break-word',
+          whiteSpace: 'pre-wrap',
+          margin: 0,
+          padding: 0
+        }}
+      >
+        {content}
+      </p>
+    );
   };
 
   return (
-    <div className={`flex w-full mb-3 ${isMe ? "justify-end" : "justify-start"}`}>
+    <div 
+      style={{
+        display: 'flex',
+        width: '100%',
+        marginBottom: '12px',
+        justifyContent: isMe ? 'flex-end' : 'flex-start'
+      }}
+    >
       {!isMe && (
-        <div className="mr-2 self-end flex-shrink-0">
+        <div style={{ marginRight: '8px', alignSelf: 'flex-end', flexShrink: 0 }}>
           <img
             src={message.senderInfo?.avatarUrl || "https://ui-avatars.com/api/?name=User&background=random"}
             alt="avt"
-            className="w-6 h-6 rounded-full object-cover"
+            style={{
+              width: '24px',
+              height: '24px',
+              borderRadius: '50%',
+              objectFit: 'cover'
+            }}
           />
         </div>
       )}
 
-      <div className={`max-w-[75%] flex flex-col ${isMe ? "items-end" : "items-start"}`}>
+      <div 
+        style={{ 
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: isMe ? 'flex-end' : 'flex-start',
+          maxWidth: '220px'
+        }}
+      >
         <div
-          className={`px-3 py-2 rounded-xl shadow-sm ${
-            isMe
-              ? "bg-blue-600 text-white rounded-br-none"
-              : "bg-gray-200 text-gray-800 rounded-bl-none"
-          }`}
+          style={{
+            padding: '8px 12px',
+            borderRadius: '12px',
+            boxShadow: '0 1px 2px rgba(0,0,0,0.1)',
+            backgroundColor: isMe ? '#2563eb' : '#e5e7eb',
+            color: isMe ? 'white' : '#1f2937',
+            borderBottomRightRadius: isMe ? '0' : '12px',
+            borderBottomLeftRadius: isMe ? '12px' : '0',
+            maxWidth: '220px',
+            wordBreak: 'break-word'
+          }}
         >
           {renderContent()}
         </div>
-        <span className="text-[10px] text-gray-400 mt-1 block">
+        <span style={{
+          fontSize: '10px',
+          color: '#9ca3af',
+          marginTop: '4px',
+          display: 'block'
+        }}>
           {moment(sentAt).format("HH:mm")}
         </span>
       </div>
@@ -137,7 +179,10 @@ const MiniChatBox = ({ conversationId, targetUser, currentUser, onClose }) => {
 
   if (isMinimized) {
     return (
-      <div className="fixed bottom-0 right-20 w-64 bg-white border border-gray-300 shadow-lg rounded-t-lg z-50">
+      <div 
+        className="fixed bottom-0 right-20 bg-white border border-gray-300 shadow-lg rounded-t-lg z-50"
+        style={{ width: '256px' }}
+      >
         <div
           className="flex justify-between items-center p-3 bg-blue-600 text-white cursor-pointer rounded-t-lg"
           onClick={() => setIsMinimized(false)}
@@ -161,8 +206,23 @@ const MiniChatBox = ({ conversationId, targetUser, currentUser, onClose }) => {
 
   return (
     <div 
-        className="fixed bottom-0 right-20 w-[330px] bg-white border border-gray-300 shadow-2xl rounded-t-xl z-50 flex flex-col font-sans"
-        style={{ maxHeight: '500px', height: 'auto' }}
+        style={{
+          position: 'fixed',
+          bottom: 0,
+          right: '80px',
+          width: '330px',
+          height: '500px',
+          maxHeight: '80vh',
+          backgroundColor: 'white',
+          border: '1px solid #d1d5db',
+          boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)',
+          borderTopLeftRadius: '12px',
+          borderTopRightRadius: '12px',
+          zIndex: 50,
+          display: 'flex',
+          flexDirection: 'column',
+          fontFamily: 'system-ui, -apple-system, sans-serif'
+        }}
     >
       
       {/* 1. HEADER */}
@@ -206,12 +266,23 @@ const MiniChatBox = ({ conversationId, targetUser, currentUser, onClose }) => {
         </div>
       </div>
 
+      {/* 2. MESSAGES */}
       <div 
-        className="flex-1 bg-white p-3 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent"
-        style={{ height: '150px', overflowY: 'auto' }}
+        style={{ 
+          flex: 1,
+          backgroundColor: 'white',
+          padding: '12px',
+          overflowY: 'auto',
+          overflowX: 'hidden'
+        }}
       >
         {messages.length === 0 && (
-            <div className="text-center text-gray-400 text-xs mt-10">
+            <div style={{
+              textAlign: 'center',
+              color: '#9ca3af',
+              fontSize: '12px',
+              marginTop: '40px'
+            }}>
                 Hãy bắt đầu trò chuyện...
             </div>
         )}
@@ -232,7 +303,7 @@ const MiniChatBox = ({ conversationId, targetUser, currentUser, onClose }) => {
           <button
             type="button"
             onClick={() => fileInputRef.current?.click()}
-            className="text-blue-500 hover:text-blue-600 p-1"
+            className="text-blue-500 hover:text-blue-600 p-1 flex-shrink-0"
           >
             📷
           </button>
@@ -253,7 +324,7 @@ const MiniChatBox = ({ conversationId, targetUser, currentUser, onClose }) => {
           <button
             type="submit"
             disabled={!newMessage.trim()}
-            className="text-blue-600 hover:text-blue-700 disabled:opacity-50"
+            className="text-blue-600 hover:text-blue-700 disabled:opacity-50 flex-shrink-0"
           >
             ➤
           </button>

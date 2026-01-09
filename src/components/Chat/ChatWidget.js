@@ -7,7 +7,9 @@ import MiniChatBox from "./MiniChatBox";
 /* Conversation item */
 const ConversationItem = ({ conversation, onClick, currentUserId }) => {
   const { t } = useTranslation();
-  const { lastMessage, unreadCount, otherUserInfo } = conversation;
+  const { lastMessage, unreadCount, otherUserInfo, receiver  } = conversation;
+
+  const userInfo = otherUserInfo || receiver;
 
   // Target user
   const targetName = otherUserInfo?.fullName || t("default_user");
@@ -49,22 +51,29 @@ const ConversationItem = ({ conversation, onClick, currentUserId }) => {
         <div className="flex justify-between">
           <h4 className="text-sm font-bold truncate">{targetName}</h4>
           {lastMessage && (
-            <span className="text-[10px] text-gray-400 ml-2">
+            <span className="text-[10px] text-gray-400 ml-2 flex-shrink-0">
               {moment(lastMessage.sentAt).fromNow()}
             </span>
           )}
         </div>
         <p
-          className={`text-xs truncate ${
+          className={`text-xs ${
             unreadCount > 0 ? "font-bold" : "text-gray-500"
           }`}
+          style={{
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
+            wordBreak: 'break-all',
+            maxWidth: '100%'
+          }}
         >
           {previewText}
         </p>
       </div>
 
       {unreadCount > 0 && (
-        <span className="ml-2 bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">
+        <span className="ml-2 bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full flex-shrink-0">
           {unreadCount}
         </span>
       )}
@@ -131,8 +140,8 @@ const ChatWidget = () => {
   // Conversation list
   return (
     <div
-      className="fixed bottom-0 right-20 w-[330px] bg-white border shadow-2xl rounded-t-xl z-50 flex flex-col"
-      style={{ height: "500px", maxHeight: "80vh" }}
+      className="fixed bottom-0 right-20 bg-white border shadow-2xl rounded-t-xl z-50 flex flex-col"
+      style={{ width: "330px", height: "500px", maxHeight: "80vh" }}
     >
       <div className="flex justify-between items-center p-3 border-b">
         <h3 className="font-bold text-lg">{t("messages_header")}</h3>
@@ -156,11 +165,7 @@ const ChatWidget = () => {
         )}
       </div>
 
-      <div className="p-2 border-t text-center bg-gray-50">
-        <a href="/messages" className="text-xs font-bold text-blue-600">
-          {t("view_all")}
-        </a>
-      </div>
+
     </div>
   );
 };

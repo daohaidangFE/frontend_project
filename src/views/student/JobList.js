@@ -28,7 +28,7 @@ const getCurrentLocation = () => {
           });
         },
         (err) => reject(err),
-        { timeout: 8000 } // Chờ tối đa 8 giây
+        { timeout: 8000 }
       );
     }
   });
